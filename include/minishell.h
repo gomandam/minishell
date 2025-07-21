@@ -6,14 +6,14 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/20 00:49:26 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/22 01:03:57 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "libft.h"
+# include "./libft/libft.h"
 
 # include <readline/readline.h>
 // readline, rl_on_new_line, rl_replace_line, rl_redisplay

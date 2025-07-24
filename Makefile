@@ -10,7 +10,12 @@ INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR) -lreadline
 
 SRC_DIR = source
 SOURCES = $(SRC_DIR)/main.c \
-					$(SRC_DIR)/lexer/tokenizer.c
+					$(SRC_DIR)/lexer/free.c \
+					$(SRC_DIR)/lexer/general.c \
+					$(SRC_DIR)/lexer/handlers.c \
+					$(SRC_DIR)/lexer/lexer.c \
+					$(SRC_DIR)/lexer/segments.c \
+					$(SRC_DIR)/lexer/tokens.c
 OBJ = $(SOURCES:%.c=%.o)
 
 LIBFT_DIR = libft

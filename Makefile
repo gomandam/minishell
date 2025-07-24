@@ -9,8 +9,9 @@ INC_DIR = include
 INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR) -lreadline
 
 SRC_DIR = source
-SOURCES = source/main.c
-OBJ = $(SOURCES:.c=.o)
+SOURCES = $(SRC_DIR)/main.c \
+					$(SRC_DIR)/lexer/tokenizer.c
+OBJ = $(SOURCES:%.c=%.o)
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a

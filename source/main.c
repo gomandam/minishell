@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/23 05:18:41 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/24 20:11:28 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
+	t_tok	*tokens;
 
 	ft_putstr_fd("Welcome to MiniYeska!\n", 1);
 	(void)argc;
@@ -28,7 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 			break ;
 		if (*line)
 			add_history(line);
-		printf("You entered: %s\n", line);
+		tokenize(line, &tokens);
 		ft_free((void **)&line);
 	}
 	rl_clear_history();

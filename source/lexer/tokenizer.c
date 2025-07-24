@@ -6,78 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 03:41:41 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 14:15:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/24 20:33:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-typedef enum e_toktype
-{
-	T_WORD,
-	T_PIPE,
-	T_AND_IF,
-	T_OR_IF,
-	T_INFILE,
-	T_HEREDOC,
-	T_OUTFILE,
-	T_APPEND,
-	T_LPAREN,
-	T_RPAREN,
-}	t_toktype;
-
-typedef enum e_segtype
-{
-	SEG_TEXT,
-	SEG_PARAM,
-	SEG_WILDCARD
-}	t_segtype;
-
-typedef enum e_lxstate
-{
-	LX_GENERAL,
-	LX_IN_SINGLE_Q,
-	LX_IN_DOUBLE_Q,
-	LX_PARAM,
-	LX_EOF,
-	LX_DIE, // Unvalid state, without error
-	LX_ERR // Malloc error
-}	t_lxstate;
-
-typedef struct s_slice
-{
-	const char	*begin;
-	size_t		len;
-}	t_slice;
-
-typedef struct s_seg
-{
-	t_segtype		type;
-	t_slice			slice;
-	struct s_seg	*next;
-}	t_seg;
-
-typedef struct s_tok
-{
-	t_toktype		type;
-	t_slice			slice;
-	t_seg			*seg_head;
-	t_seg			*seg_tail;
-	struct s_tok	*next;
-}	t_tok;
-
-typedef struct s_lexer
-{
-	const char		*input;
-	const char		*cur;
-	t_lxstate		prev;
-	t_lxstate		state;
-	t_tok			*tok;
-	t_tok			*head;
-	t_tok			*tail;
-}	t_lexer;
-
-typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
 
 // lexer cursor
 
@@ -147,7 +80,7 @@ void	tok_push(t_tok **head, t_tok **tail, t_tok *tok)
 int	start_word(t_lexer *lx)
 {
 	if (lx->tok && lx->tok->type == T_WORD)
-		return (0);
+		return (0); // Unfinished word
 	lx->tok = new_tok(T_WORD);
 	if (!lx->tok)
 		return (1);
@@ -177,24 +110,89 @@ void	emit_tok(t_lexer *lx)
 	lx->tok = NULL;
 }
 
-int	emit_op(t_lexer *lx, t_toktype type, size_t len)
+t_lxstate	emit_op(t_lexer *lx, t_toktype type, size_t len)
 {
 	t_tok	*operator;
 
 	emit_tok(lx);
 	operator = new_tok(type);
 	if (!operator)
-		return (1);
+		return (LX_ERR);
 	operator->slice.begin = lx->cur;
 	operator->slice.len = len;
 	tok_push(&lx->head, &lx->tail, operator);
 	lx_advance_n(lx, len);
+	return (LX_GENERAL);
+}
+
+int	ft_iscutword(char c)
+{
+	if (ft_isspace(c)
+		|| c == '|' || c == '&' || c == '<' || c == '>' || c == '('
+		|| c == ')' || c == '\'' || c == '"' || c == '$' || c == '*')
+		return (1);
 	return (0);
 }
 
 t_lxstate	handle_general(t_lexer *lx)
 {
-	return (lx->state);
+	if (ft_isspace(*lx->cur)) // TODO: Check if must be here
+	{
+		emit_tok(lx);
+		while (ft_isspace(*lx->cur))
+			lx_advance(lx);
+	}
+	if (*lx->cur == '\0')
+		return (LX_EOF);
+	if (*lx->cur == '|' && lx->cur[1] == '|')
+		return (emit_op(lx, T_OR_IF, 2));
+	if (*lx->cur == '&' && lx->cur[1] == '&')
+		return (emit_op(lx, T_AND_IF, 2));
+	if (*lx->cur == '<' && lx->cur[1] == '<')
+		return (emit_op(lx, T_HEREDOC, 2));
+	if (*lx->cur == '>' && lx->cur[1] == '>')
+		return (emit_op(lx, T_APPEND, 2));
+	if (*lx->cur == '|')
+		return (emit_op(lx, T_PIPE, 1));
+	if (*lx->cur == '<')
+		return (emit_op(lx, T_INFILE, 1));
+	if (*lx->cur == '>')
+		return (emit_op(lx, T_OUTFILE, 1));
+	if (*lx->cur == '(')
+		return (emit_op(lx, T_LPAREN, 1));
+	if (*lx->cur == ')')
+		return (emit_op(lx, T_RPAREN, 1));
+	if (*lx->cur == '\'')
+		return (lx_advance(lx), LX_IN_SINGLE_Q);
+	if (*lx->cur == '"')
+		return (lx_advance(lx), LX_IN_DOUBLE_Q);
+	if (*lx->cur == '$' && (lx->cur[1] == '?' || lx->cur[1] == '_' || ft_isalnum(lx->cur[1])))
+	{
+		if (start_word(lx) == 1)
+			return (LX_ERR);
+		lx->prev = lx->state;
+		lx_advance(lx);
+		return (LX_PARAM);
+	}
+	if (*lx->cur == '*')
+	{
+		if (start_word(lx) == 1)
+			return (LX_ERR);
+		if (add_seg(lx, SEG_WILDCARD, lx->cur, 1) == 1)
+			return (ft_free((void **)&lx->tok), LX_ERR);
+		lx_advance(lx);
+		return (LX_GENERAL);
+	}
+	const char *start;
+
+	start = lx->cur;
+	if (start_word(lx) == 1)
+		return (LX_ERR);
+	while (*lx->cur && !ft_iscutword(*lx->cur)) // TODO: Manage bug when a '$' or '&' have symbols after
+		lx_advance(lx);
+	if (add_seg(lx, SEG_TEXT, start, lx->cur - start) == 1)
+		return (ft_free((void **)&lx->tok), LX_ERR); // TODO: Free functions
+	return (LX_GENERAL);
 }
 
 t_lxstate	handle_in_single_q(t_lexer *lx)
@@ -219,15 +217,19 @@ t_lxstate	handle_in_double_q(t_lexer *lx)
 	const char	*start;
 
 	start = lx->cur;
-	while (*lx->cur && *lx->cur != '\"' && *lx->cur != '$')
+	while (*lx->cur && *lx->cur != '\"')
+	{
+		if (*lx->cur == '$' && (lx->cur[1] == '?' || lx->cur[1] == '_' || ft_isalnum(lx->cur[1])))
+			break;
 		lx_advance(lx);
+	}
 	if (*lx->cur == '\0')
 		return (LX_DIE);
 	if (start_word(lx) == 1)
 		return (LX_ERR);
 	if (add_seg(lx, SEG_TEXT, start, lx->cur - start) == 1)
 		return (ft_free((void **)&lx->tok), LX_ERR); // TODO: Free functions
-	if (*lx->cur == '$') // TODO: It's not checking if is only '$'
+	if (*lx->cur == '$')
 	{
 		// * Probably can create a function, return the new state and preserve the prev state
 		// * also, check if can we save all the prev state (in a stack), or do it in the parser
@@ -241,7 +243,19 @@ t_lxstate	handle_in_double_q(t_lexer *lx)
 
 t_lxstate	handle_param(t_lexer *lx)
 {
-	return (lx->state);
+	const char	*start;
+
+	start = lx->cur;
+	if (*lx->cur == '?')
+		lx_advance(lx);
+	else
+	{
+		while (*lx->cur && (ft_isalnum(*lx->cur) || *lx->cur == '_'))
+			lx_advance(lx);
+	}
+	if (add_seg(lx, SEG_PARAM, start, lx->cur - start) == 1)
+		return (ft_free((void **)&lx->tok), LX_ERR);
+	return (lx->prev);
 }
 
 t_lxstate	handle_finish(t_lexer *lx)
@@ -262,6 +276,26 @@ t_lxhandler	lexer_handler(t_lxstate state)
 	return (handle_finish);
 }
 
+// !
+void	print_tokens(t_tok *head)
+{
+	t_tok	*tok;
+	t_seg	*seg;
+
+	tok = head;
+	while (tok)
+	{
+		printf("Token type: %d, slice: [%.*s]\n", tok->type, (int)tok->slice.len, tok->slice.begin);
+		seg = tok->seg_head;
+		while (seg)
+		{
+			printf("  Segment type: %d, slice: [%.*s]\n", seg->type, (int)seg->slice.len, seg->slice.begin);
+			seg = seg->next;
+		}
+		tok = tok->next;
+	}
+}
+
 int	tokenize(const char *input, t_tok **out)
 {
 	t_lexer	lx;
@@ -277,9 +311,14 @@ int	tokenize(const char *input, t_tok **out)
 		lx.state = lexer_handler(lx.state)(&lx);
 	}
 	emit_tok(&lx);
-	if (lx.state == LX_ERR)
+	print_tokens(lx.head); // !
+	if (lx.state == LX_ERR || lx.state == LX_DIE)
 	{
+		*out = NULL;
 		// TODO: Free allocated tokens and segments
 	}
+	if (lx.state == LX_ERR)
+		return (1);
+	*out = lx.head;
 	return (0);
 }

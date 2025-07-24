@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 03:41:41 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:28:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/24 22:49:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,26 +43,6 @@ t_lxhandler	lexer_handler(t_lxstate state)
 	return (handle_finish);
 }
 
-// !
-void	print_tokens(t_tok *head)
-{
-	t_tok	*tok;
-	t_seg	*seg;
-
-	tok = head;
-	while (tok)
-	{
-		printf("Token type: %d, slice: [%.*s]\n", tok->type, (int)tok->slice.len, tok->slice.begin);
-		seg = tok->seg_head;
-		while (seg)
-		{
-			printf("  Segment type: %d, slice: [%.*s]\n", seg->type, (int)seg->slice.len, seg->slice.begin);
-			seg = seg->next;
-		}
-		tok = tok->next;
-	}
-}
-
 int	tokenize(const char *input, t_tok **out)
 {
 	t_lexer		lx;
@@ -81,11 +61,10 @@ int	tokenize(const char *input, t_tok **out)
 		lx.state = next;
 	}
 	emit_tok(&lx);
-	print_tokens(lx.head); // !
 	if (lx.state == LX_ERR || lx.state == LX_DIE)
 	{
 		*out = NULL;
-		// TODO: Free allocated tokens and segments
+		free_tokens(&lx.head);
 	}
 	if (lx.state == LX_ERR)
 		return (1);

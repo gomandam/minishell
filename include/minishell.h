@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:26:01 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/24 22:45:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,17 @@ t_lxstate	emit_op(t_lexer *lx, t_toktype type, size_t len);
 void		lx_advance_n(t_lexer *lx, size_t n);
 void		lx_advance(t_lexer *lx);
 
+
 t_lxstate	handle_in_single_q(t_lexer *lx);
 t_lxstate	handle_in_double_q(t_lexer *lx);
 t_lxstate	handle_param(t_lexer *lx);
 t_lxstate	handle_finish(t_lexer *lx);
 
 t_lxstate	handle_general(t_lexer *lx);
+
+void		free_segments(t_seg **seg);
+void		free_tok(t_tok **tok);
+void		free_tokens(t_tok **tok);
 
 int			tokenize(const char *input, t_tok **out);
 

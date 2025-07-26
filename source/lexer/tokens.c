@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 21:01:09 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:47:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/26 02:06:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ t_tok	*new_tok(t_toktype type)
 	if (!tok)
 		return (NULL);
 	tok->type = type;
-	tok->slice.begin = NULL;
-	tok->slice.len = 0;
 	tok->seg_head = NULL;
 	tok->seg_tail = NULL;
 	tok->next = NULL;
@@ -65,8 +63,6 @@ t_lxstate	emit_op(t_lexer *lx, t_toktype type, size_t len)
 	operator = new_tok(type);
 	if (!operator)
 		return (LX_ERR);
-	operator->slice.begin = lx->cur;
-	operator->slice.len = len;
 	tok_push(&lx->head, &lx->tail, operator);
 	lx_advance_n(lx, len);
 	return (LX_GENERAL);

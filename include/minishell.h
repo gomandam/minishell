@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:45:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/26 02:05:43 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef enum e_lxstate
 	LX_IN_SINGLE_Q,
 	LX_IN_DOUBLE_Q,
 	LX_PARAM,
-	LX_EOF,
+	LX_EOL,
 	LX_DIE,
 	LX_ERR
 }	t_lxstate;
@@ -88,7 +88,6 @@ typedef struct s_seg
 typedef struct s_tok
 {
 	t_toktype		type;
-	t_slice			slice;
 	t_seg			*seg_head;
 	t_seg			*seg_tail;
 	struct s_tok	*next;
@@ -116,16 +115,15 @@ void		tok_push(t_tok **head, t_tok **tail, t_tok *tok);
 void		emit_tok(t_lexer *lx);
 t_lxstate	emit_op(t_lexer *lx, t_toktype type, size_t len);
 
-void		lx_advance_n(t_lexer *lx, size_t n);
 void		lx_advance(t_lexer *lx);
+void		lx_advance_n(t_lexer *lx, size_t n);
 
+t_lxstate	handle_general(t_lexer *lx);
 
 t_lxstate	handle_in_single_q(t_lexer *lx);
 t_lxstate	handle_in_double_q(t_lexer *lx);
 t_lxstate	handle_param(t_lexer *lx);
 t_lxstate	handle_finish(t_lexer *lx);
-
-t_lxstate	handle_general(t_lexer *lx);
 
 void		free_segments(t_seg **seg);
 void		free_tok(t_tok **tok);

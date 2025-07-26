@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 03:41:41 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:49:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/26 02:04:34 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	lx_advance_n(t_lexer *lx, size_t n)
 	}
 }
 
-t_lxhandler	lexer_handler(t_lxstate state)
+static t_lxhandler	lexer_handler(t_lxstate state)
 {
 	if (state == LX_GENERAL)
 		return (handle_general);
@@ -54,7 +54,7 @@ int	tokenize(const char *input, t_tok **out)
 	lx.input = input;
 	lx.cur = input;
 	lx.state = LX_GENERAL;
-	while (lx.state != LX_EOF && lx.state != LX_DIE && lx.state != LX_ERR)
+	while (lx.state != LX_EOL && lx.state != LX_DIE && lx.state != LX_ERR)
 	{
 		next = lexer_handler(lx.state)(&lx);
 		lx.prev = lx.state;

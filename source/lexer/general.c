@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 21:09:56 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:28:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/26 02:01:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static t_lxstate	handle_general_word(t_lexer *lx)
 		lx_advance(lx);
 	}
 	if (add_seg(lx, SEG_TEXT, start, lx->cur - start) == 1)
-		return (ft_free((void **)&lx->tok), LX_ERR); // TODO: Free functions
+		return (LX_ERR);
 	return (LX_GENERAL);
 }
 
@@ -57,7 +57,7 @@ static t_lxstate	handle_general_2(t_lexer *lx)
 		if (start_word(lx) == 1)
 			return (LX_ERR);
 		if (add_seg(lx, SEG_WILDCARD, lx->cur, 1) == 1)
-			return (ft_free((void **)&lx->tok), LX_ERR);
+			return (LX_ERR);
 		lx_advance(lx);
 		return (LX_GENERAL);
 	}
@@ -73,7 +73,7 @@ t_lxstate	handle_general(t_lexer *lx)
 			lx_advance(lx);
 	}
 	if (*lx->cur == '\0')
-		return (LX_EOF);
+		return (LX_EOL);
 	if (*lx->cur == '|' && lx->cur[1] == '|')
 		return (emit_op(lx, T_OR_IF, 2));
 	if (*lx->cur == '&' && lx->cur[1] == '&')

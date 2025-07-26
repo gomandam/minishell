@@ -6,26 +6,32 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/24 22:51:08 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/07/26 02:09:54 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // ! Temporal
-void	print_tokens(t_tok *head)
+void	debug_tokens(t_tok *head)
 {
-	t_tok	*tok;
-	t_seg	*seg;
-
-	tok = head;
-	while (tok)
+	const char *toktype_names[] = {
+		"T_WORD", "T_PIPE", "T_AND_IF", "T_OR_IF",
+		"T_INFILE", "T_HEREDOC", "T_OUTFILE", "T_APPEND",
+		"T_LPAREN", "T_RPAREN"
+	};
+	const char *segtype_names[] = {
+		"SEG_TEXT", "SEG_PARAM", "SEG_WILDCARD"
+	};
+	printf("-> Tokens:\n");
+	t_tok	*tok = head;
+	while (tok != NULL)
 	{
-		printf("Token type: %d, slice: [%.*s]\n", tok->type, (int)tok->slice.len, tok->slice.begin);
-		seg = tok->seg_head;
-		while (seg)
+		printf("	Token type: %s (%d)\n", toktype_names[tok->type], tok->type);
+		t_seg	*seg = tok->seg_head;
+		while (seg != NULL)
 		{
-			printf("  Segment type: %d, slice: [%.*s]\n", seg->type, (int)seg->slice.len, seg->slice.begin);
+			printf("		Segment type: %s (%d), slice: [%.*s]\n", segtype_names[seg->type], seg->type, (int)seg->slice.len, seg->slice.begin);
 			seg = seg->next;
 		}
 		tok = tok->next;
@@ -54,7 +60,7 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_free((void **)&line);
 			break ;
 		}
-		print_tokens(tokens);
+		debug_tokens(tokens);
 		free_tokens(&tokens);
 		ft_free((void **)&line);
 	}

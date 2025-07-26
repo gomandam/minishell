@@ -1,12 +1,13 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES)
+CFLAGS = -Wall -Wextra -Werror $(INCFLAGS)
 
 RM = rm -f
 
 INC_DIR = include
-INCLUDES = -I$(INC_DIR) -I$(LIBFT_DIR) -lreadline
+INCFLAGS = -I$(INC_DIR) -I$(LIBFT_DIR)
+LDFLAGS = -lreadline
 
 SRC_DIR = source
 SOURCES = $(SRC_DIR)/main.c \
@@ -25,7 +26,7 @@ all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
 	@echo "Creating miniyeska..."
-	@$(CC) $(OBJ) $(CFLAGS) $(LIBFT) -o $(NAME)
+	@$(CC) $(OBJ) $(CFLAGS) $(LIBFT) $(LDFLAGS) -o $(NAME)
 	@echo "Finish!"
 
 $(LIBFT):

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/26 02:44:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/03 20:27:44 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define STRUCTURES_H
 
 # include <sys/types.h> // pid_t, size_t
+
+// lexer
 
 typedef enum e_toktype
 {
@@ -80,5 +82,82 @@ typedef struct s_lexer
 }	t_lexer;
 
 typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
+
+// parse
+
+typedef enum e_redirtype
+{
+	R_INFILE,
+	R_HEREDOC,
+	R_OUTFILE,
+	R_APPEND
+}	t_redirtype;
+
+typedef enum e_asttype
+{
+	AST_CMD,
+	AST_PIPE,
+	AST_AND_IF,
+	AST_OR_IF,
+	AST_SUBSH
+}	t_asttype;
+
+typedef struct s_redir
+{
+	union
+	{
+		t_tok			*word;
+		char			*text;
+	}			u_data;
+	t_redirtype		type;
+	struct s_redir	*next;
+}	t_redir;
+
+typedef struct s_redirs
+{
+	t_redir		*head;
+	t_redir		*tail;
+}	t_redirs;
+
+typedef struct s_cmd
+{
+	union
+	{
+		t_tok			*words;
+		char			**argv;
+	}			u_data;
+	size_t			count;
+	t_redirs		redir;
+}	t_cmd;
+
+typedef struct s_op
+{
+	struct s_ast	*left;
+	struct s_ast	*right;
+}	t_op;
+
+typedef struct s_subsh
+{
+	struct s_ast	*child;
+	t_redirs		redir;
+}	t_subsh;
+
+typedef struct s_ast
+{
+	union
+	{
+		t_cmd	cmd;
+		t_op	op;
+		t_subsh	subsh;
+	}			u_data;
+	t_asttype		type;
+}	t_ast;
+
+// TODO
+typedef struct s_parser
+{
+	t_tok		*cur;
+	int			err;
+}	t_parser;
 
 #endif

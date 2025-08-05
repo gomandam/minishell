@@ -16,7 +16,12 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/lexer/handlers.c \
 					$(SRC_DIR)/lexer/lexer.c \
 					$(SRC_DIR)/lexer/segments.c \
-					$(SRC_DIR)/lexer/tokens.c
+					$(SRC_DIR)/lexer/tokens.c  \
+					$(SRC_DIR)/parser/command.c \
+					$(SRC_DIR)/parser/free.c \
+					$(SRC_DIR)/parser/operators.c \
+					$(SRC_DIR)/parser/parser.c \
+					$(SRC_DIR)/parser/redir.c
 OBJ = $(SOURCES:%.c=%.o)
 
 LIBFT_DIR = libft

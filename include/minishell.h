@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/03 18:59:07 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:50:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,14 @@ void		free_ast_cmd_parse(t_ast **ast);
 void		free_ast_parse(t_ast **ast);
 
 int			parse_ast(t_tok *tok, t_ast **out);
+
+// !debug: delete file and functions
+void		debug_tok(t_tok *tok, int level);
+void		debug_tokenizer(t_tok *head);
+void		debug_parser(t_ast *ast);
+
+
+
+
 
 #endif

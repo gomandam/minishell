@@ -6,42 +6,17 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/26 02:09:54 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/06 19:47:55 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// ! Temporal
-void	debug_tokens(t_tok *head)
-{
-	const char *toktype_names[] = {
-		"T_WORD", "T_PIPE", "T_AND_IF", "T_OR_IF",
-		"T_INFILE", "T_HEREDOC", "T_OUTFILE", "T_APPEND",
-		"T_LPAREN", "T_RPAREN"
-	};
-	const char *segtype_names[] = {
-		"SEG_TEXT", "SEG_PARAM", "SEG_WILDCARD"
-	};
-	printf("-> Tokens:\n");
-	t_tok	*tok = head;
-	while (tok != NULL)
-	{
-		printf("	Token type: %s (%d)\n", toktype_names[tok->type], tok->type);
-		t_seg	*seg = tok->seg_head;
-		while (seg != NULL)
-		{
-			printf("		Segment type: %s (%d), slice: [%.*s]\n", segtype_names[seg->type], seg->type, (int)seg->slice.len, seg->slice.begin);
-			seg = seg->next;
-		}
-		tok = tok->next;
-	}
-}
-
 int	main(int argc, char *argv[], char *envp[])
 {
 	char	*line;
 	t_tok	*tokens;
+	t_ast	*ast;
 
 	ft_putstr_fd("Welcome to MiniYeska!\n", 1);
 	(void)argc;
@@ -60,8 +35,21 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_free((void **)&line);
 			break ;
 		}
-		debug_tokens(tokens);
-		free_tokens(&tokens);
+		debug_tokenizer(tokens);
+		if (tokens == NULL)
+		{
+			ft_free((void **)&line);
+			continue ;
+		}
+		if (parse_ast(tokens, &ast) == 1)
+		{
+			// free_tokens(&tokens);
+			ft_free((void **)&line);
+			continue ;
+		}
+		debug_parser(ast);
+		free_ast_parse(&ast); // ? Must use free_ast_final when ast is expanded
+		// free_tokens(&tokens); // TODO: free tokens must not free because are freed
 		ft_free((void **)&line);
 	}
 	rl_clear_history();

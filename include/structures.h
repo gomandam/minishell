@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/06 00:28:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/06 23:18:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct s_redir
 	{
 		t_tok			*word;
 		char			*text;
+		int16_t			pipe[2]; // TODO: For heredoc
 	}			u_data;
 	t_redirtype		type;
 	struct s_redir	*next;

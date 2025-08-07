@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 02:07:43 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/06 00:29:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:22:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int	manage_error(t_parser *parser)
 		ft_putstr_fd("minishell: memory allocation error\n", STDERR_FILENO);
 		return (1);
 	}
+	if (parser->err == PARSER_ERR_UNEXPECTED_EOF)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `newline`\n", STDERR_FILENO);
+		return (1);
+	}
 	return (0);
 }
 
@@ -37,19 +42,12 @@ int	parse_ast(t_tok *tok, t_ast **out)
 	t_parser	parser;
 
 	parser.cur = tok;
-	parser.err = PARSER_ERR_NONE;
 	*out = NULL;
 	if (parse_and_or(&parser, out) == 1)
-	{
-		*out = NULL;
-		return (manage_error(&parser));
-	}
+		return (free_tokens(&parser.cur), free_ast_parse(out), 1);
 	if (parser.cur != NULL)
-	{
-		*out = NULL;
-		parser.err = PARSER_ERR_SYNTAX;
-		return (manage_error(&parser));
-	}
+		return (printerr_syntaxtok(parser.cur), free_tokens(&parser.cur),
+			free_ast_cmd_parse(out), 1);
 	return (0);
 }
 

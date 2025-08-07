@@ -18,10 +18,12 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/lexer/segments.c \
 					$(SRC_DIR)/lexer/tokens.c  \
 					$(SRC_DIR)/parser/command.c \
+					$(SRC_DIR)/parser/errors.c \
 					$(SRC_DIR)/parser/free.c \
 					$(SRC_DIR)/parser/operators.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redir.c \
+					$(SRC_DIR)/parser/utils.c \
 					$(SRC_DIR)/debug.c #! Temporal
 OBJ = $(SOURCES:%.c=%.o)
 

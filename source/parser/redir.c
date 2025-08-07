@@ -6,19 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/03 19:01:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/07 19:06:26 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	is_redirtok(t_tok *tok)
-{
-	if (tok == NULL)
-		return (0);
-	return (tok->type == T_INFILE || tok->type == T_OUTFILE
-		|| tok->type == T_HEREDOC || tok->type == T_APPEND);
-}
 
 t_redir	*new_redir(t_redirtype type, t_tok *word)
 {
@@ -73,22 +65,35 @@ int	collect_redir(t_parser *parser, t_redirs *list)
 	word = op->next;
 	if (word == NULL)
 	{
-		parser->err = PARSER_ERR_UNEXPECTED_EOF;
+		printerr_unexpecteol();
+		// parser->err = PARSER_ERR_UNEXPECTED_EOF;
 		return (1);
 	}
 	if (word->type != T_WORD)
 	{
-		parser->err = PARSER_ERR_SYNTAX;
+		printerr_syntaxtok(word);
+		// parser->err = PARSER_ERR_SYNTAX;
 		return (1);
 	}
 	redir = new_redir_from_tok(op, word);
 	if (redir == NULL)
 	{
-		parser->err = PARSER_ERR_MEMORY;
+		printerr_malloc();
+		// parser->err = PARSER_ERR_MEMORY;
 		return (1);
 	}
 	redir_push(list, redir);
 	parser->cur = word->next;
 	free_tok(&op);
+	return (0);
+}
+
+int	collect_redirs(t_parser *parser, t_redirs *redirs)
+{
+	while (parser->cur && is_redirtok(parser->cur))
+	{
+		if (collect_redir(parser, redirs) == 1)
+			return (1);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/06 19:50:04 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/07 17:51:37 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,14 @@ int			tokenize(const char *input, t_tok **out);
 
 // parser
 
+char		*get_text_tok(t_tok *tok);
 int			is_redirtok(t_tok *tok);
+void		consume_tok(t_parser *parser);
+
+int			printerr_malloc(void);
+int			printerr_unexpecteol(void);
+int			printerr_syntaxtok(t_tok *cur);
+
 t_redir		*new_redir(t_redirtype type, t_tok *word);
 t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
 void		redir_push(t_redirs *list, t_redir *redir);
@@ -105,9 +112,5 @@ int			parse_ast(t_tok *tok, t_ast **out);
 void		debug_tok(t_tok *tok, int level);
 void		debug_tokenizer(t_tok *head);
 void		debug_parser(t_ast *ast);
-
-
-
-
 
 #endif

@@ -6,21 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:00 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/03 19:00:06 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:04:01 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	collect_redirs(t_parser *parser, t_redirs *redirs)
-{
-	while (parser->cur && is_redirtok(parser->cur))
-	{
-		if (collect_redir(parser, redirs) == 1)
-			return (1);
-	}
-	return (0);
-}
 
 t_ast	*new_cmd_leaf(void)
 {
@@ -43,29 +33,13 @@ static int	parse_cmd(t_parser *parser, t_ast **out)
 	t_tok	*last_word;
 	t_tok	*tok;
 
+	if (parser->cur == NULL)
+		return (printerr_unexpecteol());
+	if (parser->cur->type != T_WORD && !is_redirtok(parser->cur))
+		return (printerr_syntaxtok(parser->cur), 1);
 	cmd = new_cmd_leaf();
 	if (cmd == NULL)
-	{
-		parser->err = PARSER_ERR_MEMORY;
-		return (1);
-	}
-	if (collect_redirs(parser, &cmd->u_data.cmd.redir) == 1)
-	{
-		free_ast_parse(&cmd);
-		return (1);
-	}
-	if (parser->cur == NULL)
-	{
-		free_ast_parse(&cmd);
-		parser->err = PARSER_ERR_UNEXPECTED_EOF;
-		return (1);
-	}
-	if (parser->cur->type != T_WORD)
-	{
-		free_ast_parse(&cmd);
-		parser->err = PARSER_ERR_SYNTAX;
-		return (1);
-	}
+		return (printerr_malloc());
 	last_word = NULL;
 	while (parser->cur && (parser->cur->type == T_WORD
 			|| is_redirtok(parser->cur)))
@@ -83,11 +57,9 @@ static int	parse_cmd(t_parser *parser, t_ast **out)
 			cmd->u_data.cmd.count++;
 		}
 		else if (collect_redir(parser, &cmd->u_data.cmd.redir) == 1)
-		{
-			free_ast_parse(&cmd);
-			return (1);
-		}
+			return (free_ast_parse(&cmd), 1);
 	}
+	// if (parser->cur != NULL && !is_redirtok(parser->cur))
 	*out = cmd;
 	return (0);
 }
@@ -109,44 +81,27 @@ t_ast	*new_subsh_node(t_ast *child)
 static int	parse_subsh(t_parser *parser, t_ast **out)
 {
 	t_ast	*child;
-	t_tok	*next;
 
-	next = parser->cur->next;
-	free_tok(&parser->cur);
-	parser->cur = next;
+	consume_tok(parser);
 	if (parse_and_or(parser, &child) == 1)
 		return (1);
 	if (parser->cur == NULL)
-	{
-		parser->err = PARSER_ERR_UNEXPECTED_EOF;
-		return (1);
-	}
+		return (printerr_unexpecteol(), free_ast_parse(&child), 1);
 	if (parser->cur->type != T_RPAREN)
-	{
-		parser->err = PARSER_ERR_SYNTAX;
-		return (1);
-	}
-	next = parser->cur->next;
-	free_tok(&parser->cur);
-	parser->cur = next;
+		return (printerr_syntaxtok(parser->cur), free_ast_parse(&child), 1);
+	consume_tok(parser);
 	child = new_subsh_node(child);
 	if (child == NULL)
-	{
-		parser->err = PARSER_ERR_MEMORY;
-		return (1);
-	}
+		return (printerr_malloc(), free_ast_parse(&child), 1);
 	if (collect_redirs(parser, &child->u_data.subsh.redir) == 1)
-	{
-		free_ast_parse(&child);
-		return (1);
-	}
+		return (free_ast_parse(&child), 1);
 	*out = child;
 	return (0);
 }
 
 int	parse_cmd_subsh(t_parser *parser, t_ast **out)
 {
-	if (parser->cur->type == T_LPAREN)
+	if (parser->cur && parser->cur->type == T_LPAREN)
 		return (parse_subsh(parser, out));
 	return (parse_cmd(parser, out));
 }

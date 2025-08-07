@@ -6,22 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:48:15 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/06 00:29:59 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/07 19:34:37 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	consume_operator(t_tok **cur, t_toktype type)
-{
-	t_tok	*next;
-
-	if (*cur == NULL || (*cur)->type != type)
-		return ;
-	next = (*cur)->next;
-	free_tok(cur);
-	*cur = next;
-}
 
 t_ast	*new_op_node(t_asttype type, t_ast *left, t_ast *right)
 {
@@ -44,21 +33,14 @@ int	parse_pipe(t_parser *parser, t_ast **out)
 		return (1);
 	while (parser->cur && parser->cur->type == T_PIPE)
 	{
-		consume_operator(&parser->cur, T_PIPE);
+		consume_tok(parser);
 		right = NULL;
 		if (parse_cmd_subsh(parser, &right) == 1)
-		{
-			free_ast_parse(out);
-			return (1);
-		}
+			return (free_ast_parse(out), 1);
 		*out = new_op_node(AST_PIPE, *out, right);
 		if (*out == NULL)
-		{
-			free_ast_parse(out);
-			free_ast_parse(&right);
-			parser->err = PARSER_ERR_MEMORY;
-			return (1);
-		}
+			return (printerr_malloc(), free_ast_parse(out),
+				free_ast_parse(&right), 1);
 	}
 	return (0);
 }
@@ -77,21 +59,14 @@ int	parse_and_or(t_parser	*parser, t_ast **out)
 			type = AST_AND_IF;
 		else
 			type = AST_OR_IF;
-		consume_operator(&parser->cur, parser->cur->type);
+		consume_tok(parser);
 		right = NULL;
 		if (parse_pipe(parser, &right) == 1)
-		{
-			free_ast_parse(out);
-			return (1);
-		}
+			return (free_ast_parse(out), 1);
 		*out = new_op_node(type, *out, right);
 		if (*out == NULL)
-		{
-			free_ast_parse(out);
-			free_ast_parse(&right);
-			parser->err = PARSER_ERR_MEMORY;
-			return (1);
-		}
+			return (printerr_malloc(), free_ast_parse(out),
+				free_ast_parse(&right), 1);
 	}
 	return (0);
 }

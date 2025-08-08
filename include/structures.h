@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/06 23:18:16 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/07 20:40:02 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,25 @@
 
 # include <sys/types.h> // pid_t, size_t
 
-// lexer
+typedef struct s_slice
+{
+	const char	*begin;
+	size_t		len;
+}	t_slice;
+
+typedef enum e_segtype
+{
+	SEG_TEXT,
+	SEG_PARAM,
+	SEG_WILDCARD
+}	t_segtype;
+
+typedef struct s_seg
+{
+	t_segtype		type;
+	t_slice			slice;
+	struct s_seg	*next;
+}	t_seg;
 
 typedef enum e_toktype
 {
@@ -31,37 +49,6 @@ typedef enum e_toktype
 	T_RPAREN,
 }	t_toktype;
 
-typedef enum e_segtype
-{
-	SEG_TEXT,
-	SEG_PARAM,
-	SEG_WILDCARD
-}	t_segtype;
-
-typedef enum e_lxstate
-{
-	LX_GENERAL,
-	LX_IN_SINGLE_Q,
-	LX_IN_DOUBLE_Q,
-	LX_PARAM,
-	LX_EOL,
-	LX_DIE,
-	LX_ERR
-}	t_lxstate;
-
-typedef struct s_slice
-{
-	const char	*begin;
-	size_t		len;
-}	t_slice;
-
-typedef struct s_seg
-{
-	t_segtype		type;
-	t_slice			slice;
-	struct s_seg	*next;
-}	t_seg;
-
 typedef struct s_tok
 {
 	t_toktype		type;
@@ -70,21 +57,6 @@ typedef struct s_tok
 	struct s_tok	*next;
 }	t_tok;
 
-typedef struct s_lexer
-{
-	const char		*input;
-	const char		*cur;
-	t_lxstate		prev;
-	t_lxstate		state;
-	t_tok			*tok;
-	t_tok			*head;
-	t_tok			*tail;
-}	t_lexer;
-
-typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
-
-// parse
-
 typedef enum e_redirtype
 {
 	R_INFILE,
@@ -92,15 +64,6 @@ typedef enum e_redirtype
 	R_OUTFILE,
 	R_APPEND
 }	t_redirtype;
-
-typedef enum e_asttype
-{
-	AST_CMD,
-	AST_PIPE,
-	AST_AND_IF,
-	AST_OR_IF,
-	AST_SUBSH
-}	t_asttype;
 
 typedef struct s_redir
 {
@@ -143,6 +106,15 @@ typedef struct s_subsh
 	t_redirs		redir;
 }	t_subsh;
 
+typedef enum e_asttype
+{
+	AST_CMD,
+	AST_PIPE,
+	AST_AND_IF,
+	AST_OR_IF,
+	AST_SUBSH
+}	t_asttype;
+
 typedef struct s_ast
 {
 	union
@@ -154,11 +126,37 @@ typedef struct s_ast
 	t_asttype		type;
 }	t_ast;
 
-// TODO
+// lexer
+
+typedef enum e_lxstate
+{
+	LX_GENERAL,
+	LX_IN_SINGLE_Q,
+	LX_IN_DOUBLE_Q,
+	LX_PARAM,
+	LX_EOL,
+	LX_DIE,
+	LX_ERR
+}	t_lxstate;
+
+typedef struct s_lexer
+{
+	const char		*input;
+	const char		*cur;
+	t_lxstate		prev;
+	t_lxstate		state;
+	t_tok			*tok;
+	t_tok			*head;
+	t_tok			*tail;
+}	t_lexer;
+
+typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
+
+// parse
+
 typedef struct s_parser
 {
 	t_tok		*cur;
-	int			err;
 }	t_parser;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/07 19:06:26 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:23:13 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,12 @@ int	collect_redir(t_parser *parser, t_redirs *list)
 	op = parser->cur;
 	word = op->next;
 	if (word == NULL)
-	{
-		printerr_unexpecteol();
-		// parser->err = PARSER_ERR_UNEXPECTED_EOF;
-		return (1);
-	}
+		return (printerr_unexpecteol());
 	if (word->type != T_WORD)
-	{
-		printerr_syntaxtok(word);
-		// parser->err = PARSER_ERR_SYNTAX;
-		return (1);
-	}
+		return (printerr_syntaxtok(word));
 	redir = new_redir_from_tok(op, word);
 	if (redir == NULL)
-	{
-		printerr_malloc();
-		// parser->err = PARSER_ERR_MEMORY;
-		return (1);
-	}
+		return (printerr_malloc());
 	redir_push(list, redir);
 	parser->cur = word->next;
 	free_tok(&op);

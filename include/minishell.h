@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/07 17:51:37 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:36:54 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ int			collect_redir(t_parser *parser, t_redirs *list);
 int			collect_redirs(t_parser *parser, t_redirs *redirs);
 
 t_ast		*new_cmd_leaf(void);
-// int			parse_cmd(t_parser *parser, t_ast **out);
+int			parse_cmd(t_parser *parser, t_ast **out);
 t_ast		*new_subsh_node(t_ast *child);
-// int			parse_subsh(t_parser *parser, t_ast **out);
-int			parse_cmd_subsh(t_parser *parser, t_ast **out);
+int			parse_subsh(t_parser *parser, t_ast **out);
 
+int			parse_cmd_subsh(t_parser *parser, t_ast **out);
 t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
 int			parse_pipe(t_parser *parser, t_ast **out);
 int			parse_and_or(t_parser	*parser, t_ast **out);

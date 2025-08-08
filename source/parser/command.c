@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:00 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/07 20:04:01 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:36:20 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,25 @@ t_ast	*new_cmd_leaf(void)
 	return (ast);
 }
 
-static int	parse_cmd(t_parser *parser, t_ast **out)
+void	collect_cmd(t_parser *parser, t_ast *cmd, t_tok **last_word)
+{
+	t_tok	*tok;
+
+	tok = parser->cur;
+	parser->cur = parser->cur->next;
+	tok->next = NULL;
+	if (cmd->u_data.cmd.u_data.words == NULL)
+		cmd->u_data.cmd.u_data.words = tok;
+	else
+		(*last_word)->next = tok;
+	*last_word = tok;
+	cmd->u_data.cmd.count++;
+}
+
+int	parse_cmd(t_parser *parser, t_ast **out)
 {
 	t_ast	*cmd;
 	t_tok	*last_word;
-	t_tok	*tok;
 
 	if (parser->cur == NULL)
 		return (printerr_unexpecteol());
@@ -45,21 +59,10 @@ static int	parse_cmd(t_parser *parser, t_ast **out)
 			|| is_redirtok(parser->cur)))
 	{
 		if (parser->cur->type == T_WORD)
-		{
-			tok = parser->cur;
-			parser->cur = parser->cur->next;
-			tok->next = NULL;
-			if (cmd->u_data.cmd.u_data.words == NULL)
-				cmd->u_data.cmd.u_data.words = tok;
-			else
-				last_word->next = tok;
-			last_word = tok;
-			cmd->u_data.cmd.count++;
-		}
+			collect_cmd(parser, cmd, &last_word);
 		else if (collect_redir(parser, &cmd->u_data.cmd.redir) == 1)
 			return (free_ast_parse(&cmd), 1);
 	}
-	// if (parser->cur != NULL && !is_redirtok(parser->cur))
 	*out = cmd;
 	return (0);
 }
@@ -78,7 +81,7 @@ t_ast	*new_subsh_node(t_ast *child)
 	return (ast);
 }
 
-static int	parse_subsh(t_parser *parser, t_ast **out)
+int	parse_subsh(t_parser *parser, t_ast **out)
 {
 	t_ast	*child;
 
@@ -97,11 +100,4 @@ static int	parse_subsh(t_parser *parser, t_ast **out)
 		return (free_ast_parse(&child), 1);
 	*out = child;
 	return (0);
-}
-
-int	parse_cmd_subsh(t_parser *parser, t_ast **out)
-{
-	if (parser->cur && parser->cur->type == T_LPAREN)
-		return (parse_subsh(parser, out));
-	return (parse_cmd(parser, out));
 }

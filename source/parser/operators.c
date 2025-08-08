@@ -6,11 +6,18 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:48:15 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/07 19:34:37 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 16:36:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	parse_cmd_subsh(t_parser *parser, t_ast **out)
+{
+	if (parser->cur && parser->cur->type == T_LPAREN)
+		return (parse_subsh(parser, out));
+	return (parse_cmd(parser, out));
+}
 
 t_ast	*new_op_node(t_asttype type, t_ast *left, t_ast *right)
 {

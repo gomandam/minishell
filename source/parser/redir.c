@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/08 16:23:13 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:16:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,32 +55,32 @@ void	redir_push(t_redirs *list, t_redir *redir)
 	list->tail = redir;
 }
 
-int	collect_redir(t_parser *parser, t_redirs *list)
+int	collect_redir(t_tok **cur, t_redirs *list)
 {
 	t_redir	*redir;
 	t_tok	*op;
 	t_tok	*word;
 
-	op = parser->cur;
+	op = *cur;
 	word = op->next;
 	if (word == NULL)
-		return (printerr_unexpecteol());
+		return (perror_unexpecteol());
 	if (word->type != T_WORD)
-		return (printerr_syntaxtok(word));
+		return (perror_syntaxtok(word));
 	redir = new_redir_from_tok(op, word);
 	if (redir == NULL)
-		return (printerr_malloc());
+		return (perror_malloc());
 	redir_push(list, redir);
-	parser->cur = word->next;
+	*cur = word->next;
 	free_tok(&op);
 	return (0);
 }
 
-int	collect_redirs(t_parser *parser, t_redirs *redirs)
+int	collect_redirs(t_tok **cur, t_redirs *redirs)
 {
-	while (parser->cur && is_redirtok(parser->cur))
+	while (*cur && is_redirtok(*cur))
 	{
-		if (collect_redir(parser, redirs) == 1)
+		if (collect_redir(cur, redirs) == 1)
 			return (1);
 	}
 	return (0);

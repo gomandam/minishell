@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/08 16:36:54 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:29:58 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,36 +77,38 @@ int			tokenize(const char *input, t_tok **out);
 
 // parser
 
-char		*get_text_tok(t_tok *tok);
 int			is_redirtok(t_tok *tok);
-void		consume_tok(t_parser *parser);
+void		consume_tok(t_tok **cur);
+char		*get_text_tok(t_tok *tok);
 
-int			printerr_malloc(void);
-int			printerr_unexpecteol(void);
-int			printerr_syntaxtok(t_tok *cur);
-
-t_redir		*new_redir(t_redirtype type, t_tok *word);
-t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
-void		redir_push(t_redirs *list, t_redir *redir);
-int			collect_redir(t_parser *parser, t_redirs *list);
-
-int			collect_redirs(t_parser *parser, t_redirs *redirs);
-
-t_ast		*new_cmd_leaf(void);
-int			parse_cmd(t_parser *parser, t_ast **out);
-t_ast		*new_subsh_node(t_ast *child);
-int			parse_subsh(t_parser *parser, t_ast **out);
-
-int			parse_cmd_subsh(t_parser *parser, t_ast **out);
-t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
-int			parse_pipe(t_parser *parser, t_ast **out);
-int			parse_and_or(t_parser	*parser, t_ast **out);
+int			perror_malloc(void);
+int			perror_unexpecteol(void);
+int			perror_syntaxtok(t_tok *cur);
 
 void		free_redirs(t_redirs *list);
 void		free_ast_cmd_parse(t_ast **ast);
 void		free_ast_parse(t_ast **ast);
 
-int			parse_ast(t_tok *tok, t_ast **out);
+t_redir		*new_redir(t_redirtype type, t_tok *word);
+t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
+void		redir_push(t_redirs *list, t_redir *redir);
+int			collect_redir(t_tok **cur, t_redirs *list);
+
+int			collect_redirs(t_tok **cur, t_redirs *redirs);
+
+t_ast		*new_cmd_leaf(void);
+void		collect_cmd(t_tok **cur, t_ast *cmd, t_tok **last_word);
+int			parse_cmd(t_tok **cur, t_ast **out);
+t_ast		*new_subsh_node(t_ast *child);
+int			parse_subsh(t_tok **cur, t_ast **out);
+
+int			parse_cmd_subsh(t_tok **cur, t_ast **out);
+
+t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
+int			parse_pipe(t_tok **cur, t_ast **out);
+int			parse_and_or(t_tok **cur, t_ast **out);
+
+int			parse_ast(t_tok *tokens, t_ast **out);
 
 // !debug: delete file and functions
 void		debug_tok(t_tok *tok, int level);

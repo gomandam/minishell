@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/07 20:40:02 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:31:00 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef enum e_redirtype
 	R_INFILE,
 	R_HEREDOC,
 	R_OUTFILE,
-	R_APPEND
+	R_APPEND,
 }	t_redirtype;
 
 typedef struct s_redir
@@ -71,7 +71,7 @@ typedef struct s_redir
 	{
 		t_tok			*word;
 		char			*text;
-		int16_t			pipe[2]; // TODO: For heredoc
+		// int				pipe[2]; // TODO: For heredoc
 	}			u_data;
 	t_redirtype		type;
 	struct s_redir	*next;
@@ -112,7 +112,7 @@ typedef enum e_asttype
 	AST_PIPE,
 	AST_AND_IF,
 	AST_OR_IF,
-	AST_SUBSH
+	AST_SUBSH,
 }	t_asttype;
 
 typedef struct s_ast
@@ -136,7 +136,7 @@ typedef enum e_lxstate
 	LX_PARAM,
 	LX_EOL,
 	LX_DIE,
-	LX_ERR
+	LX_ERR,
 }	t_lxstate;
 
 typedef struct s_lexer
@@ -151,12 +151,5 @@ typedef struct s_lexer
 }	t_lexer;
 
 typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
-
-// parse
-
-typedef struct s_parser
-{
-	t_tok		*cur;
-}	t_parser;
 
 #endif

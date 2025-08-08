@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 02:07:43 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/08 16:22:21 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:29:42 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ int	is_redirtok(t_tok *tok)
 		|| tok->type == T_HEREDOC || tok->type == T_APPEND);
 }
 
-void	consume_tok(t_parser *parser)
+void	consume_tok(t_tok **cur)
 {
 	t_tok	*next;
 
-	if (parser->cur == NULL)
+	if (*cur == NULL)
 		return ;
-	next = parser->cur->next;
-	free_tok(&parser->cur);
-	parser->cur = next;
+	next = (*cur)->next;
+	free_tok(cur);
+	*cur = next;
 }
 
 char	*get_text_tok(t_tok *tok)
@@ -54,16 +54,16 @@ char	*get_text_tok(t_tok *tok)
 	return ("");
 }
 
-int	parse_ast(t_tok *tok, t_ast **out)
+int	parse_ast(t_tok *tokens, t_ast **out)
 {
-	t_parser	parser;
+	t_tok	*cur;
 
-	parser.cur = tok;
+	cur = tokens;
 	*out = NULL;
-	if (parse_and_or(&parser, out) == 1)
-		return (free_tokens(&parser.cur), free_ast_parse(out), 1);
-	if (parser.cur != NULL)
-		return (printerr_syntaxtok(parser.cur), free_tokens(&parser.cur),
+	if (parse_and_or(&cur, out) == 1)
+		return (free_tokens(&cur), free_ast_parse(out), 1);
+	if (cur != NULL)
+		return (perror_syntaxtok(cur), free_tokens(&cur),
 			free_ast_cmd_parse(out), 1);
 	return (0);
 }

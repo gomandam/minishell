@@ -6,26 +6,26 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:28:33 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/08 16:25:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:12:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	printerr_malloc(void)
+int	perror_malloc(void)
 {
 	write(STDERR_FILENO, "minishell: memory allocation error\n", 35);
 	return (1);
 }
 
-int	printerr_unexpecteol(void)
+int	perror_unexpecteol(void)
 {
 	write(STDERR_FILENO,
 		"minishell: syntax error near unexpected token 'newline'\n", 56);
 	return (1);
 }
 
-int	printerr_syntaxtok(t_tok *cur)
+int	perror_syntaxtok(t_tok *cur)
 {
 	char	*tok_text;
 	size_t	tok_size;

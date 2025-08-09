@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/26 02:44:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/08 17:31:00 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,26 @@
 # define STRUCTURES_H
 
 # include <sys/types.h> // pid_t, size_t
+
+typedef struct s_slice
+{
+	const char	*begin;
+	size_t		len;
+}	t_slice;
+
+typedef enum e_segtype
+{
+	SEG_TEXT,
+	SEG_PARAM,
+	SEG_WILDCARD
+}	t_segtype;
+
+typedef struct s_seg
+{
+	t_segtype		type;
+	t_slice			slice;
+	struct s_seg	*next;
+}	t_seg;
 
 typedef enum e_toktype
 {
@@ -29,12 +49,84 @@ typedef enum e_toktype
 	T_RPAREN,
 }	t_toktype;
 
-typedef enum e_segtype
+typedef struct s_tok
 {
-	SEG_TEXT,
-	SEG_PARAM,
-	SEG_WILDCARD
-}	t_segtype;
+	t_toktype		type;
+	t_seg			*seg_head;
+	t_seg			*seg_tail;
+	struct s_tok	*next;
+}	t_tok;
+
+typedef enum e_redirtype
+{
+	R_INFILE,
+	R_HEREDOC,
+	R_OUTFILE,
+	R_APPEND,
+}	t_redirtype;
+
+typedef struct s_redir
+{
+	union
+	{
+		t_tok			*word;
+		char			*text;
+		// int				pipe[2]; // TODO: For heredoc
+	}			u_data;
+	t_redirtype		type;
+	struct s_redir	*next;
+}	t_redir;
+
+typedef struct s_redirs
+{
+	t_redir		*head;
+	t_redir		*tail;
+}	t_redirs;
+
+typedef struct s_cmd
+{
+	union
+	{
+		t_tok			*words;
+		char			**argv;
+	}			u_data;
+	size_t			count;
+	t_redirs		redir;
+}	t_cmd;
+
+typedef struct s_op
+{
+	struct s_ast	*left;
+	struct s_ast	*right;
+}	t_op;
+
+typedef struct s_subsh
+{
+	struct s_ast	*child;
+	t_redirs		redir;
+}	t_subsh;
+
+typedef enum e_asttype
+{
+	AST_CMD,
+	AST_PIPE,
+	AST_AND_IF,
+	AST_OR_IF,
+	AST_SUBSH,
+}	t_asttype;
+
+typedef struct s_ast
+{
+	union
+	{
+		t_cmd	cmd;
+		t_op	op;
+		t_subsh	subsh;
+	}			u_data;
+	t_asttype		type;
+}	t_ast;
+
+// lexer
 
 typedef enum e_lxstate
 {
@@ -44,29 +136,8 @@ typedef enum e_lxstate
 	LX_PARAM,
 	LX_EOL,
 	LX_DIE,
-	LX_ERR
+	LX_ERR,
 }	t_lxstate;
-
-typedef struct s_slice
-{
-	const char	*begin;
-	size_t		len;
-}	t_slice;
-
-typedef struct s_seg
-{
-	t_segtype		type;
-	t_slice			slice;
-	struct s_seg	*next;
-}	t_seg;
-
-typedef struct s_tok
-{
-	t_toktype		type;
-	t_seg			*seg_head;
-	t_seg			*seg_tail;
-	struct s_tok	*next;
-}	t_tok;
 
 typedef struct s_lexer
 {

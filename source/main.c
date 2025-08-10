@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/06 19:47:55 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/10 14:48:56 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)envp;
 	while (1)
 	{
-		// TODO: Handle signals
+		// TODO: Handle signals, and exit errors for return 1
 		line = readline(MINI_PROMPT);
 		if (!line)
 			break ;
@@ -35,12 +35,12 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_free((void **)&line);
 			break ;
 		}
-		debug_tokenizer(tokens);
 		if (tokens == NULL)
 		{
 			ft_free((void **)&line);
 			continue ;
 		}
+		debug_tokenizer(tokens);
 		if (parse_ast(tokens, &ast) == 1)
 		{
 			// free_tokens(&tokens);

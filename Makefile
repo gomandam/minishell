@@ -11,6 +11,7 @@ LDFLAGS = -lreadline
 
 SRC_DIR = source
 SOURCES = $(SRC_DIR)/main.c \
+					$(SRC_DIR)/errors.c \
 					$(SRC_DIR)/lexer/free.c \
 					$(SRC_DIR)/lexer/general.c \
 					$(SRC_DIR)/lexer/handlers.c \
@@ -18,7 +19,6 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/lexer/segments.c \
 					$(SRC_DIR)/lexer/tokens.c  \
 					$(SRC_DIR)/parser/command.c \
-					$(SRC_DIR)/parser/errors.c \
 					$(SRC_DIR)/parser/free.c \
 					$(SRC_DIR)/parser/operators.c \
 					$(SRC_DIR)/parser/parser.c \

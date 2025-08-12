@@ -23,6 +23,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/operators.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redir.c \
+					$(SRC_DIR)/expansion/literal.c \
 					$(SRC_DIR)/debug.c #! Temporal
 OBJ = $(SOURCES:%.c=%.o)
 

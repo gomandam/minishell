@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/12 19:01:59 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/13 00:10:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int			parse_ast(t_tok *tokens, t_ast **out);
 // expansion
 
 char		*literal_expansion(t_tok *word);
+char		*expand_tok(t_tok *tok);
 
 // !debug: delete file and functions
 void		debug_tok(t_tok *tok, int level);

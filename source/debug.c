@@ -29,6 +29,37 @@ void	debug_tok(t_tok *tok, int level)
 	}
 }
 
+void	debug_tok_expansion(t_tok *tok, int level)
+{
+	debug_tok(tok, level);
+	if (tok->type == T_WORD)
+	{
+		char *expanded = expand_tok(tok);
+		debug_indent(level + 1);
+		printf("Expanded token: %s\n", expanded);
+		free(expanded);
+	}
+}
+
+void	debug_redir_expansion(t_redir *redir, int level)
+{
+	debug_indent(level);
+	if (redir->type == R_HEREDOC)
+	{
+		char *expanded = literal_expansion(redir->u_data.word);
+		debug_indent(level + 1);
+		printf("Expanded literal redir: %s\n", expanded);
+		free(expanded);
+	}
+	else
+	{
+		char *expanded = expand_tok(redir->u_data.word);
+		debug_indent(level + 1);
+		printf("Expanded redir: %s\n", expanded);
+		free(expanded);
+	}
+}
+
 static void	debug_redirs(t_redirs *redirs, int level)
 {
 	if (redirs == NULL || redirs->head == NULL)
@@ -41,7 +72,7 @@ static void	debug_redirs(t_redirs *redirs, int level)
 		debug_indent(level);
 		printf("Redir type: %s (%d)\n", redirtype_names[redir->type], redir->type);
 		if (redir->u_data.word != NULL)
-			debug_tok(redir->u_data.word, level + 1);
+			debug_redir_expansion(redir, level + 1);
 		else
 		{
 			debug_indent(level + 1);
@@ -68,7 +99,8 @@ static void	debug_ast(t_ast *ast, int level)
 		t_tok	*word = ast->u_data.cmd.u_data.words;
 		while (word != NULL)
 		{
-			debug_tok(word, level + 1);
+			// debug_tok(word, level + 1);
+			debug_tok_expansion(word, level + 1);
 			word = word->next;
 		}
 		debug_redirs(&ast->u_data.cmd.redir, level + 1);

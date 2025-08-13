@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 23:00:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/13 11:48:46 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/13 13:50:13 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ char	*expand_tok(t_tok *tok)
 		}
 		cur = cur->next;
 	}
-	if (wildcards > 0)
-		return (NULL); // TODO: manage wildcards for return char ** when do globbing, not char *, if don't find matches with *, must return the char* consturcted by concat * with the expanded info
+	// if (wildcards > 0)
+		// return (NULL); // TODO: manage wildcards for return char ** when do globbing, not char *, if don't find matches with *, must return the char* consturcted by concat * with the expanded info
 	res = malloc(sizeof(char) * (len + 1));
 	if (res == NULL)
 		return (ft_lstclear(&param_expanded, NULL), NULL);
@@ -101,3 +101,8 @@ char	*expand_tok(t_tok *tok)
 	printf("Expanded token: %s\n", res); */
 	return (res);
 }
+
+/* int	expand_cmd(t_cmd *cmd)
+{
+
+} */

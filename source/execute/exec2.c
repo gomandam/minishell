@@ -1,55 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   exec2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/13 02:42:28 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/13 02:12:02 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 
-// TESTING behaviours
-typedef enum e_asttype
-{
-    AST_CMD,
-    AST_PIPE,
-    AST_AND_IF,
-    AST_OR_IF,
-    AST_SUBSH
-}  t_asttype;
+// recursive function for solving branches from AST
 
+/*
+ * binary operator node in the AST, connect left and right children
+ * represents:
+ * - priority binary nodes: AST_AND_IF, AST_OR_IF
+ * - non-priority binary nodes: AST_PIPE
+ */
 
-typedef struct s_ast t_ast;
-typedef struct s_cmd
-{
-    char **argv;
-}   t_cmd;
-
-typedef struct s_op
-{
-    t_ast *left;
-    t_ast *right;
-}   t_op;
-
-typedef struct s_subsh
-{
-    t_ast *child;
-}   t_subsh;
-
-struct s_ast {
-    t_asttype type;
-    union {
-        t_cmd cmd;
-        t_op op;
-        t_subsh subsh;
-    } u_data;
-};
+/*
+	Process Control:
+	fork()
+	execve()
+	wait()
+	waitpid()
+	exit()
+*/

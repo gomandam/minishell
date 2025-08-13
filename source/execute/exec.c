@@ -6,11 +6,11 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/13 02:50:40 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/13 03:00:48 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+// #include "../../include/minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -57,9 +57,10 @@ struct s_ast {
 // Utility for pipes (left | right)
 int exec_pipe_node(t_ast *left, t_ast *right)
 {
-    int fd[2];
-    pid_t pid_left, pid_right;
-    int status = 0;
+    int	fd[2];
+    pid_t	pid_left;
+    pid_t	pid_right;
+    int	status = 0;
 
     if (pipe(fd) == -1)
         return (perror("pipe"), 1);
@@ -85,7 +86,7 @@ int exec_pipe_node(t_ast *left, t_ast *right)
     waitpid(pid_right, &status, 0);
     return status;
 }
-// The recursive executor (Prompt from chatgpt. I have found bigs)
+// The recursive executor (Prompt from chatgpt. I have found as reference)
 int exec_ast(t_ast *node)
 {
     int s;

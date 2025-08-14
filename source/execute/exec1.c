@@ -6,12 +6,9 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/15 00:20:29 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/14 03:02:30 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// MAIN EXEC. FUNCTION -> Prototype: pipe, execution, process control, 
-// 	recursive functions to traverse AST
 
 // #include "../../include/minishell.h"
 #include <stdio.h>
@@ -57,73 +54,6 @@ struct s_ast {
     } u_data;
 };
 
-//Prototyped for definition
-int	exec_pipe_node(t_ast *left, t_ast *right);
-
-int	exec_cmd_node(char *argv[])
-{
-	pid_t	pid;
-	int	status;
-
-	if (!argv || !argv[0])
-		return (1);
-	pid = fork();
-	if (pid == -1)
-		return(perror("fork"), 1);
-	if (pid == 0)
-	{
-		if (execve(argv[0], argv, NULL) == -1)	// child process
-		{
-			perror("execve");
-			exit(127); // command not found
-		}
-	}
-	else
-		waitpid(pid, &status, 0); // parent process
-	return (status);
-}
-
-// recursive
-int	exec_ast(t_ast *node)
-{
-	int s;
-	if (!node)
-		return (1);
-	if (node->type == AST_CMD)
-		return exec_cmd_node(node->u_data.cmd.argv);
-	if (node->type == AST_PIPE)
-		return exec_pipe_node(node->u_data.op.left, node->u_data.op.right);
-	if (node->type == AST_AND_IF)
-	{
-		s = exec_ast(node->u_data.op.left);
-		if (WIFEXITED(s) && WEXITSTATUS(s) == 0)
-			return exec_ast(node->u_data.op.right);
-		return (s);
-	}
-	if (node->type == AST_OR_IF)
-	{
-		s = exec_ast(node->u_data.op.left);
-		if (WIFEXITED(s) && WEXITSTATUS(s) != 0)
-			return exec_ast(node->u_data.op.right);
-		return s;
-	}
-	if (node->type == AST_SUBSH)
-	{
-		pid_t	pid;
-		pid = fork();
-		int status;
-
-		status = 0;
-		if (pid == 0)
-			exit(exec_ast(node->u_data.subsh.child));
-		else if (pid > 0)
-			waitpid(pid, &status, 0);
-		else
-			perror("fork");
-		return (status);
-	}
-	return (1);
-}
 // Utility for pipes (left | right)
 int	exec_pipe_node(t_ast *left, t_ast *right)
 {
@@ -131,7 +61,6 @@ int	exec_pipe_node(t_ast *left, t_ast *right)
 	pid_t	pid_left;
 	pid_t	pid_right;
 	int	status;
-
 	status = 0;
 	if (pipe(fd) == -1)
 		return (perror("pipe"), 1);
@@ -154,7 +83,46 @@ int	exec_pipe_node(t_ast *left, t_ast *right)
 	waitpid(pid_right, &status, 0);
 	return status;
 }
-
+// recursive
+int	exec_ast(t_ast *node)
+{
+	int s;
+	if (!node)
+		return 1;
+	if (node->type == AST_CMD)
+		return exec_cmd_node(node->u_data.cmd.argv);
+	if (node->type == AST_PIPE)
+		return exec_pipe_node(node->u_data.op.left, node->u_data.op.right)
+	if (node->type == AST_AND_IF)
+	{
+		s = exec_ast(node->u_data.op.left);
+		if (WIFEXITED(s) && WEXITSTATUS(s) == 0)
+			return exec_ast(node->u_data.op.right);
+		return s;
+	}
+	if (node->type == AST_OR_IF)
+	{
+		s = exec_ast(node->u_data.op.left);
+		if (WIFEXITED(s) && WEXITSTATUS(s) != 0)
+			return exec_ast(node->u_data.op.right);
+		return s;
+	}
+	if (node->type == AST_SUBSH)
+	{
+		pid_t	pid;
+		pid = fork();
+		int status;
+		status = 0;
+		if (pid == 0)
+			exit(exec_ast(node->u_data.subsh.child));
+		else if (pid > 0)
+			waitpid(pid, &status, 0);
+		else
+			perror("fork");
+		return status;
+	}
+	return 1;
+}
 // Debug: build a small AST for testing
 t_ast	*build_test_ast(void)
 {

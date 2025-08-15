@@ -1,18 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simple.c                                           :+:      :+:    :+:   */
+/*   alternatives.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 18:36:09 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/13 13:10:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/14 12:49:36 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static size_t	get_len(t_tok *word)
+// TODO: For bash error oh ambiguos redirect (multiple args for only one redir, when expand wildcard)
+char	*literal_expansion(t_tok *word)
+{
+	size_t		len;
+	const char	*last_char;
+
+	last_char = word->seg_tail->slice.begin + word->seg_tail->slice.len;
+	len = last_char - word->seg_head->slice.begin;
+	return (ft_strndup(word->seg_head->slice.begin, len));
+}
+
+static size_t	get_len_simple(t_tok *word)
 {
 	size_t	len;
 	t_seg	*cur;
@@ -61,7 +72,7 @@ char	*simple_expansion(t_tok *word)
 	size_t	len;
 	char	*expanded;
 
-	len = get_len(word);
+	len = get_len_simple(word);
 	expanded = malloc(sizeof(char) * (len + 1));
 	if (expanded == NULL)
 		return (NULL);

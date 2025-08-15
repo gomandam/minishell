@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/13 13:10:57 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/14 12:55:49 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int			perror_malloc(void);
 int			perror_unexpecteof(t_lxstate prev);
 int			perror_unexpecteol(void);
 int			perror_syntaxtok(t_tok *cur);
+int			perror_ambiguosredir(t_tok *word);
 
 // lexer
 
@@ -109,7 +110,7 @@ int			parse_ast(t_tok *tokens, t_ast **out);
 
 char		*literal_expansion(t_tok *word);
 char		*simple_expansion(t_tok *word);
-char		*expand_tok(t_tok *tok);
+int			expand_cmd(t_cmd *cmd); // also add $?
 
 // !debug: delete file and functions
 void		debug_tok(t_tok *tok, int level);

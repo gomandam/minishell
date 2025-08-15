@@ -11,7 +11,8 @@ LDFLAGS = -lreadline
 
 SRC_DIR = source
 SOURCES = $(SRC_DIR)/main.c \
-	  				$(SRC_DIR)/init.c \
+					$(SRC_DIR)/env.c \
+					$(SRC_DIR)/init.c \
 					$(SRC_DIR)/errors.c \
 					$(SRC_DIR)/lexer/free.c \
 					$(SRC_DIR)/lexer/general.c \

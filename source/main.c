@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/15 17:59:09 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/15 19:00:25 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ int	main(int argc, char *argv[], char *envp[])
 		// free_tokens(&tokens); // TODO: free tokens must not free because are freed
 		ft_free((void **)&shell.line);
 	}
+	free_env_list(&shell.env_list);
 	rl_clear_history();
 }

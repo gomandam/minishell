@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/15 17:44:22 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/15 17:59:09 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,8 @@ int	main(int argc, char *argv[], char *envp[])
 	ft_putstr_fd("Welcome to MiniYeska!\n", 1);
 	(void)argc;
 	(void)argv;
-	(void)envp;
-	shell.line = NULL;
-	shell.tokens = NULL;
-	shell.ast = NULL;
-	shell.last_status = 0;
+	if (init_shell(&shell, envp) == 1)
+		return (1);
 	while (1)
 	{
 		// TODO: Handle signals, and exit errors for return 1

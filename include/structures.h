@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/10 16:03:04 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/15 17:22:32 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,5 +244,29 @@ typedef struct s_lexer
 
 // * type for lexer state machine handler function
 typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
+
+typedef struct s_env
+{
+	char	*full;	// full line of the env
+	char	*value; // line after '=' of env
+	struct s_env	*next; // goes to the next list
+}	t_env;
+
+typedef struct s_env_list	// envp 
+{
+	t_env	*head;
+	t_env 	*tail;
+	char	**envp;
+	size_t	size;
+}	t_env_list;
+
+typedef struct s_shell
+{
+	char *line;
+	t_tok	*tokens;
+	t_ast	*ast;
+	t_env_list	env_list;	// contains the double pointer to access the environment varaibles
+	int	last_status;		// envp, to change the command status value (range: 0-255)
+}	t_shell;
 
 #endif

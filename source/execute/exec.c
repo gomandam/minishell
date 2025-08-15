@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/15 00:20:29 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/15 02:00:07 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	exec_cmd_node(char *argv[])
 // recursive
 int	exec_ast(t_ast *node)
 {
-	int s;
+	int	s;
 	if (!node)
 		return (1);
 	if (node->type == AST_CMD)
@@ -111,7 +111,7 @@ int	exec_ast(t_ast *node)
 	{
 		pid_t	pid;
 		pid = fork();
-		int status;
+		int	status;
 
 		status = 0;
 		if (pid == 0)

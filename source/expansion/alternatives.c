@@ -6,13 +6,12 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 18:36:09 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/14 12:49:36 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/16 17:44:49 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO: For bash error oh ambiguos redirect (multiple args for only one redir, when expand wildcard)
 char	*literal_expansion(t_tok *word)
 {
 	size_t		len;

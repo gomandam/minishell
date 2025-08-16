@@ -91,7 +91,7 @@ static void	debug_redirs(t_redirs *redirs, int level)
 	}
 }
 
-static void	debug_ast(t_ast *ast, int level)
+static void	debug_ast(t_shell *shell, t_ast *ast, int level)
 {
 	if (ast == NULL)
 	{
@@ -110,7 +110,7 @@ static void	debug_ast(t_ast *ast, int level)
 			word = word->next;
 		}
 		debug_redirs(&ast->u_data.cmd.redir, level + 1);
-		expand_cmd(&ast->u_data.cmd);
+		expand_cmd(shell, &ast->u_data.cmd);
 		debug_indent(level + 1);
 		printf("cmd expanded:\n");
 		size_t i = 0;
@@ -140,16 +140,16 @@ static void	debug_ast(t_ast *ast, int level)
 }
 	else if (ast->type == AST_SUBSH)
 	{
-		debug_ast(ast->u_data.subsh.child, level + 1);
+		debug_ast(shell, ast->u_data.subsh.child, level + 1);
 		debug_redirs(&ast->u_data.subsh.redir, level + 1);
 	}
 	else {
 		debug_indent(level + 1);
 		printf("Left:\n");
-		debug_ast(ast->u_data.op.left, level + 2);
+		debug_ast(shell, ast->u_data.op.left, level + 2);
 		debug_indent(level + 1);
 		printf("Right:\n");
-		debug_ast(ast->u_data.op.right, level + 2);
+		debug_ast(shell, ast->u_data.op.right, level + 2);
 	}
 }
 
@@ -164,8 +164,8 @@ void	debug_tokenizer(t_tok *head)
 	}
 }
 
-void	debug_parser(t_ast *ast)
+void	debug_parser(t_shell *shell, t_ast *ast)
 {
 	printf("-> Parser:\n");
-	debug_ast(ast, 1);
+	debug_ast(shell, ast, 1);
 }

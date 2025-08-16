@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 15:23:02 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/20 00:39:18 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/16 10:46:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 			return (c1[i] - c2[i]);
 		i++;
 	}
-	return (0);
+	if (i == n)
+		return (0);
+	return (c1[i] - c2[i]);
 }

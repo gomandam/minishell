@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/14 12:55:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/16 10:01:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,5 +116,14 @@ int			expand_cmd(t_cmd *cmd); // also add $?
 void		debug_tok(t_tok *tok, int level);
 void		debug_tokenizer(t_tok *head);
 void		debug_parser(t_ast *ast);
+
+// env functions
+
+t_env		*create_env_node(char *full, char *value);
+void		env_list_push(t_env_list *env_list, t_env *node);
+void		free_env_list(t_env_list *env_list);
+
+// main helper functions
+int			init_shell(t_shell *shell, char *envp[]);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/10 16:03:04 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/15 19:09:23 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,5 +244,45 @@ typedef struct s_lexer
 
 // * type for lexer state machine handler function
 typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
+
+/*
+ * environment variable node,
+ * with full line of the env,
+ * the value is the line after '=' of env
+ */
+typedef struct s_env
+{
+	char			*full;
+	char			*value;
+	struct s_env	*next;
+}	t_env;
+
+/*
+ * list of environment variables
+ * envp is a cached value that will be free on modified list
+ */
+typedef struct s_env_list
+{
+	t_env		*head;
+	t_env		*tail;
+	char		**envp;
+	size_t		size;
+}	t_env_list;
+
+/*
+ * main shell struct t_shell
+ * line is the readline input
+ * tokens was generated for the lexer from the current line
+ * ast was generated for the parser from the tokens
+ * last_status is the exit status of the last executed line
+ */
+typedef struct s_shell
+{
+	char		*line;
+	t_tok		*tokens;
+	t_ast		*ast;
+	t_env_list	env_list;
+	int			last_status;
+}	t_shell;
 
 #endif

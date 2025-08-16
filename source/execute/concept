@@ -1,4 +1,4 @@
-Certainly. In the context of your MINISHELL project, "execution" refers to the phase after parsing, where the shell takes the Abstract Syntax Tree (AST) or command list and actually runs the commands, handling piping, redirections, and process control.
+In the context of your MINISHELL project, "execution" refers to the phase after parsing, where the shell takes the Abstract Syntax Tree (AST) or command list and actually runs the commands, handling piping, redirections, and process control.
 
 Below is a technical breakdown of the core parts of execution, their purpose, implementation, and the system functions required.
 

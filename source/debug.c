@@ -34,12 +34,6 @@ void	debug_tok(t_tok *tok, int level)
 // 	debug_tok(tok, level);
 // 	if (tok->type == T_WORD)
 // 	{
-// 		/*
-// 		char *expanded = expand_tok(tok);
-// 		debug_indent(level + 1);
-// 		printf("Expanded token: %s\n", expanded);
-// 		free(expanded);
-// 		*/
 // 	}
 // }
 
@@ -66,11 +60,6 @@ void	debug_redir(t_redir *redir, int level)
 // 		}
 // 		else
 // 		{
-// 			/*
-// 			char *expanded = expand_tok(redir->u_data.word);
-// 			printf("Literal redir: %s, Expanded redir: %s\n", literal, expanded);
-// 			free(expanded);
-// 			*/
 // 		}
 // 		free(literal);
 // 	}
@@ -131,12 +120,6 @@ static void	debug_ast(t_shell *shell, t_ast *ast, int level)
 			printf("Redir type: %s (%d): [%s]\n", redirtype_names[redir->type], redir->type, redir->u_data.name);
 			redir = redir->next;
 		}
-		/*
-		debug_indent(level + 1);
-		char	**argv = ast->u_data.cmd.u_data.argv;
-		for (int i = 0; argv[i] != NULL; i++)
-			printf("Word %d: %s\n", i, argv[i]);
-		*/
 }
 	else if (ast->type == AST_SUBSH)
 	{

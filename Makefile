@@ -29,6 +29,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/expansion/command.c \
 					$(SRC_DIR)/expansion/expansion.c \
 					$(SRC_DIR)/expansion/free.c \
+					$(SRC_DIR)/expansion/free2.c \
 					$(SRC_DIR)/expansion/redirs.c \
 					$(SRC_DIR)/expansion/structures.c \
 					$(SRC_DIR)/expansion/wildcards.c \

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 10:59:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 18:11:18 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/17 18:58:01 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,14 @@ int	expand_redirs(t_shell *shell, t_redirs *redirs)
 	t_redir	*cur;
 
 	cur = redirs->head;
-	int error = 0;
 	while (cur != NULL)
 	{
 		if (cur->type != R_HEREDOC)
 		{
-			if (expand_redir(shell, cur) == 1 || error == 3)
+			if (expand_redir(shell, cur) == 1)
 				return (free_redirslst(&cur),
 					free_exp_redirslst(&redirs->head), 1);
 		}
-		error++;
 		cur = cur->next;
 	}
 	return (0);

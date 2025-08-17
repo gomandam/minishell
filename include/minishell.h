@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:36:19 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/17 18:43:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,10 +122,11 @@ int			expand_wildcards(t_shell *sh, t_exp *exp, t_tok *tok, t_argv *argv);
 void		free_param(t_param **param, t_seg *from_seg);
 void		free_paramlst(t_param **head, t_param **tail, t_seg *segs);
 void		free_argv(t_argv *argv);
-
 void		free_exp_redir(t_redir **redir);
 void		free_exp_redirslst(t_redir **head);
 void		free_exp_redirs(t_redirs *redirs);
+void		free_ast_cmd_final(t_ast **ast);
+void		free_ast_final(t_ast **ast);
 
 int			expand_tok(t_exp *exp, t_tok *tok, t_argv *argv);
 int			expand_cmd(t_shell *shell, t_cmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:50:24 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:35:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/17 18:36:33 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,26 +69,4 @@ void	free_exp_redir(t_redir **redir)
 	}
 	free(*redir);
 	*redir = NULL;
-}
-
-void	free_exp_redirslst(t_redir **head)
-{
-	t_redir	*next;
-
-	if (head == NULL || *head == NULL)
-		return ;
-	while (*head != NULL)
-	{
-		next = (*head)->next;
-		free_exp_redir(head);
-		*head = next;
-	}
-}
-
-void	free_exp_redirs(t_redirs *redirs)
-{
-	if (redirs == NULL)
-		return ;
-	free_redirslst(&redirs->head);
-	redirs->tail = NULL;
 }

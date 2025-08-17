@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:50:24 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/17 18:36:33 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:29:55 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ void	free_exp_redir(t_redir **redir)
 	}
 	else
 	{
-		// TODO: close pipefd[0];
+		// TODO: remove free_tok and replace with ft_close(&(*redir)->u_data.pipefd[0]);
+		free_tok(&(*redir)->u_data.word);
 	}
 	free(*redir);
 	*redir = NULL;

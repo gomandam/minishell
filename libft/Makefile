@@ -9,6 +9,7 @@ AR = ar rc
 RM = rm -f
 
 SRC =	ft_free.c \
+			ft_close.c \
 			ft_strndup.c \
 			ft_strcmp.c \
 			ft_isalpha.c \

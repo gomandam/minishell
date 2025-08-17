@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 19:41:11 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/13 12:11:07 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/17 19:26:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 void	*ft_free(void **ptr);
 char	*ft_strndup(const char *s1, size_t n);
 int		ft_strcmp(const char *s1, const char *s2);
+void	ft_close(int *fd);
 
 // standard libft functions
 int		ft_isalpha(int c);

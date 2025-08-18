@@ -1,0 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
+/*   Updated: 2025/08/19 00:35:15 by gomandam         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// MAIN EXEC. FUNCTION -> Prototype: pipe, execution, process control, 
+// 	recursive functions to traverse AST
+
+#include "../../include/minishell.h"
+
+/*
+ * Recursively executes the AST node.
+ * Deals with the logic based on node type:
+ * - AST_CMD:     Executes a command
+ * - AST_PIPE:    Handles a pipeline (left | right)
+ * - AST_AND_IF:  Handles '&&' logic (executes right only if left succeeds)
+ * - AST_OR_IF:   Handles '||' logic (executes right only if left fails)
+ * - AST_SUBSH:   Handles a subshell (parentheses)
+
+ * Returns: exit status of the executed subtree
+*/
+
+int	exec_ast(t_ast *node, t_env_list *env_list)
+{
+	if (!node)
+		retur (0);
+	if (node->type == AST_CMD)
+	{
+		// TO DO: Implement cmd execution for built-ins & external
+	}
+	else if (node->type == AST_PIPE)
+	{
+	// TO DO: pipeline handling
+	// setup pipe(), fork left  dup2 write, fork right  dup2 read, close fd  wait child process
+	}
+	else if (node->type == AST_AND_IF)
+	{
+		// TO DO: execute left, if status == 0, execute right
+	}
+	else if (node->type == AST_OR_IF)
+	{
+		// TO DO: execute left, if status != 0, execute right
+	}
+	else if (node->type == AST_SUBSH)
+	{
+		// TO DO: implement subshell execution (fork, exec in child process)
+	}
+	//  Handle errors, unexpected node type
+	return (1);
+}

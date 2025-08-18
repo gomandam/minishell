@@ -11,6 +11,8 @@ LDFLAGS = -lreadline
 
 SRC_DIR = source
 SOURCES = $(SRC_DIR)/main.c \
+					$(SRC_DIR)/env.c \
+					$(SRC_DIR)/init.c \
 					$(SRC_DIR)/errors.c \
 					$(SRC_DIR)/lexer/free.c \
 					$(SRC_DIR)/lexer/general.c \
@@ -23,6 +25,14 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/operators.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redir.c \
+					$(SRC_DIR)/expansion/alternatives.c \
+					$(SRC_DIR)/expansion/command.c \
+					$(SRC_DIR)/expansion/expansion.c \
+					$(SRC_DIR)/expansion/free.c \
+					$(SRC_DIR)/expansion/free2.c \
+					$(SRC_DIR)/expansion/redirs.c \
+					$(SRC_DIR)/expansion/structures.c \
+					$(SRC_DIR)/expansion/wildcards.c \
 					$(SRC_DIR)/debug.c #! Temporal
 OBJ = $(SOURCES:%.c=%.o)
 

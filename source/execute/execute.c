@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/19 00:35:15 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/19 01:08:28 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 int	exec_ast(t_ast *node, t_env_list *env_list)
 {
 	if (!node)
-		retur (0);
+		return (0);
 	if (node->type == AST_CMD)
 	{
 		// TO DO: Implement cmd execution for built-ins & external

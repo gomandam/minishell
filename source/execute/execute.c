@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/22 03:05:09 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/22 04:37:12 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,8 @@ int	execute_ast(t_ast *node, t_env_list *env_list)
 	if (!node)
 		return (0);
 	if (node->type == AST_CMD)
-	{
-		if (expand_cmd(shell, &node->u_data.cmd) != 0)
-			return (1);
-		// TO DO: Execute Command > Implement cmd execution for built-ins & external
-	}
+		return (expand_ast_cmd(shell, &node->u_data.cmd));
+		// Execute Command > Implement cmd execution for built-ins & external
 	else if (node->type == AST_PIPE)
 	{
 	// TO DO: pipeline handling

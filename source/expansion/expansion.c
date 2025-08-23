@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 23:00:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:21:55 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/23 19:03:51 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ size_t	consume_param(t_exp *exp, t_seg *seg, char *cur)
 	return (len);
 }
 
-int	expand_tok(t_exp *exp, t_tok *tok, t_argv *argv)
+char	*expand_tok(t_exp *exp, t_tok *tok)
 {
 	t_seg	*cur;
 	size_t	i;
@@ -61,7 +61,7 @@ int	expand_tok(t_exp *exp, t_tok *tok, t_argv *argv)
 
 	expanded = malloc(sizeof(char) * (exp->len + 1));
 	if (expanded == NULL)
-		return (perror_malloc());
+		return (perror_malloc(), NULL);
 	i = 0;
 	cur = tok->seg_head;
 	while (cur != NULL)
@@ -71,13 +71,14 @@ int	expand_tok(t_exp *exp, t_tok *tok, t_argv *argv)
 			ft_strlcpy(&expanded[i], cur->slice.begin, cur->slice.len + 1);
 			i += cur->slice.len;
 		}
+		else if (cur->type == SEG_WILDCARD)
+			expanded[i++] = '*';
 		else if (cur->type == SEG_PARAM)
 			i += consume_param(exp, cur, &expanded[i]);
 		cur = cur->next;
 	}
-	if (new_argv_push(argv, expanded) == 1)
-		return (perror_malloc(), free(expanded), 1);
-	return (0);
+	expanded[i] = '\0';
+	return (expanded);
 }
 
 static int	get_info(t_shell *shell, t_exp *exp, t_tok *tok)
@@ -112,6 +113,7 @@ static int	get_info(t_shell *shell, t_exp *exp, t_tok *tok)
 int	expansion(t_shell *shell, t_tok *tok, t_argv *argv)
 {
 	t_exp	exp;
+	char	*expanded;
 
 	exp.head = NULL;
 	exp.tail = NULL;
@@ -119,15 +121,15 @@ int	expansion(t_shell *shell, t_tok *tok, t_argv *argv)
 	exp.wildcards = 0;
 	if (get_info(shell, &exp, tok) == 1)
 		return (1);
-	if (exp.wildcards > 0)
+	expanded = expand_tok(&exp, tok);
+	if (expanded == NULL)
+		return (free_paramlst(&exp.head, &exp.tail, tok->seg_head), 1);
+	if (exp.wildcards == 0)
 	{
-		if (expand_wildcards(shell, &exp, tok, argv) == 1)
-			return (free_paramlst(&exp.head, &exp.tail, tok->seg_head), 1);
+		if (new_argv_push(argv, expanded) == 1)
+			return (free(expanded), 1);
 	}
-	else
-	{
-		if (expand_tok(&exp, tok, argv) == 1)
-			return (free_paramlst(&exp.head, &exp.tail, tok->seg_head), 1);
-	}
+	else if (expand_wildcards(shell, &exp, expanded, argv) == 1)
+		return (1);
 	return (0);
 }

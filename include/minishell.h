@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/17 18:43:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/23 19:03:13 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char		**convert_argv_to_array(t_argv *argv);
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
 
-int			expand_wildcards(t_shell *sh, t_exp *exp, t_tok *tok, t_argv *argv);
+int			expand_wildcards(t_shell *shell, t_exp *exp, char *s, t_argv *av);
 
 void		free_param(t_param **param, t_seg *from_seg);
 void		free_paramlst(t_param **head, t_param **tail, t_seg *segs);
@@ -128,7 +128,7 @@ void		free_exp_redirs(t_redirs *redirs);
 void		free_ast_cmd_final(t_ast **ast);
 void		free_ast_final(t_ast **ast);
 
-int			expand_tok(t_exp *exp, t_tok *tok, t_argv *argv);
+char		*expand_tok(t_exp *exp, t_tok *tok);
 int			expand_cmd(t_shell *shell, t_cmd *cmd);
 int			expansion(t_shell *shell, t_tok *tok, t_argv *argv);
 

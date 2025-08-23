@@ -34,10 +34,12 @@ int	execute_ast(t_ast *node, t_env_list *env_list)
 	if (node->type == AST_CMD)
 		return (expand_ast_cmd(shell, &node->u_data.cmd));
 		// Execute Command > Implement cmd execution for built-ins & external
+		// Basecase, where to return pid during recursion
 	else if (node->type == AST_PIPE)
 	{
 	// TO DO: pipeline handling
-	// setup pipe(), fork left  dup2 write, fork right  dup2 read, close fd  wait child process
+	// setup pipe(), left dup2 write,  right  dup2 read, close fd  wait child process
+	// exec_pipe(node); {{ execute_ast(node->left);  execute_ast(node->right); } waitpid(); }
 	}
 	else if (node->type == AST_AND_IF)
 	{
@@ -47,7 +49,7 @@ int	execute_ast(t_ast *node, t_env_list *env_list)
 	{
 		// TO DO: execute left, if status != 0, execute right
 	}
-	else if (node->type == AST_SUBSH)
+	else if (node->type == AST_SUBSH)		// NOT mandatory or mentioned in evaluation
 	{
 		// if (expand_subsh(shell, &node->u_data.subsh) != 0)
 		//	return (1);
@@ -56,3 +58,4 @@ int	execute_ast(t_ast *node, t_env_list *env_list)
 	//  Handle errors, unexpected node type
 	return (1);
 }
+	// Think for basecase where the recursion ends

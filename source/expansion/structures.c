@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:57:45 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:20:55 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/24 21:44:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,16 @@ int	new_argv_push(t_argv *argv, char *value)
 	argv->tail = new_node;
 	argv->argc++;
 	return (0);
+}
+
+int	new_argvdup_push(t_argv *argv, char *todup)
+{
+	char	*copy;
+
+	copy = ft_strdup(todup);
+	if (copy == NULL)
+		return (1);
+	return (new_argv_push(argv, copy));
 }
 
 char	**convert_argv_to_array(t_argv *argv)

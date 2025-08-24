@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/23 19:03:13 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/24 22:15:32 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,12 +112,14 @@ int			parse_ast(t_tok *tokens, t_ast **out);
 t_param		*new_param(void);
 void		param_push(t_param **head, t_param **tail, t_param *new_param);
 int			new_argv_push(t_argv *argv, char *value);
+int			new_argvdup_push(t_argv *argv, char *value);
 char		**convert_argv_to_array(t_argv *argv);
 
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
 
-int			expand_wildcards(t_shell *shell, t_exp *exp, char *s, t_argv *av);
+int			wildcard_match(const char *pattern, const char *str);
+int			expand_wildcards(t_shell *shell, char *expanded, t_argv *argv);
 
 void		free_param(t_param **param, t_seg *from_seg);
 void		free_paramlst(t_param **head, t_param **tail, t_seg *segs);

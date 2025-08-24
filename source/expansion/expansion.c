@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 23:00:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/23 19:03:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/24 21:39:09 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	expansion(t_shell *shell, t_tok *tok, t_argv *argv)
 		if (new_argv_push(argv, expanded) == 1)
 			return (free(expanded), 1);
 	}
-	else if (expand_wildcards(shell, &exp, expanded, argv) == 1)
+	else if (expand_wildcards(shell, expanded, argv) == 1)
 		return (1);
 	return (0);
 }

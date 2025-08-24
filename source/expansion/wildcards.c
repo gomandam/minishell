@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:08:36 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/24 22:18:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/24 22:24:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ int	expand_wildcards(t_shell *shell, char *expanded, t_argv *argv)
 		if (new_argv_push(argv, expanded) == 1)
 			return (free(expanded), 1);
 	}
+	else
+		free(expanded);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 18:36:09 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:44:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/25 19:02:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,14 @@ char	*literal_expansion(t_tok *word)
 {
 	size_t		len;
 	const char	*last_char;
+	const char	*first_char;
 
+	first_char = word->seg_head->slice.begin;
+	if (word->seg_head->type == SEG_PARAM)
+		first_char = first_char - 1;
 	last_char = word->seg_tail->slice.begin + word->seg_tail->slice.len;
-	len = last_char - word->seg_head->slice.begin;
-	return (ft_strndup(word->seg_head->slice.begin, len));
+	len = last_char - first_char;
+	return (ft_strndup(first_char, len));
 }
 
 static size_t	get_len_simple(t_tok *word)

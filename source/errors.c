@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:28:33 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 13:52:19 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/25 20:22:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int	perror_syntaxtok(t_tok *cur)
 	return (1);
 }
 
-int	perror_ambiguosredir(t_tok *word)
+int	perror_ambiguosredir(t_shell *shell, t_tok *word)
 {
 	char	*word_literal;
 	size_t	word_size;
 
-	word_literal = literal_expansion(word);
+	word_literal = literal_expansion(word, shell->line);
 	if (word_literal == NULL)
 		return (perror_malloc());
 	word_size = ft_strlen(word_literal);

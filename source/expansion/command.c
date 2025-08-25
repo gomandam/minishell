@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:52:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:13:17 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/25 16:37:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ int	expand_cmd(t_shell *shell, t_cmd *cmd)
 	return (0);
 }
 
-int	expand_subsh(t_shell *shell, t_cmd *cmd)
+int	expand_subsh(t_shell *shell, t_subsh *subsh)
 {
-	if (expand_redirs(shell, &cmd->redir) == 1)
+	if (expand_redirs(shell, &subsh->redir) == 1)
 		return (1);
 	return (0);
 }

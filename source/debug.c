@@ -99,7 +99,11 @@ static void	debug_ast(t_shell *shell, t_ast *ast, int level)
 			word = word->next;
 		}
 		debug_redirs(&ast->u_data.cmd.redir, level + 1);
-		expand_cmd(shell, &ast->u_data.cmd);
+		if (expand_cmd(shell, &ast->u_data.cmd))
+		{
+			// printf("error on expand_cmd\n");
+			return ;
+		}
 		debug_indent(level + 1);
 		printf("cmd expanded:\n");
 		size_t i = 0;

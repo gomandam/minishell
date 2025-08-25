@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 20:14:11 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/25 20:32:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@ char		**convert_argv_to_array(t_argv *argv);
 
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
+
+size_t		consume_param(t_exp *exp, t_seg *seg, char *cur);
+t_param		*expand_param(t_shell *shell, t_seg *seg);
 
 int			wildcard_match(const char *pattern, const char *str);
 int			expand_wildcards(t_shell *shell, char *expanded, t_argv *argv);

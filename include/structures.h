@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/24 19:17:02 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/25 17:40:42 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,9 @@ typedef struct s_exp
 	t_param		*tail;
 	size_t		len;
 	size_t		wildcards;
+	size_t		paramc;
+	size_t		paramnull;
+	size_t		words;
 }	t_exp;
 
 typedef struct s_argv

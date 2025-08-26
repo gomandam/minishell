@@ -1,0 +1,150 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    ast_map.txt                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/08/19 00:50:01 by gomandam          #+#    #+#              #
+#    Updated: 2025/08/19 01:00:05 by gomandam         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+STRUCTURE HIERARCHY DIAGRAM
+
+t_shell (Main shell container)
+│
+├── line (input readline buffer)
+├── tokens (lexical token list)
+├── ast (parsed command tree)
+├── env_list (environment variables)
+└── last_status (previous command exit code)
+
+┌── Lexical Analysis ────┐   ┌── Parsing ────────────┐   ┌── Execution ──────┐
+│                        │   │                       │   │                    │
+│  t_tok (Token)         │   │  t_ast (AST Node)     │   │  Process handling  │
+│  ├── type              │──►│  ├── type             │──►│  Command execution │
+│  ├── seg_head/tail     │   │  └── u_data           │   │  Redirections      │
+│  └── next              │   │     ├── cmd           │   │  Pipe management   │
+│                        │   │     ├── op            │   │                    │
+│  t_seg (Segment)       │   │     └── subsh         │   │                    │
+│  ├── type              │   │                       │   │                    │
+│  ├── slice             │   │  t_redirs             │   │                    │
+│  └── next              │   │  ├── head             │   │                    │
+│                        │   │  └── tail             │   │                    │
+└────────────────────────┘   └───────────────────────┘   └────────────────────┘
+
+KEY STRUCTURE ANALYSIS
+
+Lexical Analysis Components
+
+    t_slice: Holds a reference to a portion of the original input buffer. Comments accurately describe it as a slice from the original readline buffer.
+
+    t_seg: Segment within a word token. Forms a linked list of segments within a token. Comments correctly describe the three types: SEG_TEXT, SEG_PARAM, SEG_WILDCARD
+
+    t_tok: Token node produced by the lexer. The comments accurately describe that T_WORD tokens have segments, while others have NULL seg_head/seg_tail
+
+Parser Components
+
+    t_redir: Redirection node
+        Comments correctly explain the dual interpretation of u_data union for parsing vs execution phases
+
+    t_redirs: List of redirections
+        Simple list structure with head/tail pointers
+
+    t_ast: Abstract syntax tree node
+        Comments accurately describe the five node types and union implementation
+
+    t_cmd, t_op, t_subsh: AST node variants
+        Comments correctly explain their structure and purpose
+
+State and Control Components
+
+    t_lxstate: Lexer state machine states
+        Comments correctly explain all states including valid end states and error states
+
+    t_lexer: Lexer machine state container
+        Comments accurately describe machine states and processing elements
+
+    t_env and t_env_list: Environment variable handling
+        Comments correctly explain structure and caching mechanism
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/17 18:52:16 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/26 03:50:07 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,19 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_free((void **)&shell.line);
 			continue ;
 		}
-		// debug_tokenizer(shell.tokens);
+		debug_tokenizer(&shell);
 		if (parse_ast(shell.tokens, &shell.ast) == 1)
 		{
 			// free_tokens(&shell.tokens);
 			ft_free((void **)&shell.line);
 			continue ;
 		}
-		debug_parser(&shell, shell.ast);
+		if (debug_parser(&shell) == 1)
+		{
+			free_ast_parse(&shell.ast);
+			ft_free((void **)&shell.line);
+			continue ;
+		}
 		free_ast_final(&shell.ast);
 		// free_ast_parse(&shell.ast); // ? Must use free_ast_final when ast is expanded
 		// free_tokens(&tokens); // TODO: free tokens must not free because are freed

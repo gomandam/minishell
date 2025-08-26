@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 20:32:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/26 03:49:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,7 @@ void		free_env_list(t_env_list *env_list);
 int			init_shell(t_shell *shell, char *envp[]);
 
 // !debug: delete file and functions
-void		debug_tok(t_tok *tok, int level);
-void		debug_tokenizer(t_tok *head);
-void		debug_parser(t_shell *shell, t_ast *ast);
+void		debug_tokenizer(t_shell *shell);
+int			debug_parser(t_shell *shell);
 
 #endif

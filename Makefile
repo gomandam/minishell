@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror $(INCFLAGS) -g3
 
 RM = rm -f
 
@@ -34,7 +34,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/expansion/redirs.c \
 					$(SRC_DIR)/expansion/structures.c \
 					$(SRC_DIR)/expansion/wildcards.c \
-					$(SRC_DIR)/debug.c #! Temporal
+					$(SRC_DIR)/debug.c
 OBJ = $(SOURCES:%.c=%.o)
 
 LIBFT_DIR = libft

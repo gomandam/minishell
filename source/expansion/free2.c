@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/17 19:27:40 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/26 03:34:56 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,9 @@ void	free_ast_cmd_final(t_ast **ast)
 
 void	free_ast_final(t_ast **ast)
 {
+	if (!ast)
+		return ;
+	printf("Freeing AST node expanded %p\n", (void *)*ast);
 	if (!ast || !*ast)
 		return ;
 	if ((*ast)->type == AST_PIPE || (*ast)->type == AST_AND_IF

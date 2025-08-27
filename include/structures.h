@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 17:40:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/27 19:21:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,6 +247,14 @@ typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
 
 // * expansion
 
+// TODO: update struct for split, marking the difference bettwen "$VAR" and $VAR
+/*
+ * expanded parameter node for a t_tok
+ * in case of env:
+ *   value is a pointer to the t_env value, so must not be freed
+ * in case of other parameters ($?):
+ *   value is a pointer to the parameter value, must be freed
+ */
 typedef struct s_param
 {
 	const char		*value;
@@ -254,6 +262,7 @@ typedef struct s_param
 	size_t			len;
 }	t_param;
 
+// * expansion struct for a t_tok
 typedef struct s_exp
 {
 	t_param		*head;
@@ -265,6 +274,7 @@ typedef struct s_exp
 	size_t		words;
 }	t_exp;
 
+// * list of arguments for a t_tok expansion, for a command or redir word
 typedef struct s_argv
 {
 	t_list	*head;

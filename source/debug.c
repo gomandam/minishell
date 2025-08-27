@@ -219,7 +219,6 @@ int	debug_ast_cmd(t_shell *shell, t_ast **ast, int level)
 
 	if (expand_cmd(shell, &(*ast)->u_data.cmd) == 1)
 	{
-		printf("Error on expand_cmd\n");
 		return (1);
 	}
 

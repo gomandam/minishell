@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/26 03:50:07 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/26 04:01:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (1);
 	while (1)
 	{
-		// TODO: Handle signals, and exit errors for return 1
+		// TODO: Handle signals, and exit errors for return 1, create repl function
 		shell.line = readline(MINI_PROMPT);
 		if (!shell.line)
 			break ;
@@ -42,19 +42,16 @@ int	main(int argc, char *argv[], char *envp[])
 		debug_tokenizer(&shell);
 		if (parse_ast(shell.tokens, &shell.ast) == 1)
 		{
-			// free_tokens(&shell.tokens);
 			ft_free((void **)&shell.line);
 			continue ;
 		}
-		if (debug_parser(&shell) == 1)
+		if (debug_parser(&shell) == 1) // TODO: replace with execution func
 		{
 			free_ast_parse(&shell.ast);
 			ft_free((void **)&shell.line);
 			continue ;
 		}
 		free_ast_final(&shell.ast);
-		// free_ast_parse(&shell.ast); // ? Must use free_ast_final when ast is expanded
-		// free_tokens(&tokens); // TODO: free tokens must not free because are freed
 		ft_free((void **)&shell.line);
 	}
 	free_env_list(&shell.env_list);

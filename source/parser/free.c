@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:22:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/26 03:35:21 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/26 04:01:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,6 @@ void	free_ast_cmd_parse(t_ast **ast)
 
 void	free_ast_parse(t_ast **ast)
 {
-	if (!ast)
-		return ;
-	printf("Freeing AST node not expanded %p\n", (void *)*ast);
 	if (!ast || !*ast)
 		return ;
 	if ((*ast)->type == AST_PIPE || (*ast)->type == AST_AND_IF

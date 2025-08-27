@@ -6,23 +6,58 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/26 02:00:49 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/27 00:35:46 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // To be applied at "exec_cmd.c"
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 // checks if it is a built-in with a "if" conditional statments, or control flow
-int	is_builtin(cmd->u.data _____)
+// returns 1 if argv[0] matches a builtin, else 0.
+int	is_builtin(char *cmd)
 {
-	
+	if (!cmd)
+		return (0);
+	if (!ft_strcmp(cmd, "echo"))
+		return (1);
+	if (!ft_strcmp(cmd, "cd"))
+		return (1);
+	if (!ft_strcmp(cmd, "pwd"))
+		return (1);
+	if (!ft_strcmp(cmd, "export"))
+		return (1);
+	if (!ft_strcmp(cmd, "unset"))
+		return (1);
+	if (!ft_strcmp(cmd, "env"))
+		return (1);
+	if (!ft_strcmp(cmd, "exit"))
+		return (1);
+	return (0);
 }
 
 // executes if it is a built-in, assuming builtins are working
 // following: exit, cd, echo, env, export, unset, pwd
-int	exec_builtin()
+// !TO DO: rename the built-ins ft_*() for proper naming functionality
+int	run_builtin(t_shell *shell, char *argv[])
 {
-
+	if (!argv || !argv[0])
+		return (1);
+	if (!ft_strcmp(argv[0], "echo"))
+		return (ft_echo(argv));		// char **argv
+	if (!ft_strcmp(argv[0], "cd"))
+		return (ft_cd(shell, argv));	// t_shell *shell, char **argv
+	if (!ft_strcmp(argv[0], "pwd"))
+		return (ft_pwd());		// void
+	if (!ft_strcmp(argv[0], "export"))
+		return (ft_export(shell, argv)); // ! TO DO: rebuild export builtin
+	if (!ft_strcmp(argv[0], "unset"))
+		return (ft_unset(shell, argv));	// check t_env_list
+	if (!ft_strcmp(argv[0], "env"))
+		return (ft_env(shell));		// check t_env_list *env_list
+	if (!ft_strcmp(argv[0]), "exit")
+		return (ft_exit(shell, argv));
+	return (1);
 }

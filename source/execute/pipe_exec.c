@@ -6,18 +6,20 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/28 16:33:45 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/28 20:25:39 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <sys/wait.h>
+#include <unistd.h>
 
 // waits for process ids, returns exit status of right child process
+// st1 & st2: storage exit status, overwritten by waitpid even initialized 0
 static int	wait_pipe(pid_t p1, pid_t p2)
 {
-	int	st1;	// storage exit status of processes
-	int	st2;	// initialized zero will be overwritten by waitpid
+	int	st1;
+	int	st2;
 
 	waitpid(p1, &st1, 0);
 	waitpid(p2, &st2, 0);
@@ -30,15 +32,35 @@ static int	wait_pipe(pid_t p1, pid_t p2)
 
 // local function for exec_ast_pipe();
 // setup child pipe, execute subtree then exit
-static void	child_pipe_end(t_ast *node, t_env_list *env, int end_fd, int stdio)
+static void	child_pipe_end(t_ast *node, t_env_list *env, int fd[2], int stdio)
 {
-	dup2(end_fd, stdio);
-	close(end_fd);
+	int	in_fd;
+	int	close_fd;
+
+	in_fd = -1;
+	close_fd = -1;
+	if (stdio == STDOUT_FILENO)
+	{
+		in_fd = fd[1];
+		close_fd = fd[0];
+	}
+	else if (stdio == STDIN_FILENO)
+	{
+		in_fd = fd[0];
+		close_fd = fd[1];
+	}
+	if (close_fd >= 0)
+		close(close_fd);
+	if (in_fd >= 0)
+	{
+		dup2(in_fd, stdio);
+		close(in_fd);
+	}
 	exit(execute_ast(node, env));
 }
 
 // fork the child process for a pipe
-static pid_t	pipe_fork(t_ast *node, t_env_list *env, int fd, int stdio)
+static pid_t	pipe_fork(t_ast *node, t_env_list *env, int fd[2], int stdio)
 {
 	pid_t	pid;
 
@@ -47,27 +69,32 @@ static pid_t	pipe_fork(t_ast *node, t_env_list *env, int fd, int stdio)
 		child_pipe_end(node, env, fd, stdio);
 	return (pid);
 }
-	
-// Version 2: Refactored to be norminette compliant
+
+// left writes fd[1] and right reads fd[0]
 int	exec_ast_pipe(t_shell *shell, t_ast *node)
 {
-	int	fd[2];
+	int		fd[2];
 	pid_t	pid_l;
-	pidt_t	pid_r;
+	pid_t	pid_r;
 
+	fd[0] = -1;
+	fd[1] = -1;
 	if (!node || !node->u_data.op.left || !node->u_data.op.right)
 		return (1);
 	if (pipe(fd) < 0)
 		return (perror("minishell: pipe"), 1);
-	pid_l = pipe_fork(node->u_data.op.left, &shell->env_list, fd[1], STDOUT_FILENO);
-	pid_r = pipe_fork(node->u_data.op.right, &shell->env_list, fd[0], STDIN_FILENO);
-	close(fd[0]);
-	close(fd[1]);
+	pid_l = pipe_fork(node->u_data.op.left, &shell->env_list, fd,
+			STDOUT_FILENO);
+	pid_r = pipe_fork(node->u_data.op.right, &shell->env_list, fd,
+			STDIN_FILENO);
+	if (fd[0] >= 0)
+		close(fd[0]);
+	if (fd[1] >= 0)
+		close(fd[1]);
 	return (wait_pipe(pid_l, pid_r));
 }
-
+// 
 /*	Branch build > before 27/08/2025 <pipe_exec.c>
-	REFACTOR to be  norminette compliant
 int	exec_ast_pipe(t_shell *shell, t_ast *node)
 {
 	int		fd[2];

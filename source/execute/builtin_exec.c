@@ -6,15 +6,13 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/27 00:35:46 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/28 22:04:06 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// To be applied at "exec_cmd.c"
-
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
-
+/*
 // checks if it is a built-in with a "if" conditional statments, or control flow
 // returns 1 if argv[0] matches a builtin, else 0.
 int	is_builtin(char *cmd)
@@ -41,7 +39,7 @@ int	is_builtin(char *cmd)
 // executes if it is a built-in, assuming builtins are working
 // following: exit, cd, echo, env, export, unset, pwd
 // !TO DO: rename the built-ins ft_*() for proper naming functionality
-int	run_builtin(t_shell *shell, char *argv[])
+int	run_builtin_external(t_shell *shell, char *argv[])
 {
 	if (!argv || !argv[0])
 		return (1);
@@ -61,3 +59,32 @@ int	run_builtin(t_shell *shell, char *argv[])
 		return (ft_exit(shell, argv));
 	return (1);
 }
+*/
+// ==========================================================================
+// ==========================================================================
+// DEBUGGER: Temporary functions to check the access of builtins
+void	debug_builtin(const char *cmd)
+{
+	if (!cmd)
+	{
+		printf("No command given\n");
+		return ;
+	}
+	if (!ft_strcmp(cmd, "echo"))
+		printf("Temporary: execute builtin: echo\n");
+	else if (!ft_strcmp(cmd, "cd"))
+		printf("Temporary: execute builtin: cd\n");
+	else if (!ft_strcmp(cmd, "pwd"))
+		printf("Temporary: execute builtin: pwd\n");
+	else if (!ft_strcmp(cmd, "export"))
+		printf("Temporary: execute builtin: export\n");
+	else if (!ft_strcmp(cmd, "unset"))
+		printf("Temporary: execute builtin: unset\n");
+	else if (!ft_strcmp(cmd, "env"))
+		printf("Temporary: execute builtin: env\n");
+	else if (!ft_strcmp(cmd, "exit"))
+		printf("Temporary: execute builtin: exit\n");
+	else
+		printf("Not a builtin: %s\n", cmd);
+}
+

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/28 17:37:14 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/28 21:59:42 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	execute_ast(t_ast *node, t_env_list *env_list)
 	if (!node)
 		return (0);
 	if (node->type == AST_CMD)
-		return (expand_ast_cmd(shell, &node->u_data.cmd));
+		return (exec_ast_cmd(&shell, &node->u_data.cmd));
 		// Done: Execute Command > Implement cmd execution for built-ins & external
 		// Done: Basecase, where to return pid during recursion
 	else if (node->type == AST_PIPE)
@@ -57,6 +57,8 @@ int	execute_ast(t_ast *node, t_env_list *env_list)
 	}
 	else if (node->type == AST_SUBSH)
 	{
+		printf("implement subshell logic.");
+		return (0);
 		// TO DO: implement subshell logic
 		// if (expand_subsh(shell, &node->u_data.subsh) != 0)
 		//	return (1);

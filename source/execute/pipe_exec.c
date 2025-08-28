@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/27 19:56:27 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/28 16:33:45 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 		return (1);
 	if (pipe(fd) < 0)
 		return (perror("minishell: pipe"), 1);
-	// define STDOUT_FILENO and STDIN_FILENO
 	pid_l = pipe_fork(node->u_data.op.left, &shell->env_list, fd[1], STDOUT_FILENO);
 	pid_r = pipe_fork(node->u_data.op.right, &shell->env_list, fd[0], STDIN_FILENO);
 	close(fd[0]);

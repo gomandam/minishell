@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/28 20:25:39 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/29 23:53:05 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,12 @@ static void	child_pipe_end(t_ast *node, t_env_list *env, int fd[2], int stdio)
 		dup2(in_fd, stdio);
 		close(in_fd);
 	}
-	exit(execute_ast(node, env));
+	_exit(execute_ast(NULL, node, env));
 }
 
 // fork the child process for a pipe
+// All commands in the pipeline execute in parallel,
+// 	regardless of pipeline depth or tree structure.
 static pid_t	pipe_fork(t_ast *node, t_env_list *env, int fd[2], int stdio)
 {
 	pid_t	pid;
@@ -70,7 +72,9 @@ static pid_t	pipe_fork(t_ast *node, t_env_list *env, int fd[2], int stdio)
 	return (pid);
 }
 
-// left writes fd[1] and right reads fd[0]
+// Per-node: create pipe, fork: L | R, close fds, execute concurrent, return right status.
+// fork: left writes fd[1] and fork: right reads fd[0]
+// Each stage (AST_PIPE) immediately forks both left and right children.
 int	exec_ast_pipe(t_shell *shell, t_ast *node)
 {
 	int		fd[2];
@@ -92,9 +96,11 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 	if (fd[1] >= 0)
 		close(fd[1]);
 	return (wait_pipe(pid_l, pid_r));
-}
-// 
-/*	Branch build > before 27/08/2025 <pipe_exec.c>
+} 
+/*
+
+
+   Original branch build > before 27/08/2025 <pipe_exec.c>
 int	exec_ast_pipe(t_shell *shell, t_ast *node)
 {
 	int		fd[2];

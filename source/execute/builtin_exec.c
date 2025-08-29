@@ -6,14 +6,14 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/28 22:04:06 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/30 00:00:52 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 /*
-// checks if it is a built-in with a "if" conditional statments, or control flow
+// checks if 'built-in' with "if" conditional statments, or control flow
 // returns 1 if argv[0] matches a builtin, else 0.
 int	is_builtin(char *cmd)
 {

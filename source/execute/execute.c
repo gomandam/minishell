@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/28 21:59:42 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/29 22:38:49 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,36 +23,35 @@
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-int	execute_ast(t_ast *node, t_env_list *env_list)
+int	execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list)
 {
-	t_shell	shell;
 	int	storage;
 
-	shell.env_list = *env_list;
+	shell->env_list = *env_list;
 	storage = 0;
 	if (!node)
 		return (0);
 	if (node->type == AST_CMD)
-		return (exec_ast_cmd(&shell, &node->u_data.cmd));
+		return (exec_ast_cmd(shell, &node->u_data.cmd));
 		// Done: Execute Command > Implement cmd execution for built-ins & external
 		// Done: Basecase, where to return pid during recursion
 	else if (node->type == AST_PIPE)
-		return (exec_ast_pipe(&shell, node));
+		return (exec_ast_pipe(shell, node));
 	// DONE: pipeline handling 
 	// setup pipe(), left dup2 write,  right  dup2 read, close fd  wait child process
 	// exec_pipe(node); {{ execute_ast(node->left);  execute_ast(node->right); } waitpid(); }
 	else if (node->type == AST_AND_IF)
 	{
-		storage = execute_ast(node->u_data.op.left, env_list);
+		storage = execute_ast(shell, node->u_data.op.left, env_list);
 		if (storage == 0)
-			return (execute_ast(node->u_data.op.right, env_list));
+			return (execute_ast(shell, node->u_data.op.right, env_list));
 		return (storage);
 	}
 	else if (node->type == AST_OR_IF)
 	{
-		storage = execute_ast(node->u_data.op.left, env_list);
+		storage = execute_ast(shell, node->u_data.op.left, env_list);
 		if (storage != 0)
-			return (execute_ast(node->u_data.op.right, env_list));
+			return (execute_ast(shell, node->u_data.op.right, env_list));
 		return (storage);
 	}
 	else if (node->type == AST_SUBSH)

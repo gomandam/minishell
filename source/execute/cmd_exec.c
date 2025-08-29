@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/28 22:15:58 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/30 00:14:07 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-// Fork and execute external cmd, wait for completion. Returns exit status
+// fork and execute external cmd, wait for completion. Returns exit status
+// 127 (manual) Utility to be executed was not found.
+// waitpid(pid, &status, 0); for single CMD, not pipe. Get exit code, no zombies
 static int	run_external(t_shell *shell, t_cmd *cmd)
 {
 	int	status;
@@ -35,7 +37,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
 		return (128 + WTERMSIG(status));
-	return (1);	// ? Return PID 
+	return (1);
 }
 
 // Decide builtin or external, execute builtin directly, and 
@@ -50,7 +52,7 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 //	return (run_external(shell, cmd));
 	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug
 		return ((debug_builtin(cmd->u_data.argv[0])), 0);
-	return (0);					// remove after debug
+	return (run_external(shell, cmd));	// remove after debug
 }
 
 // expand & execute cmd AST node. returns exit status

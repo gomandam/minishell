@@ -6,35 +6,26 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 18:36:09 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 20:17:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/29 12:49:28 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*literal_expansion(t_tok *word, const char *line)
+char	*literal_expansion(t_tok *word)
 {
 	size_t		len;
 	const char	*first_char;
 	const char	*last_char;
-	char		c;
 
 	first_char = word->seg_head->slice.begin;
 	if (word->seg_head->type == SEG_PARAM)
 		first_char = first_char - 1;
+	if (word->seg_head->flags & SEGF_QUOTED)
+		first_char = first_char - 1;
 	last_char = word->seg_tail->slice.begin + word->seg_tail->slice.len;
-	if (word->seg_tail->type == SEG_TEXT)
-	{
-		c = word->seg_tail->slice.begin[word->seg_tail->slice.len];
-		if (c == '"' || c == '\'')
-			last_char = last_char + 1;
-	}
-	if (word->seg_head->type == SEG_TEXT && line < first_char)
-	{
-		c = *(first_char - 1);
-		if (c == '"' || c == '\'')
-			first_char = first_char - 1;
-	}
+	if (word->seg_tail->flags & SEGF_QUOTED)
+		last_char = last_char + 1;
 	len = last_char - first_char;
 	return (ft_strndup(first_char, len));
 }

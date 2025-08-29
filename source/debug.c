@@ -9,8 +9,6 @@ static const char *redirtype_names[] = {};
 static const char *asttype_names[] = {};
 */
 // =============================================================================
-// CONSTANTES GLOBALES PARA NOMBRES DE TIPOS
-// =============================================================================
 
 const char *g_segtype_names[] = { "SEG_TEXT", "SEG_PARAM", "SEG_WILDCARD" };
 
@@ -20,8 +18,6 @@ const char *g_redirtype_names[] = { "R_INFILE", "R_HEREDOC", "R_OUTFILE", "R_APP
 
 const char *g_asttype_names[] = { "AST_CMD", "AST_PIPE", "AST_AND_IF", "AST_OR_IF", "AST_SUBSH" };
 
-// =============================================================================
-// UTILIDADES DE FORMATO Y INDENTACIÓN
 // =============================================================================
 
 void	debug_indent(int level)
@@ -41,15 +37,19 @@ void	debug_print_null_message(const char *item_name, int level)
 }
 
 // =============================================================================
-// FUNCIONES DE DEBUG PARA SEGMENTOS
-// =============================================================================
 
 void	debug_print_segment_info(t_seg *seg)
 {
-	printf("Segment [%s]: '%.*s'\n",
+	printf("Segment [%s]: '%.*s' (%s)\n",
 		g_segtype_names[seg->type],
 		(int)seg->slice.len,
-		seg->slice.begin);
+		seg->slice.begin,
+		seg->flags & SEGF_QUOTED
+			? seg->flags & SEGF_DOUBLE
+				? "double-quoted"
+				: "single-quoted"
+			: "unquoted"
+	);
 }
 
 void	debug_seg(t_seg *seg, int level)
@@ -75,8 +75,6 @@ void	debug_segment_list(t_seg *seg_head, int level)
 	}
 }
 
-// =============================================================================
-// FUNCIONES DE DEBUG PARA TOKENS
 // =============================================================================
 
 void	debug_print_token_info(t_tok *tok)
@@ -108,8 +106,6 @@ void	debug_token_list(t_tok *head, int level)
 	}
 }
 
-// =============================================================================
-// FUNCIONES DE DEBUG PARA REDIRECCIONES
 // =============================================================================
 
 void	debug_print_redir_info(t_redir *redir)
@@ -147,8 +143,6 @@ void	debug_redirs(t_redirs *redirs, int level)
 	debug_redir_list(redirs->head, level);
 }
 
-// =============================================================================
-// FUNCIONES DE DEBUG PARA AST - COMANDOS EXPANDIDOS
 // =============================================================================
 
 int	debug_ast_node(t_shell *shell, t_ast **ast, int level);
@@ -193,8 +187,6 @@ void	debug_expanded_redirs(t_redirs *redirs, int level)
 	}
 }
 
-// =============================================================================
-// FUNCIONES DE DEBUG PARA DIFERENTES TIPOS DE NODOS AST
 // =============================================================================
 
 int	debug_ast_cmd(t_shell *shell, t_ast **ast, int level)
@@ -296,8 +288,6 @@ int	debug_ast_node(t_shell *shell, t_ast **ast, int level)
 		return (debug_ast_operator(shell, ast, level + 1));
 }
 
-// =============================================================================
-// FUNCIONES PRINCIPALES DE DEBUG
 // =============================================================================
 
 void	debug_tokenizer(t_shell *shell)

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/27 19:21:22 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/29 12:43:57 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define STRUCTURES_H
 
 # include <sys/types.h> // pid_t, size_t
+# include <stdint.h> // uint8_t
 
 // * slice from the original readline buffer (the input line)
 typedef struct s_slice
@@ -35,11 +36,19 @@ typedef enum e_segtype
 	SEG_WILDCARD
 }	t_segtype;
 
+typedef enum e_segflags
+{
+	SEGF_NONE = 0,
+	SEGF_QUOTED = 1 << 0,
+	SEGF_DOUBLE = 1 << 1,
+}	t_segflags;
+
 // * segment within a t_tok of type T_WORD, list in order of appearance
 typedef struct s_seg
 {
 	t_segtype		type;
 	t_slice			slice;
+	uint8_t			flags;
 	struct s_seg	*next;
 }	t_seg;
 

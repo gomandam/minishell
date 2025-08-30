@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:08:36 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/30 14:58:20 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 18:26:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,50 @@ static int	wildcard_solve(t_shell *shell, char *expanded, t_argv *argv)
 	return (closedir(cur), 0);
 }
 
+/*
+void	get_start_atom(t_atom *start, t_builder *builder)
+{
+	t_atom	*cur;
+
+	cur = builder->head;
+	while (cur->next && cur->type == ATOM_LIT && cur->len == 0)
+		cur = cur->next;
+	start->value = cur->value;
+	start->len = cur->len;
+	start->type = cur->type;
+	start->next = cur->next;
+	if (start->type == ATOM_LIT)
+	{
+		if (start->value[0] == '.')
+		{
+			if (start->len > 1 && start->value[1] == '/')
+			{
+				start->value += 2;
+				start->len -= 2;
+			}
+			else if (start->next && start->next->type == ATOM_LIT
+				&& start->next->value[0] == '/')
+			{
+				start->value = start->next->value + 1;
+				start->len = start->next->len - 1;
+				start->next = start->next->next;
+			}
+		}
+	}
+}
+*/
+
+/*
+int	join_lit_atoms(t_shell *shell, t_builder *builder, t_builder *joined)
+{
+	return (0);
+}*/
+
 int	expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv)
 {
-	(void)shell;
-	(void)builder;
-	(void)argv;
+	size_t	initial_argc;
+
+	initial_argc = argv->argc;
 	/* // TODO
 	size_t	initial_argc;
 
@@ -84,5 +123,7 @@ int	expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv)
 		free(expanded);
 	*/
 	return (0);
+	(void)initial_argc;
+	(void)builder;
 	wildcard_solve(shell, NULL, argv);
 }

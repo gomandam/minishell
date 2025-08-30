@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 23:00:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/30 15:15:59 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 19:03:11 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,20 +194,10 @@ void	check_assignment(t_expand *build, t_atom *atom)
 	}
 }
 
-int	append_atom(t_expand *build, const char *value, size_t len, t_atomtype type)
+static int	push_new_atom(t_expand *build, const char *value, size_t len, t_atomtype type)
 {
 	t_atom	*new;
 
-	if (build->tail == NULL || build->tail->flags & BUILDF_FINISH)
-	{
-		if (new_builder(build) == 1)
-			return (1);
-	}
-	if (type == ATOM_WILD)
-		build->tail->flags |= BUILDF_WILD;
-	if (type == ATOM_WILD && build->tail->tail
-		&& build->tail->tail->type == ATOM_WILD)
-		return (0);
 	new = new_atom(value, len, type);
 	if (new == NULL)
 		return (1);
@@ -216,8 +206,38 @@ int	append_atom(t_expand *build, const char *value, size_t len, t_atomtype type)
 	else
 		build->tail->tail->next = new;
 	build->tail->tail = new;
+	if (type == ATOM_WILD)
+		build->tail->flags |= BUILDF_WILD;
 	if (build->tail->flags & BUILDF_ASSIGN && type == ATOM_LIT)
-		check_assignment(build, new);
+		check_assignment(build, build->tail->tail);
+	return (0);
+}
+
+int	append_atom(t_expand *build, const char *value, size_t len, t_atomtype type)
+{
+	t_atom	*next;
+
+	if (build->tail == NULL || build->tail->flags & BUILDF_FINISH)
+	{
+		if (new_builder(build) == 1)
+			return (1);
+	}
+	if (type == ATOM_WILD && build->tail->tail
+		&& build->tail->tail->type == ATOM_WILD)
+		return (0);
+	if (type == ATOM_LIT && len == 0 && build->tail->head)
+		return (0);
+	if (build->tail->head && build->tail->head->type == ATOM_LIT
+		&& build->tail->head->len == 0)
+	{
+		next = build->tail->head->next;
+		if (build->tail->tail == build->tail->head)
+			build->tail->tail = next;
+		free(build->tail->head);
+		build->tail->head = next;
+	}
+	if (push_new_atom(build, value, len, type) == 1)
+		return (1);
 	return (0);
 }
 

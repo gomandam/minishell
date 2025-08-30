@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/30 00:14:07 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/08/30 20:00:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,15 @@
 // fork and execute external cmd, wait for completion. Returns exit status
 // 127 (manual) Utility to be executed was not found.
 // waitpid(pid, &status, 0); for single CMD, not pipe. Get exit code, no zombies
+
+// 1. /bin/ls, ./my_script.sh -> in this cases, don't need to search anything, only execve
+// 2. ls, cat, ... -> cmd: search in PATH env where is the cmd:
+//   - if PATH don't exist, cmd not found
+//   - if PATH exist, search in each dir, each dir in PATH is separated by : (colon)
+//   - for each dir in PATH, you must concat the name of the dir, with '/', and the name of the cmd:
+//      - ex: /home/angelunix/.local/bin + / + ls -> /home/angelunix/.local/bin/ls
+//   - for each concat of the name of the cmd with each dir in PATH, you will check if the file exists, with access(path, F_OK) function
+//   - if yout find a dir path that contains the cmd, you will replace the original argv[0], with the concat dir and path you create for access
 static int	run_external(t_shell *shell, t_cmd *cmd)
 {
 	int	status;
@@ -40,7 +49,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 	return (1);
 }
 
-// Decide builtin or external, execute builtin directly, and 
+// Decide builtin or external, execute builtin directly, and
 // external is via fork/execve. Then, return cmd exit status
 int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {

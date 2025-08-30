@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 10:59:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 20:14:23 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 13:11:54 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	expand_redir(t_shell *shell, t_redir *redir)
 	argv.head = NULL;
 	argv.tail = NULL;
 	argv.argc = 0;
-	if (expansion(shell, redir->u_data.word, &argv) == 1)
+	if (expansion(shell, redir->u_data.word, &argv, 0) == 1)
 		return (1);
 	if (argv.argc == 0 || argv.argc > 1)
 		return (perror_ambiguosredir(shell, redir->u_data.word),

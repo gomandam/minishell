@@ -6,12 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:50:24 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/17 19:29:55 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:56:41 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 void	free_param(t_param **param, t_seg *from_seg)
 {
 	if (param == NULL || *param == NULL)
@@ -45,7 +46,7 @@ void	free_paramlst(t_param **head, t_param **tail, t_seg *segs)
 	}
 	*tail = NULL;
 }
-
+*/
 void	free_argv(t_argv *argv)
 {
 	if (argv == NULL)

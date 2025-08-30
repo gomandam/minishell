@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/26 04:01:46 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/29 16:40:33 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	free_ast_cmd_final(t_ast **ast)
 	*ast = NULL;
 }
 
+// TODO: Analyzing, this probably must don't work every time, because expansion probably will be in a forked process, not in the main process
 void	free_ast_final(t_ast **ast)
 {
 	if (!ast || !*ast)

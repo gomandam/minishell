@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/29 12:43:57 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:23:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,7 @@ typedef struct s_lexer
 // * type for lexer state machine handler function
 typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
 
-// * expansion
+// * last expansion
 
 // TODO: update struct for split, marking the difference bettwen "$VAR" and $VAR
 /*
@@ -263,7 +263,7 @@ typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
  *   value is a pointer to the t_env value, so must not be freed
  * in case of other parameters ($?):
  *   value is a pointer to the parameter value, must be freed
- */
+
 typedef struct s_param
 {
 	const char		*value;
@@ -282,6 +282,57 @@ typedef struct s_exp
 	size_t		paramnull;
 	size_t		words;
 }	t_exp;
+
+// * list of arguments for a t_tok expansion, for a command or redir word
+typedef struct s_argv
+{
+	t_list	*head;
+	t_list	*tail;
+	size_t	argc;
+}	t_argv;
+*/
+
+// *expansion
+typedef enum e_atomtype
+{
+	ATOM_LIT,
+	ATOM_WILD
+}	t_atomtype;
+
+typedef struct s_atom
+{
+	t_atomtype		type;
+	char			*value;
+	size_t			len;
+	struct s_atom	*next;
+}	t_atom;
+
+typedef enum e_buildflags
+{
+	BUILDF_NONE = 0,
+	BUILDF_FINISH = 1 << 0,
+	BUILDF_ASSIGN = 1 << 1,
+	BUILDF_LEFT = 1 << 2,
+	BUILDF_EQ = 1 << 3,
+	BUILDF_WILD = 1 << 4,
+}	t_buildflags;
+
+typedef struct s_builder
+{
+	t_atom				*head;
+	t_atom				*tail;
+	uint8_t				flags;
+	struct s_builder	*next;
+}	t_builder;
+
+typedef struct s_expand
+{
+	t_builder	*head;
+	t_builder	*tail;
+	char		*last_status;
+	t_list	*env; // TODO: this contains pointer for free
+	uint8_t		is_assign;
+}	t_expand;
 
 // * list of arguments for a t_tok expansion, for a command or redir word
 typedef struct s_argv

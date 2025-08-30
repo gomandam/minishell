@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/29 12:54:17 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:53:51 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,8 @@ int			parse_ast(t_tok *tokens, t_ast **out);
 
 // expansion
 
-t_param		*new_param(void);
-void		param_push(t_param **head, t_param **tail, t_param *new_param);
+// t_param		*new_param(void);
+// void		param_push(t_param **head, t_param **tail, t_param *new_param);
 int			new_argv_push(t_argv *argv, char *value);
 int			new_argvdup_push(t_argv *argv, char *value);
 char		**convert_argv_to_array(t_argv *argv);
@@ -118,14 +118,14 @@ char		**convert_argv_to_array(t_argv *argv);
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
 
-size_t		consume_param(t_exp *exp, t_seg *seg, char *cur);
-t_param		*expand_param(t_shell *shell, t_seg *seg);
+// size_t		consume_param(t_exp *exp, t_seg *seg, char *cur);
+// t_param		*expand_param(t_shell *shell, t_seg *seg);
 
 int			wildcard_match(const char *pattern, const char *str);
-int			expand_wildcards(t_shell *shell, char *expanded, t_argv *argv);
+int			expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv);
 
-void		free_param(t_param **param, t_seg *from_seg);
-void		free_paramlst(t_param **head, t_param **tail, t_seg *segs);
+// void		free_param(t_param **param, t_seg *from_seg);
+// void		free_paramlst(t_param **head, t_param **tail, t_seg *segs);
 void		free_argv(t_argv *argv);
 void		free_exp_redir(t_redir **redir);
 void		free_exp_redirslst(t_redir **head);
@@ -133,10 +133,10 @@ void		free_exp_redirs(t_redirs *redirs);
 void		free_ast_cmd_final(t_ast **ast);
 void		free_ast_final(t_ast **ast);
 
-char		*expand_tok(t_exp *exp, t_tok *tok);
+// char		*expand_tok(t_exp *exp, t_tok *tok);
 int			expand_cmd(t_shell *shell, t_cmd *cmd);
 int			expand_subsh(t_shell *shell, t_subsh *subsh);
-int			expansion(t_shell *shell, t_tok *tok, t_argv *argv);
+int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
 
 char		*literal_expansion(t_tok *word);
 char		*simple_expansion(t_tok *word);

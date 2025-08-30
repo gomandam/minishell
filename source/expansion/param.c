@@ -6,12 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 20:28:03 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 20:28:21 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:57:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 t_param	*expand_param(t_shell *shell, t_seg *seg)
 {
 	t_param	*res;
@@ -54,3 +55,4 @@ size_t	consume_param(t_exp *exp, t_seg *seg, char *cur)
 		exp->tail = NULL;
 	return (len);
 }
+*/

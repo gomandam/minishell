@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:52:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/25 16:37:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 15:29:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,29 @@ int	expand_cmd(t_shell *shell, t_cmd *cmd)
 {
 	t_argv	argv;
 	t_tok	*next;
+	int		is_assign;
+	int		first_expand;
 
-	if (expand_redirs(shell, &cmd->redir) == 1)
-		return (1);
 	argv.head = NULL;
 	argv.tail = NULL;
 	argv.argc = 0;
+	if (expand_redirs(shell, &cmd->redir) == 1)
+		return (1);
+	is_assign = 0;
+	first_expand = 1;
 	while (cmd->u_data.words != NULL)
 	{
 		next = cmd->u_data.words->next;
 		cmd->u_data.words->next = NULL;
-		if (expansion(shell, cmd->u_data.words, &argv) == 1)
+		if (expansion(shell, cmd->u_data.words, &argv, is_assign) == 1)
 			return (free_argv(&argv), free_exp_redirs(&cmd->redir), 1);
 		free_tok(&cmd->u_data.words);
+		if (first_expand == 1)
+		{
+			if (argv.argc > 0 && ft_strcmp(argv.head->content, "export") == 0)
+				is_assign = 1;
+			first_expand = 0;
+		}
 		cmd->u_data.words = next;
 	}
 	cmd->u_data.argv = NULL;

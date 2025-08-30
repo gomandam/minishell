@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:08:36 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/24 22:24:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:58:20 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,18 @@ static int	wildcard_solve(t_shell *shell, char *expanded, t_argv *argv)
 	return (closedir(cur), 0);
 }
 
-int	expand_wildcards(t_shell *shell, char *expanded, t_argv *argv)
+int	expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv)
 {
+	(void)shell;
+	(void)builder;
+	(void)argv;
+	/* // TODO
 	size_t	initial_argc;
-	char	*check_str;
 
 	initial_argc = argv->argc;
-	check_str = expanded;
-	if (expanded[0] == '.' && expanded[1] == '/')
-		check_str = check_str + 2;
+
+	if (builder->head->value[0] == '.' && builder->head->value[1] == '/')
+
 	if (wildcard_solve(shell, check_str, argv) == 1)
 		return (free(expanded), 1);
 	if (initial_argc == argv->argc)
@@ -79,5 +82,7 @@ int	expand_wildcards(t_shell *shell, char *expanded, t_argv *argv)
 	}
 	else
 		free(expanded);
+	*/
 	return (0);
+	wildcard_solve(shell, NULL, argv);
 }

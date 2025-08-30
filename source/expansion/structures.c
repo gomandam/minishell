@@ -6,12 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:57:45 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/24 21:44:22 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/08/30 14:57:45 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 t_param	*new_param(void)
 {
 	t_param	*param;
@@ -35,7 +36,7 @@ void	param_push(t_param **head, t_param **tail, t_param *new_param)
 		(*tail)->next = new_param;
 	*tail = new_param;
 }
-
+*/
 int	new_argv_push(t_argv *argv, char *value)
 {
 	t_list	*new_node;

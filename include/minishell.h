@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/03 18:45:36 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/04 01:39:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ t_lxstate	emit_op(t_lexer *lx, t_toktype type, size_t len);
 
 void		lx_advance(t_lexer *lx);
 void		lx_advance_n(t_lexer *lx, size_t n);
+
+int			is_param_start(const char *cur);
 
 t_lxstate	handle_general(t_lexer *lx);
 

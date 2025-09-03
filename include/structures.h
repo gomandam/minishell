@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/01 23:53:04 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:26:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,7 +303,7 @@ typedef enum e_atomtype
 typedef struct s_atom
 {
 	t_atomtype		type;
-	char			*value;
+	const char		*value;
 	size_t			len;
 	struct s_atom	*next;
 }	t_atom;
@@ -331,7 +331,6 @@ typedef struct s_expand
 	t_builder	*head;
 	t_builder	*tail;
 	char		*last_status;
-	t_list	*env; // TODO: this contains pointer for free
 	uint8_t		is_assign;
 }	t_expand;
 

@@ -6,11 +6,29 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/29 16:40:33 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:17:35 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_exp_redir(t_redir **redir)
+{
+	if (redir == NULL || *redir == NULL)
+		return ;
+	if ((*redir)->type != R_HEREDOC)
+	{
+		free((*redir)->u_data.name);
+		(*redir)->u_data.name = NULL;
+	}
+	else
+	{
+		// TODO: remove free_tok and replace with ft_close(&(*redir)->u_data.pipefd[0]);
+		free_tok(&(*redir)->u_data.word);
+	}
+	free(*redir);
+	*redir = NULL;
+}
 
 void	free_exp_redirslst(t_redir **head)
 {

@@ -6,37 +6,47 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:57:45 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/30 14:57:45 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/03 18:19:43 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-t_param	*new_param(void)
+t_atom	*new_atom(t_atomtype type, const char *value, size_t len)
 {
-	t_param	*param;
+	t_atom	*new;
 
-	param = malloc(sizeof(t_param));
-	if (param == NULL)
+	new = malloc(sizeof(t_atom));
+	if (new == NULL)
 		return (NULL);
-	param->value = NULL;
-	param->len = 0;
-	param->next = NULL;
-	return (param);
+	new->type = type;
+	new->value = value;
+	new->len = len;
+	new->next = NULL;
+	return (new);
 }
 
-void	param_push(t_param **head, t_param **tail, t_param *new_param)
+int	new_builder(t_expand *build)
 {
-	if (head == NULL || tail == NULL || new_param == NULL)
-		return ;
-	if (*head == NULL)
-		*head = new_param;
+	t_builder	*builder;
+
+	builder = malloc(sizeof(t_builder));
+	if (builder == NULL)
+		return (1);
+	builder->head = NULL;
+	builder->tail = NULL;
+	builder->next = NULL;
+	builder->flags = BUILDF_NONE;
+	if (build->is_assign)
+		builder->flags |= BUILDF_ASSIGN;
+	if (build->head == NULL)
+		build->head = builder;
 	else
-		(*tail)->next = new_param;
-	*tail = new_param;
+		build->tail->next = builder;
+	build->tail = builder;
+	return (0);
 }
-*/
+
 int	new_argv_push(t_argv *argv, char *value)
 {
 	t_list	*new_node;

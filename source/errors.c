@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:28:33 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/29 12:54:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/03 17:39:05 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	perror_ambiguosredir(t_shell *shell, t_tok *word)
 	char	*word_literal;
 	size_t	word_size;
 
-	(void)shell;
 	word_literal = literal_expansion(word);
 	if (word_literal == NULL)
 		return (perror_malloc());
@@ -71,4 +70,5 @@ int	perror_ambiguosredir(t_shell *shell, t_tok *word)
 	write(STDERR_FILENO, ": ambiguous redirect\n", 21);
 	free(word_literal);
 	return (1);
+	(void)shell;
 }

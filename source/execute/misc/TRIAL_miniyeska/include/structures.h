@@ -307,7 +307,7 @@ typedef struct s_shell
 	char		*line;
 	t_tok		*tokens;
 	t_ast		*ast;
-	t_env_list	env_list;	// This should be a *env_list?
+	t_env_list	env_list;
 	int			last_status;
 }	t_shell;
 

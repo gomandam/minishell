@@ -17,16 +17,21 @@
 
 // fork and execute external cmd, wait for completion. Returns exit status
 // 127 (manual) Utility to be executed was not found.
-// waitpid(pid, &status, 0); for single CMD, not pipe. Get exit code, no zombies
+// Purpose: waitpid(pid, &status, 0); for single CMD, not pipe. Get exit code, no zombies
 
-// 1. /bin/ls, ./my_script.sh -> in this cases, don't need to search anything, only execve
-// 2. ls, cat, ... -> cmd: search in PATH env where is the cmd:
+
+// 1. /bin/ls, ./sample_script.sh -> in this cases, don't need to search anything, only execve
+// 		examples 'ls' command, which can be found in the environment which has a list of variables, 
+// 		and inside the directory of the PATH which the commands can be seen.
+// 2. ls, cat, and more commands... -> cmd: search in PATH env where is the cmd:
 //   - if PATH don't exist, cmd not found
-//   - if PATH exist, search in each dir, each dir in PATH is separated by : (colon)
-//   - for each dir in PATH, you must concat the name of the dir, with '/', and the name of the cmd:
+//   - if PATH exist, search in each dir, each dir in PATH is separated by ":" (colon)
+//   - for each dir in PATH, you must concatenate the name of the dir, with '/', and the name of the cmd:
 //      - ex: /home/angelunix/.local/bin + / + ls -> /home/angelunix/.local/bin/ls
-//   - for each concat of the name of the cmd with each dir in PATH, you will check if the file exists, with access(path, F_OK) function
-//   - if yout find a dir path that contains the cmd, you will replace the original argv[0], with the concat dir and path you create for access
+//   - for each concatenate of the name of the cmd with each dir in PATH, 
+// 				you will check if the file exists, with access(path, F_OK) function
+//   - if yout find a dir path that contains the cmd, you will replace the original argv[0],
+// 				with the concat dir and path you create for access
 static int	run_external(t_shell *shell, t_cmd *cmd)
 {
 	int	status;

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 23:00:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/30 19:03:11 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/02 00:12:07 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,7 +206,7 @@ static int	push_new_atom(t_expand *build, const char *value, size_t len, t_atomt
 	else
 		build->tail->tail->next = new;
 	build->tail->tail = new;
-	if (type == ATOM_WILD)
+	if (type == ATOM_WILD && !(build->tail->flags & BUILDF_EQ))
 		build->tail->flags |= BUILDF_WILD;
 	if (build->tail->flags & BUILDF_ASSIGN && type == ATOM_LIT)
 		check_assignment(build, build->tail->tail);
@@ -224,7 +224,10 @@ int	append_atom(t_expand *build, const char *value, size_t len, t_atomtype type)
 	}
 	if (type == ATOM_WILD && build->tail->tail
 		&& build->tail->tail->type == ATOM_WILD)
+	{
+		build->tail->tail->len += len;
 		return (0);
+	}
 	if (type == ATOM_LIT && len == 0 && build->tail->head)
 		return (0);
 	if (build->tail->head && build->tail->head->type == ATOM_LIT
@@ -236,11 +239,10 @@ int	append_atom(t_expand *build, const char *value, size_t len, t_atomtype type)
 		free(build->tail->head);
 		build->tail->head = next;
 	}
-	if (push_new_atom(build, value, len, type) == 1)
-		return (1);
-	return (0);
+	return (push_new_atom(build, value, len, type));
 }
 
+// TODO: this is a really complex code for norm, but must be moved to a function in a verbose way
 int	multi_param(t_shell *shell, t_expand *build, char *val)
 {
 	size_t	i;
@@ -253,16 +255,17 @@ int	multi_param(t_shell *shell, t_expand *build, char *val)
 	{
 		if (ft_isspace(val[i]) || val[i] == '*')
 		{
-			if (i > strt && append_atom(build, &val[strt], i - strt, ATOM_LIT))
+			if (i > strt && append_atom(build, &val[strt], i - strt, ATOM_LIT) == 1)
 				return (1);
-			if (ft_isspace(val[i]))
+			if (build->tail->head != NULL && ft_isspace(val[i]))
 				build->tail->flags |= BUILDF_FINISH;
 			while (ft_isspace(val[i]))
 				i++;
-			if (val[i] == '*' && append_atom(build, NULL, 0, ATOM_WILD) == 1)
-				return (1);
+			strt = i;
 			while (val[i] == '*')
 				i++;
+			if (i > strt && append_atom(build, NULL, i - strt, ATOM_WILD) == 1)
+				return (1);
 			strt = i;
 		}
 		else
@@ -314,12 +317,7 @@ int	get_builders(t_shell *shell, t_tok *tok, t_expand *build)
 			return (1);
 		else if (cur->type == SEG_WILDCARD)
 		{
-			if (build->tail->flags & BUILDF_EQ)
-			{
-				if (append_atom(build, "*", 1, ATOM_LIT) == 1)
-					return (1);
-			}
-			else if (append_atom(build, NULL, 0, ATOM_WILD) == 1)
+			if (append_atom(build, NULL, 1, ATOM_WILD) == 1)
 				return (1);
 		}
 		else if (cur->type == SEG_PARAM && solve_param(shell, cur, build) == 1)
@@ -329,7 +327,7 @@ int	get_builders(t_shell *shell, t_tok *tok, t_expand *build)
 	return (0);
 }
 
-int	join_literals(t_shell *shell, t_builder *builder, t_argv *argv)
+int	build_literals(t_shell *shell, t_builder *builder, t_argv *argv)
 {
 	size_t	total_len;
 	size_t	i;
@@ -351,10 +349,14 @@ int	join_literals(t_shell *shell, t_builder *builder, t_argv *argv)
 	i = 0;
 	while (acur != NULL)
 	{
-		ft_strlcpy(joined + i, acur->value, acur->len + 1);
+		if (acur->type == ATOM_LIT)
+			ft_strlcpy(joined + i, acur->value, acur->len + 1);
+		else if (acur->type == ATOM_WILD)
+			ft_memset(joined + i, '*', acur->len);
 		i += acur->len;
 		acur = acur->next;
 	}
+	joined[total_len] = '\0';
 	if (new_argv_push(argv, joined) == 1)
 		return (free(joined), 1);
 	return (0);
@@ -366,14 +368,15 @@ int	build_expansion(t_shell *shell, t_expand *build, t_argv *argv)
 
 	while (build->head != NULL)
 	{
-		if (build->head->flags & BUILDF_WILD)
+		if (build->head->flags & BUILDF_WILD
+			&& !(build->tail->flags & BUILDF_EQ))
 		{
 			if (expand_wildcards(shell, build->head, argv) == 1)
 				return (1);
 		}
 		else
 		{
-			if (join_literals(shell, build->head, argv) == 1)
+			if (build_literals(shell, build->head, argv) == 1)
 				return (1);
 		}
 		next = build->head->next;

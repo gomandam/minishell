@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/30 14:53:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/01 23:38:31 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ int			parse_ast(t_tok *tokens, t_ast **out);
 
 // expansion
 
+int			build_literals(t_shell *shell, t_builder *builder, t_argv *argv);
+
 // t_param		*new_param(void);
 // void		param_push(t_param **head, t_param **tail, t_param *new_param);
 int			new_argv_push(t_argv *argv, char *value);
@@ -121,7 +123,7 @@ int			expand_redirs(t_shell *shell, t_redirs *redirs);
 // size_t		consume_param(t_exp *exp, t_seg *seg, char *cur);
 // t_param		*expand_param(t_shell *shell, t_seg *seg);
 
-int			wildcard_match(const char *pattern, const char *str);
+// int			wildcard_match(const char *pattern, const char *str);
 int			expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv);
 
 // void		free_param(t_param **param, t_seg *from_seg);

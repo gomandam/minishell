@@ -6,13 +6,14 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:28:33 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/03 17:39:05 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:25:26 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO: must modify an struct or value for indicate the error code exit, for example 258 for syntax error
+// TODO: must modify shell when is not NULL for indicate the error code exit, for example 258 for syntax error
+// TODO: perror_malloc(t_shell *shell), perror_unexpected_eof(t_shell *shell), etc
 int	perror_malloc(void)
 {
 	write(STDERR_FILENO, "minishell: memory allocation error\n", 35);

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/03 18:26:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/04 02:01:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,45 +254,13 @@ typedef struct s_lexer
 // * type for lexer state machine handler function
 typedef t_lxstate	(*t_lxhandler)(t_lexer *lx);
 
-// * last expansion
-
-// TODO: update struct for split, marking the difference bettwen "$VAR" and $VAR
-/*
- * expanded parameter node for a t_tok
- * in case of env:
- *   value is a pointer to the t_env value, so must not be freed
- * in case of other parameters ($?):
- *   value is a pointer to the parameter value, must be freed
-
-typedef struct s_param
-{
-	const char		*value;
-	struct s_param	*next;
-	size_t			len;
-}	t_param;
-
-// * expansion struct for a t_tok
-typedef struct s_exp
-{
-	t_param		*head;
-	t_param		*tail;
-	size_t		len;
-	size_t		wildcards;
-	size_t		paramc;
-	size_t		paramnull;
-	size_t		words;
-}	t_exp;
-
-// * list of arguments for a t_tok expansion, for a command or redir word
-typedef struct s_argv
-{
-	t_list	*head;
-	t_list	*tail;
-	size_t	argc;
-}	t_argv;
-*/
-
 // *expansion
+/*
+ * types of atoms in a builder for expansion:
+ * - ATOM_END: end of atoms marker
+ * - ATOM_LIT: literal text
+ * - ATOM_WILD: wildcard '*'
+ */
 typedef enum e_atomtype
 {
 	ATOM_END = 0,
@@ -300,6 +268,12 @@ typedef enum e_atomtype
 	ATOM_WILD
 }	t_atomtype;
 
+/*
+ * atom node in a builder linked list for expansion
+ * represents a piece of a word, either literal text or wildcard
+ * and allows to build complex words with multiple segments
+ * value points to the original input line and must not be freed
+ */
 typedef struct s_atom
 {
 	t_atomtype		type;
@@ -308,6 +282,7 @@ typedef struct s_atom
 	struct s_atom	*next;
 }	t_atom;
 
+// * bitwise flags for t_builder
 typedef enum e_buildflags
 {
 	BUILDF_NONE = 0,
@@ -318,6 +293,11 @@ typedef enum e_buildflags
 	BUILDF_WILD = 1 << 4,
 }	t_buildflags;
 
+/*
+ * builder struct for expansion
+ * a builder represents a single argument divided in atoms
+ * can be expanded into multiple arguments if it contains wildcards
+ */
 typedef struct s_builder
 {
 	t_atom				*head;
@@ -326,6 +306,10 @@ typedef struct s_builder
 	struct s_builder	*next;
 }	t_builder;
 
+/*
+ * expansion struct for building expanded arguments
+ * last_status is itoa version of last exit status for '$?', and must be freed
+ */
 typedef struct s_expand
 {
 	t_builder	*head;

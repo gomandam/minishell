@@ -6,14 +6,38 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 20:28:03 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/03 19:08:36 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/04 01:54:02 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	multi_spec_char(t_expand *build, char *val, size_t *i, size_t *strt)
+{
+	if (!ft_isspace(val[*i]) && val[*i] != '*')
+		return (0);
+	if (*i > *strt
+		&& append_atom(build, &val[*strt], *i - *strt, ATOM_LIT) == 1)
+		return (1);
+	if (ft_isspace(val[*i]))
+	{
+		if (build->tail->head != NULL)
+			build->tail->flags |= BUILDF_FINISH;
+		while (ft_isspace(val[*i]))
+			(*i)++;
+	}
+	else if (val[*i] == '*')
+	{
+		*strt = *i;
+		while (val[*i] == '*')
+			(*i)++;
+		if (*i > *strt && append_atom(build, NULL, *i - *strt, ATOM_WILD) == 1)
+			return (1);
+	}
+	*strt = *i;
+	return (0);
+}
 
-// TODO: this is a really complex code for norm, but must be moved to a function in a verbose way
 int	multi_param(t_shell *shell, t_expand *build, char *val)
 {
 	size_t	i;
@@ -25,19 +49,8 @@ int	multi_param(t_shell *shell, t_expand *build, char *val)
 	{
 		if (ft_isspace(val[i]) || val[i] == '*')
 		{
-			if (i > strt
-				&& append_atom(build, &val[strt], i - strt, ATOM_LIT) == 1)
+			if (multi_spec_char(build, val, &i, &strt) == 1)
 				return (1);
-			if (build->tail->head != NULL && ft_isspace(val[i]))
-				build->tail->flags |= BUILDF_FINISH;
-			while (ft_isspace(val[i]))
-				i++;
-			strt = i;
-			while (val[i] == '*')
-				i++;
-			if (i > strt && append_atom(build, NULL, i - strt, ATOM_WILD) == 1)
-				return (1);
-			strt = i;
 		}
 		else
 			i++;

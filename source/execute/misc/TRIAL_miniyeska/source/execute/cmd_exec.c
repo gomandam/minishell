@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/30 20:00:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/05 03:22:35 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 // fork and execute external cmd, wait for completion. Returns exit status
 // 127 (manual) Utility to be executed was not found.
 // Purpose: waitpid(pid, &status, 0); for single CMD, not pipe. Get exit code, no zombies
-
-
+//
+//
 // 1. /bin/ls, ./sample_script.sh -> in this cases, don't need to search anything, only execve
 // 		examples 'ls' command, which can be found in the environment which has a list of variables, 
 // 		and inside the directory of the PATH which the commands can be seen.
@@ -32,11 +32,29 @@
 // 				you will check if the file exists, with access(path, F_OK) function
 //   - if yout find a dir path that contains the cmd, you will replace the original argv[0],
 // 				with the concat dir and path you create for access
+
+static int	resolve_cmd_path(char **dst, const char *cmd, t_env_list *env_list)
+{
+	return (get_cmd_path(dst, cmd, env_list->envp));
+}
+
 static int	run_external(t_shell *shell, t_cmd *cmd)
 {
 	int	status;
 	pid_t	pid;
+	char	*resolved;
 
+	resolved = NULL;
+	if (ft_strchr(cmd->u_data.argv[0], '/'))	// control flow, possible: separate funct
+		resolved = ft_strdup(cmd->u_data.argv[0]);
+	else if (resolve_cmd_path(&resolved, cmd->u_data.argv[0], &shell->env_list))
+	{
+		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putendl_fd(cmd->u_data.argv[0], 2);
+		return (127);
+	}
+	free(cmd->u_data.argv[0]);
+	cmd->u_data.argv[0] = resolved;
 	pid = fork();
 	if (pid < 0)
 		return (perror("minishell: fork"), 1);
@@ -46,7 +64,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 		perror("minishell: execve");
 		_exit(127);
 	}
-	waitpid(pid, &status, 0);
+	waitpid(pid, &status, 0);	// wait_ifs on separate function
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))

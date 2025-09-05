@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/30 13:20:28 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/05 01:47:16 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,15 +151,37 @@ void		debug_tokenizer(t_tok *head);
 void		debug_parser(t_shell *shell, t_ast *ast);
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*======================================================================================= */
 // EXECUTION LINE
 
-int     execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list);
-int     exec_ast_pipe(t_shell *shell, t_ast *node);
-int     run_builtin_external(t_shell *shell, t_cmd *cmd);
-int     exec_ast_cmd(t_shell *shell, t_cmd *cmd);
-void    debug_builtin(const char *cmd);
-int     is_builtin(char *cmd);
+int			execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list);
+int			exec_ast_pipe(t_shell *shell, t_ast *node);
+int			run_builtin_external(t_shell *shell, t_cmd *cmd);
+int			exec_ast_cmd(t_shell *shell, t_cmd *cmd);
+int			is_builtin(char *cmd);
+void		debug_builtin(const char *cmd);
 
-
+char		*ft_freestr(char **str);
+void		ft_freestarr(char ***arr);
+int			seterrno(int errnum);
 #endif

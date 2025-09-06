@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/05 03:22:35 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/06 02:34:57 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 		resolved = ft_strdup(cmd->u_data.argv[0]);
 	else if (resolve_cmd_path(&resolved, cmd->u_data.argv[0], &shell->env_list))
 	{
-		ft_putstr_fd("minishell: command not found: ", 2);
+		ft_putstr_fd("[gab:fix here] minishell: command not found: ", 2);
 		ft_putendl_fd(cmd->u_data.argv[0], 2);
 		return (127);
 	}

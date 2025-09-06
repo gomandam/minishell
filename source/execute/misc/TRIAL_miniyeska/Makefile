@@ -39,9 +39,11 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/expansion/wildcards.c \
 					$(SRC_DIR)/debug.c \
         				$(SRC_DIR)/execute/cmd_exec.c \
+					$(SRC_DIR)/execute/cmd_exec2.c	\
 					$(SRC_DIR)/execute/pipe_exec.c \
 					$(SRC_DIR)/execute/builtin_exec.c \
-					$(SRC_DIR)/execute/execute.c
+					$(SRC_DIR)/execute/execute.c	\
+					$(SRC_DIR)/execute/free_exec.c
 
 OBJ = $(SOURCES:%.c=%.o)
 

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/05 01:27:31 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/06 01:23:48 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_freestr(char **str)
 	return (NULL);
 }
 
-void	ft_freestarr(char ***arr)
+void	ft_freestrarr(char ***arr)
 {
 	size_t	i;
 

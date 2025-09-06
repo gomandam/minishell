@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/05 01:47:16 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/06 02:05:53 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,6 +182,11 @@ int			is_builtin(char *cmd);
 void		debug_builtin(const char *cmd);
 
 char		*ft_freestr(char **str);
-void		ft_freestarr(char ***arr);
+void		ft_freestrarr(char ***arr);
 int			seterrno(int errnum);
+int     get_envp_paths(char ***path, char **envp);
+int     get_cmd_path(char **cmd_path, const char *cmd_name, char **envp);
+
+
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/29 23:53:05 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/06 02:24:47 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 	return (wait_pipe(pid_l, pid_r));
 } 
 /*
-
-
    Original branch build > before 27/08/2025 <pipe_exec.c>
 int	exec_ast_pipe(t_shell *shell, t_ast *node)
 {

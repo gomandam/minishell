@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:50:24 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/03 18:36:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/09 20:59:10 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ void	free_builders(t_builder **builders)
 	while (current != NULL)
 	{
 		next = current->next;
-		free_atoms(&current->head);
-		free(current);
+		free_builder(&current);
 		current = next;
 	}
 	*builders = NULL;

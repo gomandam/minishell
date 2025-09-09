@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:00:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/26 04:01:17 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/09 20:55:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_free((void **)&shell.line);
 			continue ;
 		}
-		free_ast_final(&shell.ast);
+		free_exp_ast(&shell.ast);
 		ft_free((void **)&shell.line);
 	}
 	free_env_list(&shell.env_list);

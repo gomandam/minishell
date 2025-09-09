@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/06 02:05:53 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:03:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void		debug_parser(t_shell *shell, t_ast *ast);
 /*======================================================================================= */
 // EXECUTION LINE
 
-int			execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list);
+int			execute_ast(t_shell *shell, t_ast *node);
 int			exec_ast_pipe(t_shell *shell, t_ast *node);
 int			run_builtin_external(t_shell *shell, t_cmd *cmd);
 int			exec_ast_cmd(t_shell *shell, t_cmd *cmd);

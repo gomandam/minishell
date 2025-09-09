@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 16:41:46 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:04:32 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	wait_pipe(pid_t p1, pid_t p2)
 
 // local function for exec_ast_pipe();
 // setup child pipe, execute subtree then exit
-static void	child_pipe_end(t_ast *node, t_env_list *env, int fd[2], int stdio)
+static void	child_pipe_end(t_shell *shell, t_ast *node, int fd[2], int stdio)
 {
 	int	in_fd;
 	int	close_fd;
@@ -59,19 +59,19 @@ static void	child_pipe_end(t_ast *node, t_env_list *env, int fd[2], int stdio)
 		dup2(in_fd, stdio);
 		close(in_fd);
 	}
-	_exit(execute_ast(NULL, node, env));
+	_exit(execute_ast(shell, node));
 }
 
 // fork the child process for a pipe
 // All commands in the pipeline execute in parallel,
 // 	regardless of pipeline depth or tree structure.
-static pid_t	pipe_fork(t_ast *node, t_env_list *env, int fd[2], int stdio)
+static pid_t	pipe_fork(t_shell *shell, t_ast *node, int fd[2], int stdio)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
-		child_pipe_end(node, env, fd, stdio);
+		child_pipe_end(shell, node, fd, stdio);
 	return (pid);
 }
 
@@ -90,16 +90,16 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 		return (1);
 	if (pipe(fd) < 0)
 		return (perror("minishell: pipe"), 1);
-	pid_l = pipe_fork(node->u_data.op.left, &shell->env_list, fd,
+	pid_l = pipe_fork(shell, node->u_data.op.left, fd,
 			STDOUT_FILENO);
-	pid_r = pipe_fork(node->u_data.op.right, &shell->env_list, fd,
+	pid_r = pipe_fork(shell, node->u_data.op.right, fd,
 			STDIN_FILENO);
 	if (fd[0] >= 0)
 		close(fd[0]);
 	if (fd[1] >= 0)
 		close(fd[1]);
 	return (wait_pipe(pid_l, pid_r));
-} 
+}
 /*
    Original branch build > before 27/08/2025 <pipe_exec.c>
 int	exec_ast_pipe(t_shell *shell, t_ast *node)

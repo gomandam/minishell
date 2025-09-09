@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/29 22:38:49 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:02:45 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-int	execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list)
+int	execute_ast(t_shell *shell, t_ast *node)
 {
 	int	storage;
 
-	shell->env_list = *env_list;
 	storage = 0;
 	if (!node)
 		return (0);
@@ -37,21 +36,21 @@ int	execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list)
 		// Done: Basecase, where to return pid during recursion
 	else if (node->type == AST_PIPE)
 		return (exec_ast_pipe(shell, node));
-	// DONE: pipeline handling 
+	// DONE: pipeline handling
 	// setup pipe(), left dup2 write,  right  dup2 read, close fd  wait child process
 	// exec_pipe(node); {{ execute_ast(node->left);  execute_ast(node->right); } waitpid(); }
 	else if (node->type == AST_AND_IF)
 	{
-		storage = execute_ast(shell, node->u_data.op.left, env_list);
+		storage = execute_ast(shell, node->u_data.op.left);
 		if (storage == 0)
-			return (execute_ast(shell, node->u_data.op.right, env_list));
+			return (execute_ast(shell, node->u_data.op.right));
 		return (storage);
 	}
 	else if (node->type == AST_OR_IF)
 	{
-		storage = execute_ast(shell, node->u_data.op.left, env_list);
+		storage = execute_ast(shell, node->u_data.op.left);
 		if (storage != 0)
-			return (execute_ast(shell, node->u_data.op.right, env_list));
+			return (execute_ast(shell, node->u_data.op.right));
 		return (storage);
 	}
 	else if (node->type == AST_SUBSH)

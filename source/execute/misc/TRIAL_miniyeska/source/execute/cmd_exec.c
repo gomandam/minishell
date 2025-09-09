@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 16:41:14 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 20:07:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,18 @@
 //
 //
 // 1. /bin/ls, ./sample_script.sh -> in this cases, don't need to search anything, only execve
-// 		examples 'ls' command, which can be found in the environment which has a list of variables, 
+// 		examples 'ls' command, which can be found in the environment which has a list of variables,
 // 		and inside the directory of the PATH which the commands can be seen.
 // 2. ls, cat, and more commands... -> cmd: search in PATH env where is the cmd:
 //   - if PATH don't exist, cmd not found
 //   - if PATH exist, search in each dir, each dir in PATH is separated by ":" (colon)
 //   - for each dir in PATH, you must concatenate the name of the dir, with '/', and the name of the cmd:
 //      - ex: /home/angelunix/.local/bin + / + ls -> /home/angelunix/.local/bin/ls
-//   - for each concatenate of the name of the cmd with each dir in PATH, 
+//   - for each concatenate of the name of the cmd with each dir in PATH,
 // 				you will check if the file exists, with access(path, F_OK) function
 //   - if yout find a dir path that contains the cmd, you will replace the original argv[0],
 // 				with the concat dir and path you create for access
 
-static int	resolve_cmd_path(char **dst, const char *cmd, t_env_list *env_list)
-{
-	return (get_cmd_path(dst, cmd, env_list->envp));
-}
 
 static int	run_external(t_shell *shell, t_cmd *cmd)
 {
@@ -44,17 +40,14 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 	pid_t	pid;
 	char	*resolved;
 
-	resolved = NULL;
-	if (ft_strchr(cmd->u_data.argv[0], '/'))	// control flow, possible: separate funct
-		resolved = ft_strdup(cmd->u_data.argv[0]);
-	else if (resolve_cmd_path(&resolved, cmd->u_data.argv[0], &shell->env_list))
+	if (ft_strchr(cmd->u_data.argv[0], '/') == NULL)
 	{
-		ft_putstr_fd("[gab:fix here] minishell: command not found: ", 2);
-		ft_putendl_fd(cmd->u_data.argv[0], 2);
-		return (127);
+		resolved = NULL;
+		if (resolve_cmd_path(shell, &resolved, cmd->u_data.argv[0]) == 1)
+			return (127);
+		free(cmd->u_data.argv[0]);
+		cmd->u_data.argv[0] = resolved;
 	}
-	free(cmd->u_data.argv[0]);
-	cmd->u_data.argv[0] = resolved;
 	pid = fork();
 	if (pid < 0)
 		return (perror("minishell: fork"), 1);

@@ -18,6 +18,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/env.c \
 					$(SRC_DIR)/init.c \
 					$(SRC_DIR)/errors.c \
+					$(SRC_DIR)/errors2.c \
 					$(SRC_DIR)/lexer/free.c \
 					$(SRC_DIR)/lexer/general.c \
 					$(SRC_DIR)/lexer/handlers.c \
@@ -38,8 +39,8 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/expansion/structures.c \
 					$(SRC_DIR)/expansion/wildcards.c \
 					$(SRC_DIR)/debug.c \
-        				$(SRC_DIR)/execute/cmd_exec.c \
-					$(SRC_DIR)/execute/cmd_exec2.c	\
+					$(SRC_DIR)/execute/cmd_exec.c \
+					$(SRC_DIR)/execute/cmd_path.c	\
 					$(SRC_DIR)/execute/pipe_exec.c \
 					$(SRC_DIR)/execute/builtin_exec.c \
 					$(SRC_DIR)/execute/execute.c	\

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 16:19:48 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:40:38 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	run_builtin(t_shell *shell, char *argv[])
 // DEBUGGER: Temporary functions to check the access of builtins
 void	debug_builtin(const char *cmd)
 {
-	ft_putstr_fd("DEBUG: inside debug_builtin(); \n", 2);
+	ft_putstr_fd("DEBUG: inside debug_builtin(); at builtin_exec.c\n", 2);
 
 	if (!cmd)
 	{

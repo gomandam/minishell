@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 16:12:11 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:41:46 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	child_pipe_end(t_ast *node, t_env_list *env, int fd[2], int stdio)
 	int	in_fd;
 	int	close_fd;
 
-	ft_putstr_fd("DEBUG: Entered child_pipe_end\n", 2);
+	ft_putstr_fd("DEBUG: entered child_pipe_end at pipe_exec.c\n", 2);
 
 	in_fd = -1;
 	close_fd = -1;

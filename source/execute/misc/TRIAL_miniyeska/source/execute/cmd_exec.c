@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 16:20:25 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:41:14 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 // external is via fork/execve. Then, return cmd exit status
 int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {
-	ft_putstr_fd("DEBUG: Entered the run_builtin_external(); \n", 2);
+	ft_putstr_fd("DEBUG: entered the run_builtin_external(); at cmd_exec.c\n", 2);
 
 	(void)shell; 					// remove after debug
 	if (!cmd->u_data.argv || !cmd->u_data.argv[0])

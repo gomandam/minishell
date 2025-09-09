@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 #include <sys/wait.h>
 #include <fcntl.h>
 
@@ -22,7 +21,16 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 {
 	int	status;
 	pid_t	pid;
+	char	*resolved;
 
+	if (ft_strchr(cmd->u_data.argv[0], '/') == NULL)
+	{
+		resolved = NULL;
+		if (resolve_cmd_path(shell, &resolved, cmd->u_data.argv[0]) == 1)
+			return (127);
+		free(cmd->u_data.argv[0]);
+		cmd->u_data.argv[0] = resolved;
+	}
 	pid = fork();
 	if (pid < 0)
 		return (perror("minishell: fork"), 1);
@@ -44,6 +52,8 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 // external is via fork/execve. Then, return cmd exit status
 int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {
+	ft_putstr_fd("DEBUG: entered the run_builtin_external(); at cmd_exec.c\n", 2);
+
 	(void)shell; 					// remove after debug
 	if (!cmd->u_data.argv || !cmd->u_data.argv[0])
 		return (0);
@@ -58,6 +68,8 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 // expand & execute cmd AST node. returns exit status
 int	exec_ast_cmd(t_shell *shell, t_cmd *cmd)
 {
+	ft_putstr_fd("DEBUG: Entered exec_ast_cmd();\n", 2);
+
 	if (expand_cmd(shell, cmd) != 0)
 		return (1);
 	return (run_builtin_external(shell, cmd));

@@ -20,38 +20,31 @@
  * - AST_SUBSH:   Handles a subshell (parentheses)
  	* Returns: exit status of the executed subtree·		*/
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
-int	execute_ast(t_shell *shell, t_ast *node, t_env_list *env_list)
+int	execute_ast(t_shell *shell, t_ast *node)
 {
 	int	storage;
 
-	shell->env_list = *env_list;
 	storage = 0;
 	if (!node)
 		return (0);
 	if (node->type == AST_CMD)
 		return (exec_ast_cmd(shell, &node->u_data.cmd));
-		// Done: Execute Command > Implement cmd execution for built-ins & external
-		// Done: Basecase, where to return pid during recursion
 	else if (node->type == AST_PIPE)
 		return (exec_ast_pipe(shell, node));
-	// DONE: pipeline handling 
-	// setup pipe(), left dup2 write,  right  dup2 read, close fd  wait child process
-	// exec_pipe(node); {{ execute_ast(node->left);  execute_ast(node->right); } waitpid(); }
 	else if (node->type == AST_AND_IF)
 	{
-		storage = execute_ast(shell, node->u_data.op.left, env_list);
+		storage = execute_ast(shell, node->u_data.op.left);
 		if (storage == 0)
-			return (execute_ast(shell, node->u_data.op.right, env_list));
+			return (execute_ast(shell, node->u_data.op.right));
 		return (storage);
 	}
 	else if (node->type == AST_OR_IF)
 	{
-		storage = execute_ast(shell, node->u_data.op.left, env_list);
+		storage = execute_ast(shell, node->u_data.op.left);
 		if (storage != 0)
-			return (execute_ast(shell, node->u_data.op.right, env_list));
+			return (execute_ast(shell, node->u_data.op.right));
 		return (storage);
 	}
 	else if (node->type == AST_SUBSH)

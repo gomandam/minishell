@@ -46,8 +46,9 @@ int	main(int argc, char *argv[], char *envp[])
 			ft_free((void **)&shell.line);
 			continue ;
 		}
-		debug_parser(&shell, shell.ast);
-		free_ast_final(&shell.ast);
+		execute_ast(&shell, shell.ast);
+		// debug_parser(&shell, shell.ast);
+		// free_ast_final(&shell.ast);
 		// free_ast_parse(&shell.ast); // ? Must use free_ast_final when ast is expanded
 		// free_tokens(&tokens); // TODO: free tokens must not free because are freed
 		ft_free((void **)&shell.line);

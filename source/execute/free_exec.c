@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_striteri.c                                      :+:      :+:    :+:   */
+/*   free_exec1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/23 20:29:23 by migugar2          #+#    #+#             */
-/*   Updated: 2025/07/20 00:38:40 by migugar2         ###   ########.fr       */
+/*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
+/*   Updated: 2025/09/09 22:06:58 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+char	*ft_freestr(char **str)
+{
+	if (str != NULL && str != NULL)
+	{
+		free(*str);
+		*str = NULL;
+	}
+	return (NULL);
+}
+
+void	ft_freestrarr(char ***arr)
 {
 	size_t	i;
 
-	if (f == NULL || s == NULL)
+	if (!arr || !*arr)
 		return ;
 	i = 0;
-	while (s[i])
-	{
-		f(i, &s[i]);
-		i++;
-	}
+	while ((*arr)[i])
+		free((*arr)[i++]);
+	free(*arr);
+	*arr = NULL;
 }

@@ -6,13 +6,12 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/30 00:00:52 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 21:25:55 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
-/*
+#include "minishell.h"
+
 // checks if 'built-in' with "if" conditional statments, or control flow
 // returns 1 if argv[0] matches a builtin, else 0.
 int	is_builtin(char *cmd)
@@ -36,7 +35,7 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-// executes if it is a built-in, assuming builtins are working
+/* //  executes if it is a built-in, assuming builtins are working
 // following: exit, cd, echo, env, export, unset, pwd
 // !TO DO: rename the built-ins ft_*() for proper naming functionality
 int	run_builtin_external(t_shell *shell, char *argv[])
@@ -58,13 +57,12 @@ int	run_builtin_external(t_shell *shell, char *argv[])
 	if (!ft_strcmp(argv[0]), "exit")
 		return (ft_exit(shell, argv));
 	return (1);
-}
-*/
-// ==========================================================================
-// ==========================================================================
+}*/
 // DEBUGGER: Temporary functions to check the access of builtins
 void	debug_builtin(const char *cmd)
 {
+	ft_putstr_fd("DEBUG: inside debug_builtin(); at builtin_exec.c\n", 2);
+
 	if (!cmd)
 	{
 		printf("No command given\n");
@@ -87,4 +85,3 @@ void	debug_builtin(const char *cmd)
 	else
 		printf("Not a builtin: %s\n", cmd);
 }
-

@@ -1,36 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_exec.c                                        :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 19:54:37 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/09 22:09:26 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*ft_freestr(char **str)
+int	perror_cmdnotfound(t_shell *shell, const char *cmd)
 {
-	if (str != NULL && str != NULL)
-	{
-		free(*str);
-		*str = NULL;
-	}
-	return (NULL);
+	write(STDERR_FILENO, "minishell: command not found: ", 30);
+	write(STDERR_FILENO, cmd, ft_strlen(cmd));
+	write(STDERR_FILENO, "\n", 1);
+	if (shell)
+		shell->last_status = 127;
+	return (1);
 }
 
-void	ft_freestrarr(char ***arr)
-{
-	size_t	i;
-
-	if (!arr || !*arr)
-		return ;
-	i = 0;
-	while ((*arr)[i])
-		free((*arr)[i++]);
-	free(*arr);
-	*arr = NULL;
-}

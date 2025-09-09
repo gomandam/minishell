@@ -6,13 +6,14 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/06 02:24:47 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 16:12:11 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include <sys/wait.h>
 #include <unistd.h>
+#include "../../libft/libft.h"
 
 // waits for process ids, returns exit status of right child process
 // st1 & st2: storage exit status, overwritten by waitpid even initialized 0
@@ -36,6 +37,8 @@ static void	child_pipe_end(t_ast *node, t_env_list *env, int fd[2], int stdio)
 {
 	int	in_fd;
 	int	close_fd;
+
+	ft_putstr_fd("DEBUG: Entered child_pipe_end\n", 2);
 
 	in_fd = -1;
 	close_fd = -1;

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 18:04:32 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/09 18:29:51 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,36 +100,3 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 		close(fd[1]);
 	return (wait_pipe(pid_l, pid_r));
 }
-/*
-   Original branch build > before 27/08/2025 <pipe_exec.c>
-int	exec_ast_pipe(t_shell *shell, t_ast *node)
-{
-	int		fd[2];
-	pid_t	pid_l;
-	pid_t	pid_r;
-
-	if (!node || !node->u_data.op.left || !node->u_data.op.right)
-		return (1);
-	if (pipe(fd) < 0)
-		return (perror("minishell: pipe"), 1);
-	pid_l = fork();
-	if (pid_l == 0)
-	{
-		dup2(fd[1], 1);
-		close(fd[0]);
-		close(fd[1]);
-		exit(execute_ast(node->u_data.op.left, &shell->env_list));
-	}
-	pid_r = fork();
-	if (pid_r == 0)
-	{
-		dup2(fd[0], 0);
-		close(fd[1]);
-		close(fd[0]);
-		exit(execute_ast(node->u_data.op.right, &shell->env_list));
-	}
-	close(fd[0]);
-	close(fd[1]);
-	return (wait_pipe(pid_l, pid_r));
-}
-*/

@@ -1,26 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   free_exec1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/07/22 01:04:30 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/09 22:06:58 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
-/*	To file-descriptor: assuming complete with prompt lexer and struct*/
-void	_fork()
+char	*ft_freestr(char **str)
 {
-	pid_t	pid;
-
-	pid = fork();
+	if (str != NULL && str != NULL)
+	{
+		free(*str);
+		*str = NULL;
+	}
+	return (NULL);
 }
 
-void	check_fork()
+void	ft_freestrarr(char ***arr)
 {
-	
+	size_t	i;
+
+	if (!arr || !*arr)
+		return ;
+	i = 0;
+	while ((*arr)[i])
+		free((*arr)[i++]);
+	free(*arr);
+	*arr = NULL;
 }

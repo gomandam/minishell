@@ -6,13 +6,14 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:28:33 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/09 22:01:17 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/10 01:58:26 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// TODO: must modify an struct or value for indicate the error code exit, for example 258 for syntax error
+// TODO: must modify shell when is not NULL for indicate the error code exit, for example 258 for syntax error
+// TODO: perror_malloc(t_shell *shell), perror_unexpected_eof(t_shell *shell), etc
 int	perror_malloc(void)
 {
 	write(STDERR_FILENO, "minishell: memory allocation error\n", 35);
@@ -56,7 +57,7 @@ int	perror_syntaxtok(t_tok *cur)
 	return (1);
 }
 
-int	perror_ambiguosredir(t_tok *word)
+int	perror_ambiguosredir(t_shell *shell, t_tok *word)
 {
 	char	*word_literal;
 	size_t	word_size;
@@ -68,5 +69,7 @@ int	perror_ambiguosredir(t_tok *word)
 	write(STDERR_FILENO, "minishell: ", 12);
 	write(STDERR_FILENO, word_literal, word_size);
 	write(STDERR_FILENO, ": ambiguous redirect\n", 21);
+	free(word_literal);
 	return (1);
+	(void)shell;
 }

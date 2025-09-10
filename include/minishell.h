@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/09 20:53:19 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/10 01:56:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int			perror_malloc(void);
 int			perror_unexpecteof(t_lxstate prev);
 int			perror_unexpecteol(void);
 int			perror_syntaxtok(t_tok *cur);
-int			perror_ambiguosredir(t_tok *word);
+int			perror_ambiguosredir(t_shell *shell, t_tok *word);
 int			perror_cmdnotfound(t_shell *shell, const char *cmd);
 
 // lexer
@@ -62,6 +62,8 @@ t_lxstate	emit_op(t_lexer *lx, t_toktype type, size_t len);
 
 void		lx_advance(t_lexer *lx);
 void		lx_advance_n(t_lexer *lx, size_t n);
+
+int			is_param_start(const char *cur);
 
 t_lxstate	handle_general(t_lexer *lx);
 
@@ -110,31 +112,44 @@ int			parse_ast(t_tok *tokens, t_ast **out);
 
 // expansion
 
-t_param		*new_param(void);
-void		param_push(t_param **head, t_param **tail, t_param *new_param);
+t_atom		*new_atom(t_atomtype type, const char *value, size_t len);
+int			new_builder(t_expand *build);
 int			new_argv_push(t_argv *argv, char *value);
+int			new_argvdup_push(t_argv *argv, char *value);
 char		**convert_argv_to_array(t_argv *argv);
+
+int			append_atom(t_expand *b, const char *value, size_t l, t_atomtype t);
+t_atomtype	atom_peek(t_atom *atom, size_t offset, char *out);
+void		atom_advance(t_atom **atom, size_t *offset);
+
+int			multi_param(t_shell *shell, t_expand *build, char *val);
+int			solve_param(t_shell *shell, t_seg *param, t_expand *build);
 
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
 
-int			expand_wildcards(t_shell *sh, t_exp *exp, t_tok *tok, t_argv *argv);
+int			expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv);
 
-void		free_param(t_param **param, t_seg *from_seg);
-void		free_paramlst(t_param **head, t_param **tail, t_seg *segs);
+void		free_atoms(t_atom **atoms);
+void		free_builder(t_builder **builder);
+void		free_builders(t_builder **builders);
 void		free_argv(t_argv *argv);
+void		free_t_expand(t_expand *build);
+
 void		free_exp_redir(t_redir **redir);
 void		free_exp_redirslst(t_redir **head);
 void		free_exp_redirs(t_redirs *redirs);
-void		free_ast_cmd_final(t_ast **ast);
-void		free_ast_final(t_ast **ast);
-
-int			expand_tok(t_exp *exp, t_tok *tok, t_argv *argv);
-int			expand_cmd(t_shell *shell, t_cmd *cmd);
-int			expansion(t_shell *shell, t_tok *tok, t_argv *argv);
+void		free_exp_ast_cmd(t_ast **ast);
+void		free_exp_ast(t_ast **ast);
 
 char		*literal_expansion(t_tok *word);
 char		*simple_expansion(t_tok *word);
+
+int			expand_cmd(t_shell *shell, t_cmd *cmd);
+int			expand_subsh(t_shell *shell, t_subsh *subsh);
+
+int			build_literals(t_shell *shell, t_builder *builder, t_argv *argv);
+int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
 
 // env functions
 
@@ -146,21 +161,7 @@ void		free_env_list(t_env_list *env_list);
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);
 
-// !debug: delete file and functions
-void		debug_tok(t_tok *tok, int level);
-void		debug_tokenizer(t_tok *head);
-void		debug_parser(t_shell *shell, t_ast *ast);
-
-
-
-
-
-
-
-
-
-
-// EXECUTION
+// execution
 
 int			execute_ast(t_shell *shell, t_ast *node);
 int			exec_ast_pipe(t_shell *shell, t_ast *node);
@@ -173,5 +174,9 @@ char		*ft_freestr(char **str);
 void		ft_freestrarr(char ***arr);
 int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
 int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
+
+// !debug: delete file and functions
+void		debug_tokenizer(t_shell *shell);
+int			debug_parser(t_shell *shell);
 
 #endif

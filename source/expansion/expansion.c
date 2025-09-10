@@ -6,128 +6,121 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 23:00:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/16 17:21:55 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/03 19:15:40 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_param	*expand_param(t_shell *shell, t_seg *seg)
+static size_t	get_len_litbuilder(t_builder *builder)
 {
-	t_param	*res;
-	char	*key;
-
-	res = new_param();
-	if (res == NULL)
-		return (NULL);
-	if (seg->slice.len == 1 && seg->slice.begin[0] == '?')
-	{
-		res->value = ft_itoa(shell->last_status);
-		res->len = ft_strlen(res->value);
-		return (res);
-	}
-	key = malloc(sizeof(char) * (seg->slice.len + 1));
-	if (key == NULL)
-		return (free(res), NULL);
-	ft_strlcpy(key, seg->slice.begin, seg->slice.len + 1);
-	res->value = get_env_value(&shell->env_list, key);
-	free(key);
-	if (res->value == NULL)
-		res->value = "";
-	res->len = ft_strlen(res->value);
-	return (res);
-}
-
-size_t	consume_param(t_exp *exp, t_seg *seg, char *cur)
-{
-	t_param	*tmp;
 	size_t	len;
+	t_atom	*cur;
 
-	tmp = exp->head;
-	len = tmp->len;
-	ft_strlcpy(cur, tmp->value, tmp->len + 1);
-	exp->head = exp->head->next;
-	free_param(&tmp, seg);
-	if (exp->head == NULL)
-		exp->tail = NULL;
+	len = 0;
+	cur = builder->head;
+	while (cur != NULL)
+	{
+		len += cur->len;
+		cur = cur->next;
+	}
 	return (len);
 }
 
-int	expand_tok(t_exp *exp, t_tok *tok, t_argv *argv)
+int	build_literals(t_shell *shell, t_builder *builder, t_argv *argv)
 {
-	t_seg	*cur;
+	size_t	total_len;
 	size_t	i;
-	char	*expanded;
+	t_atom	*acur;
+	char	*joined;
 
-	expanded = malloc(sizeof(char) * (exp->len + 1));
-	if (expanded == NULL)
-		return (perror_malloc());
+	total_len = get_len_litbuilder(builder);
+	joined = malloc(sizeof(char) * (total_len + 1));
+	if (joined == NULL)
+		return (perror_malloc(), 1);
+	acur = builder->head;
 	i = 0;
-	cur = tok->seg_head;
-	while (cur != NULL)
+	while (acur != NULL)
 	{
-		if (cur->type == SEG_TEXT)
-		{
-			ft_strlcpy(&expanded[i], cur->slice.begin, cur->slice.len + 1);
-			i += cur->slice.len;
-		}
-		else if (cur->type == SEG_PARAM)
-			i += consume_param(exp, cur, &expanded[i]);
-		cur = cur->next;
+		if (acur->type == ATOM_LIT)
+			ft_strlcpy(joined + i, acur->value, acur->len + 1);
+		else if (acur->type == ATOM_WILD)
+			ft_memset(joined + i, '*', acur->len);
+		i += acur->len;
+		acur = acur->next;
 	}
-	if (new_argv_push(argv, expanded) == 1)
-		return (perror_malloc(), free(expanded), 1);
+	joined[total_len] = '\0';
+	if (new_argv_push(argv, joined) == 1)
+		return (perror_malloc(), free(joined), 1);
+	return (0);
+	(void)shell;
+}
+
+int	build_expansion(t_shell *shell, t_expand *build, t_argv *argv)
+{
+	t_builder	*next;
+
+	while (build->head != NULL)
+	{
+		if (build->head->flags & BUILDF_WILD
+			&& !(build->tail->flags & BUILDF_EQ))
+		{
+			if (expand_wildcards(shell, build->head, argv) == 1)
+				return (1);
+		}
+		else
+		{
+			if (build_literals(shell, build->head, argv) == 1)
+				return (1);
+		}
+		next = build->head->next;
+		free_builder(&build->head);
+		build->head = next;
+	}
 	return (0);
 }
 
-static int	get_info(t_shell *shell, t_exp *exp, t_tok *tok)
+int	get_builders(t_shell *shell, t_tok *tok, t_expand *build)
 {
-	t_seg	*cur;
-	t_param	*param;
+	t_seg		*cur;
 
+	if (new_builder(build) == 1)
+		return (1);
 	cur = tok->seg_head;
 	while (cur != NULL)
 	{
 		if (cur->type == SEG_TEXT)
-			exp->len += cur->slice.len;
-		else if (cur->type == SEG_PARAM)
 		{
-			param = expand_param(shell, cur);
-			if (param == NULL)
-				return (perror_malloc(),
-					free_paramlst(&exp->head, &exp->tail, tok->seg_head), 1);
-			param_push(&exp->head, &exp->tail, param);
-			exp->len += param->len;
+			if (append_atom(build, cur->slice.begin, cur->slice.len,
+					ATOM_LIT) == 1)
+				return (1);
 		}
 		else if (cur->type == SEG_WILDCARD)
 		{
-			exp->wildcards++;
-			exp->len++;
+			if (append_atom(build, NULL, 1, ATOM_WILD) == 1)
+				return (1);
 		}
+		else if (cur->type == SEG_PARAM && solve_param(shell, cur, build) == 1)
+			return (1);
 		cur = cur->next;
 	}
 	return (0);
 }
 
-int	expansion(t_shell *shell, t_tok *tok, t_argv *argv)
+int	expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign)
 {
-	t_exp	exp;
+	t_expand	build;
 
-	exp.head = NULL;
-	exp.tail = NULL;
-	exp.len = 0;
-	exp.wildcards = 0;
-	if (get_info(shell, &exp, tok) == 1)
-		return (1);
-	if (exp.wildcards > 0)
-	{
-		if (expand_wildcards(shell, &exp, tok, argv) == 1)
-			return (free_paramlst(&exp.head, &exp.tail, tok->seg_head), 1);
-	}
-	else
-	{
-		if (expand_tok(&exp, tok, argv) == 1)
-			return (free_paramlst(&exp.head, &exp.tail, tok->seg_head), 1);
-	}
+	build.head = NULL;
+	build.tail = NULL;
+	build.last_status = NULL;
+	build.is_assign = is_assign;
+	if (get_builders(shell, tok, &build) == 1)
+		return (perror_malloc(), free_t_expand(&build), 1);
+	if (build.head->head == NULL)
+		return (free_t_expand(&build), 0);
+	if (build_expansion(shell, &build, argv) == 1)
+		return (free_t_expand(&build), 1);
+	free_t_expand(&build);
 	return (0);
 }

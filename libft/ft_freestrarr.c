@@ -1,26 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_exec1.c                                       :+:      :+:    :+:   */
+/*   ft_freestrarr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 22:06:58 by gomandam         ###   ########.fr       */
+/*   Created: 2025/09/10 02:05:46 by migugar2          #+#    #+#             */
+/*   Updated: 2025/09/10 02:05:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-char	*ft_freestr(char **str)
-{
-	if (str != NULL && str != NULL)
-	{
-		free(*str);
-		*str = NULL;
-	}
-	return (NULL);
-}
+#include "libft.h"
 
 void	ft_freestrarr(char ***arr)
 {

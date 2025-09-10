@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/09 20:55:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/10 01:56:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int			perror_unexpecteof(t_lxstate prev);
 int			perror_unexpecteol(void);
 int			perror_syntaxtok(t_tok *cur);
 int			perror_ambiguosredir(t_shell *shell, t_tok *word);
+int			perror_cmdnotfound(t_shell *shell, const char *cmd);
 
 // lexer
 
@@ -159,6 +160,20 @@ void		free_env_list(t_env_list *env_list);
 
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);
+
+// execution
+
+int			execute_ast(t_shell *shell, t_ast *node);
+int			exec_ast_pipe(t_shell *shell, t_ast *node);
+int			run_builtin_external(t_shell *shell, t_cmd *cmd);
+int			exec_ast_cmd(t_shell *shell, t_cmd *cmd);
+int			is_builtin(char *cmd);
+void		debug_builtin(const char *cmd);
+
+char		*ft_freestr(char **str);
+void		ft_freestrarr(char ***arr);
+int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
+int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
 
 // !debug: delete file and functions
 void		debug_tokenizer(t_shell *shell);

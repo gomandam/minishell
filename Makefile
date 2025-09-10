@@ -35,7 +35,15 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/expansion/redirs.c \
 					$(SRC_DIR)/expansion/structures.c \
 					$(SRC_DIR)/expansion/wildcards.c \
+					$(SRC_DIR)/execute/builtin_exec.c \
+					$(SRC_DIR)/execute/cmd_exec.c \
+					$(SRC_DIR)/execute/cmd_path.c \
+					$(SRC_DIR)/execute/error.c \
+					$(SRC_DIR)/execute/execute.c \
+					$(SRC_DIR)/execute/free_exec.c \
+					$(SRC_DIR)/execute/pipe_exec.c \
 					$(SRC_DIR)/debug.c
+
 OBJ = $(SOURCES:%.c=%.o)
 
 LIBFT_DIR = libft

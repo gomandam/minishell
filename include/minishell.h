@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/10 01:56:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 00:39:53 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
 
 // env functions
 
+char		**get_envp_shell(t_shell *shell);
 t_env		*create_env_node(char *full, char *value);
 char		*get_env_value(t_env_list *env_list, const char *key);
 void		env_list_push(t_env_list *env_list, t_env *node);

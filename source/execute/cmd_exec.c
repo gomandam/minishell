@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/30 00:14:07 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 00:28:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 		return (perror("minishell: fork"), 1);
 	if (pid == 0)
 	{
-		execve(cmd->u_data.argv[0], cmd->u_data.argv, shell->env_list.envp);
+		execve(cmd->u_data.argv[0], cmd->u_data.argv, get_envp_shell(shell));
 		perror("minishell: execve");
 		_exit(127);
 	}
@@ -48,7 +48,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 	return (1);
 }
 
-// Decide builtin or external, execute builtin directly, and 
+// Decide builtin or external, execute builtin directly, and
 // external is via fork/execve. Then, return cmd exit status
 int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {

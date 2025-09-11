@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 18:35:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:21:36 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,17 @@ static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 	if (WIFEXITED(st2))
 		return (WEXITSTATUS(st2));
 	if (WIFSIGNALED(st2))
+	{
+		int sig = WTERMSIG(st2);
+		if (sig == SIGQUIT)
+		{
+			if (__WCOREDUMP(st2))
+				write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+			else
+				write(STDOUT_FILENO, "Quit\n", 5);
+		}
 		return (128 + WTERMSIG(st2));
+	}
 	return (1);
 }
 

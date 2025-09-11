@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 18:33:50 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:17:36 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 		return (perror("minishell: fork"), 1);
 	if (pid == 0)
 	{
+		signals_exec(shell);
 		execve(cmd->u_data.argv[0], cmd->u_data.argv, get_envp_shell(shell));
 		perror("minishell: execve");
 		_exit(127);
@@ -47,7 +48,17 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))
+	{
+		int sig = WTERMSIG(status);
+		if (sig == SIGQUIT)
+		{
+			if (__WCOREDUMP(status))
+				write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+			else
+				write(STDOUT_FILENO, "Quit\n", 5);
+		}
 		return (128 + WTERMSIG(status));
+	}
 	return (1);
 }
 

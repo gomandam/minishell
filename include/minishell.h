@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:20:02 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 22:33:32 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,12 +172,17 @@ void		debug_builtin(const char *cmd);
 int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
 int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
 
-// main helper functions
+// signals
 
-int			init_shell(t_shell *shell, char *envp[]);
+void		set_g_signum(int s);
 
 void		signals_repl(t_shell *shell);
 void		signals_wait(t_shell *shell);
+void		signals_exec(t_shell *shell);
+
+// main helper functions
+
+int			init_shell(t_shell *shell, char *envp[]);
 
 void		set_last_status(t_shell *shell, long long status);
 

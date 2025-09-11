@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 00:39:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:36:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@
 
 # define MINI_PROMPT "MINI> $ " // TODO
 
+# ifndef ECHOCTL
+#  define ECHOCTL 0
+# endif
+
 // extern volatile sig_atomic_t	g_signum; // TODO
 
 int			perror_malloc(void);
@@ -48,6 +52,7 @@ int			perror_unexpecteol(void);
 int			perror_syntaxtok(t_tok *cur);
 int			perror_ambiguosredir(t_shell *shell, t_tok *word);
 int			perror_cmdnotfound(t_shell *shell, const char *cmd);
+int			perror_usage(t_shell *shell);
 
 // lexer
 
@@ -159,9 +164,6 @@ char		*get_env_value(t_env_list *env_list, const char *key);
 void		env_list_push(t_env_list *env_list, t_env *node);
 void		free_env_list(t_env_list *env_list);
 
-// main helper functions
-int			init_shell(t_shell *shell, char *envp[]);
-
 // execution
 
 int			execute_ast(t_shell *shell, t_ast *node);
@@ -171,10 +173,16 @@ int			exec_ast_cmd(t_shell *shell, t_cmd *cmd);
 int			is_builtin(char *cmd);
 void		debug_builtin(const char *cmd);
 
-char		*ft_freestr(char **str);
-void		ft_freestrarr(char ***arr);
 int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
 int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
+
+// main helper functions
+
+int			init_shell(t_shell *shell, char *envp[]);
+
+void		restore_termios(t_shell *shell);
+
+void		repl(t_shell *shell);
 
 // !debug: delete file and functions
 void		debug_tokenizer(t_shell *shell);

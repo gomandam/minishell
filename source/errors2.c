@@ -6,11 +6,19 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/10 02:19:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 01:14:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	perror_usage(t_shell *shell)
+{
+	write(STDERR_FILENO, "minishell: usage: ./minishell\n", 30);
+	if (shell)
+		shell->last_status = EXIT_FAILURE;
+	return (1);
+}
 
 int	perror_cmdnotfound(t_shell *shell, const char *cmd)
 {

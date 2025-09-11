@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/30 00:14:07 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 03:00:31 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,15 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {
 	ft_putstr_fd("DEBUG: entered the run_builtin_external(); at cmd_exec.c\n", 2);
 
-	(void)shell; 					// remove after debug
+//	(void)shell; 					// remove after debug
 	if (!cmd->u_data.argv || !cmd->u_data.argv[0])
 		return (0);
-//	if (is_builtin(cmd->u_data.argv[0]))
-//		return (run_builtin(shell, cmd->u_data.argv));
-//	return (run_external(shell, cmd));
-	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug
-		return ((debug_builtin(cmd->u_data.argv[0])), 0);
-	return (run_external(shell, cmd));	// remove after debug
+	if (is_builtin(cmd->u_data.argv[0]))
+		return (run_builtin(shell, cmd->u_data.argv));
+	return (run_external(shell, cmd));
+//	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug
+//		return ((debug_builtin(cmd->u_data.argv[0])), 0);
+//	return (run_external(shell, cmd));	// remove after debug
 }
 
 // expand & execute cmd AST node. returns exit status

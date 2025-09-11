@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:14 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/16 14:03:16 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:09:09 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	echo_print(char *argv[], int start)
  *	argv[0] = "echo", argv[1..] = arguments
  *	Supports multiple -n flags: echo -n -n hello */
 
-int	echo(char *argv[])
+int	ft_echo(char *argv[])
 {
 	int	i;
 	int	n_flag;

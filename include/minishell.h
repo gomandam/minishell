@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/10 01:56:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:55:23 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,8 +161,13 @@ void		free_env_list(t_env_list *env_list);
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);
 
-// execution
+// builtins
+int			ft_echo(char *argv[]);
+int			ft_env(t_env_list *env_list);
+int			ft_exit(t_shell *shell, char *argv[]);
+int			ft_pwd(void);
 
+// execution
 int			execute_ast(t_shell *shell, t_ast *node);
 int			exec_ast_pipe(t_shell *shell, t_ast *node);
 int			run_builtin_external(t_shell *shell, t_cmd *cmd);

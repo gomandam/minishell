@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:55 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/16 16:35:44 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:10:27 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** Returns 0 on success, 1 on failure.
 	No need for t_shell args since !modify/read session state
 */
-int	pwd(void)
+int	ft_pwd(void)
 {
 	char	*cwd;
 

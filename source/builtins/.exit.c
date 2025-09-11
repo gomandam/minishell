@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/16 11:51:31 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:30:34 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static int	_numeric(const char *str)
 	}
 	return (1);
 }
+//! TO DO: string to long long (ft_strtoll) => check this functions
 //	Converts string to long long
 static long long	ft_atoll(const char *str)
 {
@@ -64,11 +65,11 @@ static long long	ft_atoll(const char *str)
  	handle: no args, 1 numeric, non-numeric & multiple
 	set status variable for multiple args (no exit)
  */
-int	exit(t_shell *shell, char *argv[])
+int	ft_exit(t_shell *shell, char *argv[])
 {
 	long long	status;
 
-	printf("exit\n");
+	write(1, "exit\n", 5);
 	if (!argv[1])
 	{
 		free_shell(&shell);	// implement free function

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/16 17:39:16 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:19:44 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	remove_env_node(t_env_list *env_list, t_env *node, t_env *prev)
 	unset: implements the 'unset' built-in.
 	argv[0] = "unset", argv[1..n] = var names to unset
 	Returns 1 if any variable was removed, 0 otherwise.	*/
-int	unset(t_env_list *env_list, char *argv[])
+int	ft_unset(t_env_list *env_list, char *argv[])
 {
 	int	removed;
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/16 15:33:05 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 02:31:36 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ static int	is_numeric(const char *str)
 	return (1);
 }
 
-int	exit(t_shell *shell, char *argv[])
+int	ft_exit(t_shell *shell, char *argv[])
 {
 	int	exit_status;
 
 	exit_status = 0;
-	printf("exit\n");
+	write(1, "exit\n", 5);
 	if (argv[1])
 	{
 		if (!is_numeric(argv[1]))

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 02:24:58 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:05:14 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -362,13 +362,12 @@ typedef struct s_env_list
  */
 typedef struct s_shell
 {
-	char			*line;
-	t_tok			*tokens;
-	t_ast			*ast;
-	t_env_list		env_list;
-	int				last_status;
-	struct termios	termios_saved;
-	int				interactive;
+	char		*line;
+	t_tok		*tokens;
+	t_ast		*ast;
+	t_env_list	env_list;
+	int			last_status;
+	int			interactive;
 }	t_shell;
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 04:09:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 15:11:11 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 16:54:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ void	signals_repl(t_shell *shell)
 
 	if (!shell->interactive)
 		return ;
-	ft_bzero(&sa, sizeof(sa));
 	if (g_signum == SIGINT)
 	{
 		g_signum = 0;
 		write(STDOUT_FILENO, "\n", 1);
 	}
+	ft_bzero(&sa, sizeof(sa));
 	sa.sa_handler = handle_repl_sigint;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);

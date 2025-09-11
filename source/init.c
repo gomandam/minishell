@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 15:10:11 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:04:05 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,6 @@ int	init_envp(t_shell *shell, char *envp[])
 	return (0);
 }
 
-void	init_termios(t_shell *shell)
-{
-	struct termios	termios_new;
-
-	tcgetattr(STDIN_FILENO, &shell->termios_saved);
-	termios_new = shell->termios_saved;
-	termios_new.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &termios_new);
-}
-
-void	restore_termios(t_shell *shell)
-{
-	if (shell->interactive == 0)
-		return ;
-	tcsetattr(STDIN_FILENO, TCSANOW, &shell->termios_saved);
-}
-
 int	init_shell(t_shell *shell, char *envp[])
 {
 	shell->line = NULL;
@@ -63,9 +46,6 @@ int	init_shell(t_shell *shell, char *envp[])
 	if (init_envp(shell, envp) == 1)
 		return (1);
 	if (shell->interactive)
-	{
-		init_termios(shell);
 		ft_putendl_fd("Welcome to MiniYeska!", STDOUT_FILENO);
-	}
 	return (0);
 }

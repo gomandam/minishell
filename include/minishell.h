@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 15:25:38 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 16:57:03 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,8 @@ int			init_shell(t_shell *shell, char *envp[]);
 int			ft_pwd(void);
 int			ft_env(t_env_list *env_list);
 int			ft_unset(t_env_list *env_list, char *argv[]);
+int			ft_echo(t_cmd *cmd);
 
-int			ft_echo(char *argv[]);
 int			ft_exit(t_shell *shell, char *argv[]);
 
 // execution

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 16:00:47 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:02:33 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 			return (ft_env(&shell->env_list));
 		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
 			return (ft_unset(&shell->env_list, cmd->u_data.argv));
+		if (!ft_strcmp(cmd->u_data.argv[0], "echo"))
+				return (ft_echo(cmd));		// since ft_echo(t_cmd *cmd)
 	}
 	return (run_external(shell, cmd));
 //	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug

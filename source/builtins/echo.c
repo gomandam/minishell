@@ -6,11 +6,12 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:14 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 02:09:09 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 17:03:31 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 static int	echo_flag(char *argv)		// handles -n or -nnnn for newlines
 {
@@ -31,13 +32,17 @@ static int	echo_flag(char *argv)		// handles -n or -nnnn for newlines
 static void	echo_print(char *argv[], int start)
 {
 	int	i;
+	int	length;
 
 	i = start;
 	while (argv[i] != NULL)	 //instead '\0', null pointer not string/char termination
 	{
-		printf("%s", argv[i]);		// print arguments
+		length = 0;
+		while (argv[i][length])
+			length++;
+		write(STDOUT_FILENO, argv[i], length);
 		if (argv[i + 1] != NULL)
-			printf(" ");		// space after each argv, unless NULL
+			write(STDOUT_FILENO, " ", 1);	// space after each argv, unless NULL
 		i++;
 	}
 }
@@ -46,13 +51,17 @@ static void	echo_print(char *argv[], int start)
  *	argv[0] = "echo", argv[1..] = arguments
  *	Supports multiple -n flags: echo -n -n hello */
 
-int	ft_echo(char *argv[])
+int	ft_echo(t_cmd *cmd)
 {
 	int	i;
 	int	n_flag;
+	char	**argv;
 
 	i = 1;
 	n_flag = 0;
+	if (!cmd || !cmd->u_data.argv)
+		return (0);
+	argv = cmd->u_data.argv;
 	while (argv[i] && echo_flag(argv[i]))		// check multiple -n flags
 	{
 		n_flag = 1;
@@ -61,6 +70,6 @@ int	ft_echo(char *argv[])
 	if (argv[i])			// print arguments
 		echo_print(argv, i);
 	if (!n_flag)			// newline if no -n flag
-		printf("\n");
+		write(STDOUT_FILENO, "\n", 1);
 	return (0);
 }

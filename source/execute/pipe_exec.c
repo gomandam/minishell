@@ -6,14 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 06:24:01 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 18:35:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/wait.h>
-#include <unistd.h>
 
+// TODO: last_status write
 // waits for process ids, returns exit status of right child process
 // st1 & st2: storage exit status, overwritten by waitpid even initialized 0
 static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
@@ -22,8 +21,8 @@ static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 	int	st2;
 
 	signals_wait(shell);
-	waitpid(p1, &st1, 0);
 	waitpid(p2, &st2, 0);
+	waitpid(p1, &st1, 0);
 	signals_repl(shell);
 	if (WIFEXITED(st2))
 		return (WEXITSTATUS(st2));
@@ -90,7 +89,7 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 	if (!node || !node->u_data.op.left || !node->u_data.op.right)
 		return (1);
 	if (pipe(fd) < 0)
-		return (perror("minishell: pipe"), 1);
+		return (perror("minishell: pipe"), 1); // TODO: last_status
 	pid_l = pipe_fork(shell, node->u_data.op.left, fd,
 			STDOUT_FILENO);
 	pid_r = pipe_fork(shell, node->u_data.op.right, fd,

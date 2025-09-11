@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 22:01:34 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 23:18:46 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	ft_exit(t_shell *shell, char *argv[])
 	}
 	else
 		status = ft_strtoll(argv[1]);
-	status = (unsigned char)status;
+	status = (uint8_t)status;
 	rl_clear_history();
 	free_shell(shell);
 	exit(status);

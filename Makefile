@@ -45,6 +45,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/builtins/env.c \
 					$(SRC_DIR)/builtins/unset.c \
 					$(SRC_DIR)/builtins/echo.c \
+					$(SRC_DIR)/builtins/exit.c \
 					$(SRC_DIR)/debug.c
 
 OBJ = $(SOURCES:%.c=%.o)

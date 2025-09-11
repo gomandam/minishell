@@ -41,6 +41,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/execute/cmd_path.c \
 					$(SRC_DIR)/execute/execute.c \
 					$(SRC_DIR)/execute/pipe_exec.c \
+					$(SRC_DIR)/builtins/pwd.c \
 					$(SRC_DIR)/debug.c
 
 OBJ = $(SOURCES:%.c=%.o)

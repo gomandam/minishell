@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 03:00:31 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 13:57:38 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,11 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 	if (!cmd->u_data.argv || !cmd->u_data.argv[0])
 		return (0);
 	if (is_builtin(cmd->u_data.argv[0]))
-		return (run_builtin(shell, cmd->u_data.argv));
+	{
+		ft_putstr_fd("DEBUG: inside is_builtin() -> builtin fx\n", 2);
+		if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
+			return (ft_pwd());
+	}
 	return (run_external(shell, cmd));
 //	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug
 //		return ((debug_builtin(cmd->u_data.argv[0])), 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/08/29 23:53:05 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 06:24:01 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 
 // waits for process ids, returns exit status of right child process
 // st1 & st2: storage exit status, overwritten by waitpid even initialized 0
-static int	wait_pipe(pid_t p1, pid_t p2)
+static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 {
 	int	st1;
 	int	st2;
 
+	signals_wait(shell);
 	waitpid(p1, &st1, 0);
 	waitpid(p2, &st2, 0);
+	signals_repl(shell);
 	if (WIFEXITED(st2))
 		return (WEXITSTATUS(st2));
 	if (WIFSIGNALED(st2))
@@ -97,6 +99,6 @@ int	exec_ast_pipe(t_shell *shell, t_ast *node)
 		close(fd[0]);
 	if (fd[1] >= 0)
 		close(fd[1]);
-	return (wait_pipe(pid_l, pid_r));
+	return (wait_pipe(shell, pid_l, pid_r));
 }
 

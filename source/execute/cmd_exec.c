@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 00:28:22 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 13:17:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 		perror("minishell: execve");
 		_exit(127);
 	}
+	signals_wait(shell);
 	waitpid(pid, &status, 0);
+	signals_repl(shell);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	if (WIFSIGNALED(status))

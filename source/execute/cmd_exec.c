@@ -6,11 +6,12 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 13:57:38 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 16:00:47 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
+#include "../../libft/libft.h"
 #include <sys/wait.h>
 #include <fcntl.h>
 
@@ -50,6 +51,8 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 
 // Decide builtin or external, execute builtin directly, and 
 // external is via fork/execve. Then, return cmd exit status
+// TO DO: review 'unset' but so far it is okay
+
 int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {
 	ft_putstr_fd("DEBUG: entered the run_builtin_external(); at cmd_exec.c\n", 2);
@@ -62,6 +65,10 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 		ft_putstr_fd("DEBUG: inside is_builtin() -> builtin fx\n", 2);
 		if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
 			return (ft_pwd());
+		if (!ft_strcmp(cmd->u_data.argv[0], "env"))
+			return (ft_env(&shell->env_list));
+		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
+			return (ft_unset(&shell->env_list, cmd->u_data.argv));
 	}
 	return (run_external(shell, cmd));
 //	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug

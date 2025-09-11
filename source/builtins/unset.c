@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 02:19:44 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 15:21:36 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
  *	Does NOT affect the parent of the shell.	*/
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 // Find env node by key
 static int	find_env_node(t_env_list *env_list, const char *key,

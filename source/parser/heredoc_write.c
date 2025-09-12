@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 00:06:23 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 17:58:10 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:28:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	heredoc_write(t_shell *shell, char *line, int fd)
 	status_str = NULL;
 	len = 0;
 	val = NULL;
-	fd = STDOUT_FILENO;
 	while (line && *line != '\0')
 	{
 		if (is_param_start(line))

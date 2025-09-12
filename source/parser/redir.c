@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 19:03:45 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 20:28:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,13 @@ int	collect_redir(t_shell *shell, t_tok **cur, t_redirs *list)
 	if (redir == NULL)
 		return (perror_malloc(shell));
 	free_tok(&op);
+	*cur = next;
 	if (redir->type == R_HEREDOC)
 	{
 		if (heredoc_redir(shell, redir) == 1)
 			return (free_redir(&redir), 1);
 	}
 	redir_push(list, redir);
-	*cur = next;
 	return (0);
 }
 
@@ -87,7 +87,7 @@ int	collect_redirs(t_shell *shell, t_tok **cur, t_redirs *redirs)
 	while (*cur && is_redirtok(*cur))
 	{
 		if (collect_redir(shell, cur, redirs) == 1)
-			return (1);
+			return (free_tokens(cur), 1);
 	}
 	return (0);
 }

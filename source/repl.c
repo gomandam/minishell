@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 01:33:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 18:08:54 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:22:12 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ int	repl_evaluate(t_shell *shell)
 		return (0);
 	if (parse_ast(shell) == 1)
 		return (shell->finished);
-	if (execute_ast(shell, shell->ast) == 1)
-		return (shell->finished); // TODO: must free in execution
+	/* if (execute_ast(shell, shell->ast) == 1)
+		return (shell->finished); // TODO: must free in execution */
+	if (debug_parser(shell) == 1)
+		return (1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:00 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 04:28:57 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 20:27:48 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,12 @@ int	parse_cmd(t_shell *shell, t_tok **cur, t_ast **out)
 		return (perror_malloc(shell));
 	last_word = NULL;
 	redirs_tok = NULL;
-	while (*cur && ((*cur)->type == T_WORD
-			|| is_redirtok(*cur)))
+	while (*cur && ((*cur)->type == T_WORD || is_redirtok(*cur)))
 	{
 		if ((*cur)->type == T_WORD)
 			collect_cmd(cur, cmd, &last_word);
 		else if (append_redir(shell, cur, &redirs_tok, &redirs_last_tok) == 1)
-			return (free_ast_parse(&cmd), 1);
+			return (free_ast_parse(&cmd), free_tokens(&redirs_tok), 1);
 	}
 	if (collect_redirs(shell, &redirs_tok, &cmd->u_data.cmd.redir) == 1)
 		return (free_ast_parse(&cmd), 1);

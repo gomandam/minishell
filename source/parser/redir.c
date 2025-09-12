@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 20:28:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 21:25:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,40 +54,20 @@ void	redir_push(t_redirs *list, t_redir *redir)
 	list->tail = redir;
 }
 
-int	collect_redir(t_shell *shell, t_tok **cur, t_redirs *list)
+int	append_redir(t_shell *shell, t_tok **cur, t_tok **rdirs, t_tok **rdirs_last)
 {
-	t_redir	*redir;
-	t_tok	*op;
-	t_tok	*word;
-	t_tok	*next;
-
-	op = *cur;
-	word = op->next;
-	next = word->next;
-	if (word == NULL)
-		return (perror_unexpecteol(shell));
-	if (word->type != T_WORD)
-		return (perror_syntaxtok(shell, word));
-	redir = new_redir_from_tok(op, word);
-	if (redir == NULL)
-		return (perror_malloc(shell));
-	free_tok(&op);
-	*cur = next;
-	if (redir->type == R_HEREDOC)
-	{
-		if (heredoc_redir(shell, redir) == 1)
-			return (free_redir(&redir), 1);
-	}
-	redir_push(list, redir);
-	return (0);
-}
-
-int	collect_redirs(t_shell *shell, t_tok **cur, t_redirs *redirs)
-{
-	while (*cur && is_redirtok(*cur))
-	{
-		if (collect_redir(shell, cur, redirs) == 1)
-			return (free_tokens(cur), 1);
-	}
+	if (*rdirs == NULL)
+		*rdirs = *cur;
+	else
+		(*rdirs_last)->next = *cur;
+	*rdirs_last = *cur;
+	*cur = (*cur)->next;
+	if ((*cur) == NULL)
+		return (perror_unexpecteol(shell), 1);
+	*rdirs_last = *cur;
+	*cur = (*cur)->next;
+	(*rdirs_last)->next = NULL;
+	if ((*rdirs_last)->type != T_WORD)
+		return (perror_syntaxtok(shell, *rdirs_last), 1);
 	return (0);
 }

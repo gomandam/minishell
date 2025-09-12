@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 19:12:32 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 18:33:33 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 21:35:38 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,13 @@
 
 void	signals_heredoc(t_shell *shell)
 {
+	struct sigaction	sa;
+
 	if (!shell->interactive)
 		return ;
-	struct sigaction	sa;
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_handler = set_g_signum;
-	// sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
-	// signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 }
 

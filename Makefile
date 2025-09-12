@@ -30,6 +30,7 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/parser/operators.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redir.c \
+					$(SRC_DIR)/parser/redirs.c \
 					$(SRC_DIR)/expansion/alternatives.c \
 					$(SRC_DIR)/expansion/atoms.c \
 					$(SRC_DIR)/expansion/command.c \

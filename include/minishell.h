@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 17:37:34 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 21:25:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int			heredoc_redir(t_shell *shell, t_redir *redir);
 t_redir		*new_redir(t_redirtype type, t_tok *word);
 t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
 void		redir_push(t_redirs *list, t_redir *redir);
-int			collect_redir(t_shell *shell, t_tok **cur, t_redirs *list);
+int			append_redir(t_shell *sh, t_tok **cur, t_tok **rdirs, t_tok **rlst);
 
 int			collect_redirs(t_shell *shell, t_tok **cur, t_redirs *redirs);
 

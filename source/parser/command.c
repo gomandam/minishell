@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:00 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 20:27:48 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 21:23:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,6 @@ void	collect_cmd(t_tok **cur, t_ast *cmd, t_tok **last_word)
 		(*last_word)->next = tok;
 	*last_word = tok;
 	cmd->u_data.cmd.count++;
-}
-
-int	append_redir(t_shell *shell, t_tok **cur, t_tok **rdirs, t_tok **rdirs_last)
-{
-	if (*rdirs == NULL)
-		*rdirs = *cur;
-	else
-		(*rdirs_last)->next = *cur;
-	*rdirs_last = *cur;
-	*cur = (*cur)->next;
-	if ((*cur) == NULL)
-		return (perror_unexpecteol(shell), 1);
-	*rdirs_last = *cur;
-	*cur = (*cur)->next;
-	(*rdirs_last)->next = NULL;
-	if ((*rdirs_last)->type != T_WORD)
-		return (perror_syntaxtok(shell, *rdirs_last), 1);
-	return (0);
 }
 
 int	parse_cmd(t_shell *shell, t_tok **cur, t_ast **out)

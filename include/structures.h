@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:45:54 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 15:05:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,8 @@ typedef enum e_redirtype
  *   in execution is char *name (post-expansion), is the file name
  * - u_data union for R_HEREDOC:
  *   in parsing is t_tok *word, interpreted literal as delimiter
- *   in execution is int pipefd[2], saves the input user, read from pipefd[0]
+ *   in execution is char *name NULL, because fd is the pipe read end
+ * - fd is the file descriptor used for the redirection, -1 if not opened/closed
  */
 typedef struct s_redir
 {
@@ -122,9 +123,9 @@ typedef struct s_redir
 	{
 		t_tok			*word;
 		char			*name;
-		int				pipefd[2]; // TODO: For heredoc
 	}			u_data;
 	t_redirtype		type;
+	int				fd;
 	struct s_redir	*next;
 }	t_redir;
 
@@ -367,6 +368,7 @@ typedef struct s_shell
 	t_ast		*ast;
 	t_env_list	env_list;
 	int			interactive;
+	int			finished;
 	uint8_t		last_status;
 }	t_shell;
 

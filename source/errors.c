@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/07 15:28:33 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:04:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 15:06:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 int	perror_malloc(t_shell *shell)
 {
 	write(STDERR_FILENO, "minishell: memory allocation error\n", 35);
-	set_last_status(shell, 1);
+	set_last_status(shell, ENOMEM);
+	if (shell)
+		shell->finished = 1;
 	return (1);
 }
 

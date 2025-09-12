@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/09 20:55:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:53:02 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,8 @@ void	free_exp_redir(t_redir **redir)
 	if (redir == NULL || *redir == NULL)
 		return ;
 	if ((*redir)->type != R_HEREDOC)
-	{
-		free((*redir)->u_data.name);
-		(*redir)->u_data.name = NULL;
-	}
-	else
-	{
-		// TODO: remove free_tok and replace with ft_close(&(*redir)->u_data.pipefd[0]);
-		free_tok(&(*redir)->u_data.word);
-	}
+		ft_freestr(&(*redir)->u_data.name);
+	ft_close(&(*redir)->fd);
 	free(*redir);
 	*redir = NULL;
 }

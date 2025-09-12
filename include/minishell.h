@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 22:33:32 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 17:37:34 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
 
 # define MINI_PROMPT "MINI> $ " // TODO
+# define HEREDOC_PROMPT "> " // TODO
+# define HEREDOC_PROMPT_LEN 2 // TODO
 
 extern volatile sig_atomic_t	g_signum;
 
@@ -49,6 +51,9 @@ int			perror_syntaxtok(t_shell *shell, t_tok *cur);
 int			perror_ambiguosredir(t_shell *shell, t_tok *word);
 int			perror_cmdnotfound(t_shell *shell, const char *cmd);
 int			perror_usage(t_shell *shell);
+int			perror_syscall(t_shell *shell, char *msg);
+
+int			pwarn_heredoceof(const char *delim);
 
 // lexer
 
@@ -85,6 +90,9 @@ int			is_redirtok(t_tok *tok);
 void		consume_tok(t_tok **cur);
 char		*get_text_tok(t_tok *tok);
 
+int			heredoc_write(t_shell *shell, char *line, int fd);
+int			heredoc_redir(t_shell *shell, t_redir *redir);
+
 t_redir		*new_redir(t_redirtype type, t_tok *word);
 t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
 void		redir_push(t_redirs *list, t_redir *redir);
@@ -104,6 +112,7 @@ t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
 int			parse_pipe(t_shell *shell, t_tok **cur, t_ast **out);
 int			parse_and_or(t_shell *shell, t_tok **cur, t_ast **out);
 
+void		free_redir(t_redir **redir);
 void		free_redirslst(t_redir **head);
 void		free_redirs(t_redirs *list);
 void		free_ast_cmd_parse(t_ast **ast);

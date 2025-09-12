@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:19:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 19:03:45 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_redir	*new_redir(t_redirtype type, t_tok *word)
 	redir->type = type;
 	redir->u_data.word = word;
 	redir->next = NULL;
+	redir->fd = -1;
 	return (redir);
 }
 
@@ -29,8 +30,6 @@ t_redir	*new_redir_from_tok(t_tok *op, t_tok *word)
 {
 	t_redirtype	type;
 
-	if (op->type == T_INFILE)
-		type = R_INFILE;
 	if (op->type == T_INFILE)
 		type = R_INFILE;
 	else if (op->type == T_HEREDOC)
@@ -60,9 +59,11 @@ int	collect_redir(t_shell *shell, t_tok **cur, t_redirs *list)
 	t_redir	*redir;
 	t_tok	*op;
 	t_tok	*word;
+	t_tok	*next;
 
 	op = *cur;
 	word = op->next;
+	next = word->next;
 	if (word == NULL)
 		return (perror_unexpecteol(shell));
 	if (word->type != T_WORD)
@@ -70,18 +71,14 @@ int	collect_redir(t_shell *shell, t_tok **cur, t_redirs *list)
 	redir = new_redir_from_tok(op, word);
 	if (redir == NULL)
 		return (perror_malloc(shell));
-	/* if (op->type == T_HEREDOC)
-	{
-		if (heredoc_func(shell, redir) == 1)
-			return (1);
-		// TODO: inside heredoc_func
-			char	*delimiter = simple_expansion(word);
-			pipe, signals, gnl, etc
-			free(delimiter);
-	}*/
-	redir_push(list, redir);
-	*cur = word->next;
 	free_tok(&op);
+	if (redir->type == R_HEREDOC)
+	{
+		if (heredoc_redir(shell, redir) == 1)
+			return (free_redir(&redir), 1);
+	}
+	redir_push(list, redir);
+	*cur = next;
 	return (0);
 }
 

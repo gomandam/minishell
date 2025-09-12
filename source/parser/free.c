@@ -6,11 +6,21 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:22:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/26 04:01:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 12:55:31 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_redir(t_redir **redir)
+{
+	if (!redir || !*redir)
+		return ;
+	free_tok(&(*redir)->u_data.word);
+	ft_close(&(*redir)->fd);
+	free(*redir);
+	*redir = NULL;
+}
 
 void	free_redirslst(t_redir **head)
 {
@@ -21,9 +31,7 @@ void	free_redirslst(t_redir **head)
 	while (*head != NULL)
 	{
 		next = (*head)->next;
-		if ((*head)->u_data.word != NULL)
-			free_tok(&(*head)->u_data.word);
-		free(*head);
+		free_redir(head);
 		*head = next;
 	}
 	*head = NULL;

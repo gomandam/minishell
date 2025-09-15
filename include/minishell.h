@@ -17,11 +17,11 @@
 
 # include "structures.h"
 
+# include <stdio.h> // printf, perror
 # include <readline/readline.h>
 // readline, rl_on_new_line, rl_replace_line, rl_redisplay
 # include <readline/history.h>
 // add_history, rl_clear_history
-# include <stdio.h> // printf, perror
 # include <stdlib.h> // exit, malloc, free, getenv
 # include <unistd.h>
 // write, read, open, close, fork, access, chdir, getcwd, execve

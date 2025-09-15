@@ -89,4 +89,3 @@ int	heredoc_write(t_shell *shell, char *line, int fd)
 	}
 	return (heredoc_writelit(fd, line, len), ft_freestr(&status_str), 0);
 }
-

@@ -68,7 +68,6 @@ void	free_exp_ast_cmd(t_ast **ast)
 	*ast = NULL;
 }
 
-// TODO: Analyzing, this probably must don't work every time, because expansion probably will be in a forked process, not in the main process
 void	free_exp_ast(t_ast **ast)
 {
 	if (!ast || !*ast)

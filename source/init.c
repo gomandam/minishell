@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 18:23:43 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 15:05:42 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	init_shell(t_shell *shell, char *envp[])
 	shell->tokens = NULL;
 	shell->ast = NULL;
 	shell->last_status = 0;
+	shell->finished = 0;
 	shell->interactive = isatty(STDIN_FILENO);
 	if (init_envp(shell, envp) == 1)
 		return (1);

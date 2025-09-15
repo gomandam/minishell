@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 20:28:03 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:46:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/11 23:32:33 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static int	multi_spec_char(t_expand *build, char *val, size_t *i, size_t *strt)
 	return (0);
 }
 
+// TODO: perror error handling
 int	multi_param(t_shell *shell, t_expand *build, char *val)
 {
 	size_t	i;

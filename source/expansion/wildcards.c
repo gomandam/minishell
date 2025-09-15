@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:08:36 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:30:18 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/15 22:57:38 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	start_wildcard(t_builder *builder, t_atom **start, size_t *offset)
 	return (0);
 }
 
-int	wildcard_solve(t_shell *shell, t_builder *builder, t_argv *argv)
+int	wildcard_solve(t_shell *shell, t_builder *builder, t_list **heap_wildcard)
 {
 	DIR				*cur;
 	struct dirent	*entry;
@@ -97,9 +97,9 @@ int	wildcard_solve(t_shell *shell, t_builder *builder, t_argv *argv)
 	entry = readdir(cur);
 	while (entry != NULL)
 	{
-		if (wildcard_match(entry->d_name, &start, &offset))
+		if (wildcard_match(entry->d_name, &start, &offset) == 1)
 		{
-			if (new_argvdup_push(argv, entry->d_name) == 1)
+			if (minheap_new_push(heap_wildcard, entry->d_name) == 1)
 				return (perror_malloc(shell), closedir(cur), 1);
 		}
 		entry = readdir(cur);
@@ -109,15 +109,28 @@ int	wildcard_solve(t_shell *shell, t_builder *builder, t_argv *argv)
 
 int	expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv)
 {
-	size_t	initial_argc;
+	t_list	*heap_wildcard;
+	t_list	*last;
+	size_t	len;
 
-	initial_argc = argv->argc;
-	if (wildcard_solve(shell, builder, argv) == 1)
-		return (1);
-	if (argv->argc == initial_argc)
+	heap_wildcard = NULL;
+	if (wildcard_solve(shell, builder, &heap_wildcard) == 1)
+		return (ft_lstclear(&heap_wildcard, free), 1);
+	if (heap_wildcard == NULL)
 	{
 		if (build_literals(shell, builder, argv) == 1)
 			return (1);
+		return (0);
 	}
+	argv_push(argv, heap_wildcard);
+	last = heap_wildcard;
+	len = 0;
+	while (last->next != NULL)
+	{
+		last = last->next;
+		len++;
+	}
+	argv->argc += len;
+	argv->tail = last;
 	return (0);
 }

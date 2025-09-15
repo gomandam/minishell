@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 21:25:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/15 22:58:55 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,8 @@ int			parse_ast(t_shell *shell);
 
 t_atom		*new_atom(t_atomtype type, const char *value, size_t len);
 int			new_builder(t_expand *build);
+void		argv_push(t_argv *argv, t_list *node);
 int			new_argv_push(t_argv *argv, char *value);
-int			new_argvdup_push(t_argv *argv, char *value);
 char		**convert_argv_to_array(t_argv *argv);
 
 int			append_atom(t_expand *b, const char *value, size_t l, t_atomtype t);
@@ -137,6 +137,8 @@ int			solve_param(t_shell *shell, t_seg *param, t_expand *build);
 
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
+
+int			minheap_new_push(t_list **heap, char *todup);
 
 int			expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv);
 

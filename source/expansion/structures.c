@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 11:57:45 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/03 18:19:43 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/15 22:55:36 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ int	new_builder(t_expand *build)
 	return (0);
 }
 
+void	argv_push(t_argv *argv, t_list *node)
+{
+	if (argv->head == NULL)
+		argv->head = node;
+	else
+		argv->tail->next = node;
+	argv->tail = node;
+	argv->argc++;
+}
+
 int	new_argv_push(t_argv *argv, char *value)
 {
 	t_list	*new_node;
@@ -54,23 +64,8 @@ int	new_argv_push(t_argv *argv, char *value)
 	new_node = ft_lstnew(value);
 	if (new_node == NULL)
 		return (1);
-	if (argv->head == NULL)
-		argv->head = new_node;
-	else
-		argv->tail->next = new_node;
-	argv->tail = new_node;
-	argv->argc++;
+	argv_push(argv, new_node);
 	return (0);
-}
-
-int	new_argvdup_push(t_argv *argv, char *todup)
-{
-	char	*copy;
-
-	copy = ft_strdup(todup);
-	if (copy == NULL)
-		return (1);
-	return (new_argv_push(argv, copy));
 }
 
 char	**convert_argv_to_array(t_argv *argv)

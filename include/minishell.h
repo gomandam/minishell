@@ -6,7 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/09/11 20:16:57 by gomandam         ###   ########.fr       */
+=======
+/*   Updated: 2025/09/11 22:33:32 by migugar2         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +44,15 @@
 
 # define MINI_PROMPT "MINI> $ " // TODO
 
-// extern volatile sig_atomic_t	g_signum; // TODO
+extern volatile sig_atomic_t	g_signum;
 
-int			perror_malloc(void);
-int			perror_unexpecteof(t_lxstate prev);
-int			perror_unexpecteol(void);
-int			perror_syntaxtok(t_tok *cur);
+int			perror_malloc(t_shell *shell);
+int			perror_unexpecteof(t_shell *shell, t_lxstate prev);
+int			perror_unexpecteol(t_shell *shell);
+int			perror_syntaxtok(t_shell *shell, t_tok *cur);
 int			perror_ambiguosredir(t_shell *shell, t_tok *word);
 int			perror_cmdnotfound(t_shell *shell, const char *cmd);
+int			perror_usage(t_shell *shell);
 
 // lexer
 
@@ -76,7 +81,7 @@ void		free_segments(t_seg **seg);
 void		free_tok(t_tok **tok);
 void		free_tokens(t_tok **tok);
 
-int			tokenize(const char *input, t_tok **out);
+int			tokenize(t_shell *shell);
 
 // parser
 
@@ -87,28 +92,28 @@ char		*get_text_tok(t_tok *tok);
 t_redir		*new_redir(t_redirtype type, t_tok *word);
 t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
 void		redir_push(t_redirs *list, t_redir *redir);
-int			collect_redir(t_tok **cur, t_redirs *list);
+int			collect_redir(t_shell *shell, t_tok **cur, t_redirs *list);
 
-int			collect_redirs(t_tok **cur, t_redirs *redirs);
+int			collect_redirs(t_shell *shell, t_tok **cur, t_redirs *redirs);
 
 t_ast		*new_cmd_leaf(void);
 void		collect_cmd(t_tok **cur, t_ast *cmd, t_tok **last_word);
-int			parse_cmd(t_tok **cur, t_ast **out);
+int			parse_cmd(t_shell *shell, t_tok **cur, t_ast **out);
 t_ast		*new_subsh_node(t_ast *child);
-int			parse_subsh(t_tok **cur, t_ast **out);
+int			parse_subsh(t_shell *shell, t_tok **cur, t_ast **out);
 
-int			parse_cmd_subsh(t_tok **cur, t_ast **out);
+int			parse_cmd_subsh(t_shell *shell, t_tok **cur, t_ast **out);
 
 t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
-int			parse_pipe(t_tok **cur, t_ast **out);
-int			parse_and_or(t_tok **cur, t_ast **out);
+int			parse_pipe(t_shell *shell, t_tok **cur, t_ast **out);
+int			parse_and_or(t_shell *shell, t_tok **cur, t_ast **out);
 
 void		free_redirslst(t_redir **head);
 void		free_redirs(t_redirs *list);
 void		free_ast_cmd_parse(t_ast **ast);
 void		free_ast_parse(t_ast **ast);
 
-int			parse_ast(t_tok *tokens, t_ast **out);
+int			parse_ast(t_shell *shell);
 
 // expansion
 
@@ -153,11 +158,13 @@ int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
 
 // env functions
 
+char		**get_envp_shell(t_shell *shell);
 t_env		*create_env_node(char *full, char *value);
 char		*get_env_value(t_env_list *env_list, const char *key);
 void		env_list_push(t_env_list *env_list, t_env *node);
 void		free_env_list(t_env_list *env_list);
 
+<<<<<<< HEAD
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);
 
@@ -167,6 +174,9 @@ int			ft_env(t_env_list *env_list);
 int			ft_unset(t_env_list *env_list, char *argv[]);
 int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
+=======
+// execution
+>>>>>>> origin/main
 
 // execution
 int			execute_ast(t_shell *shell, t_ast *node);
@@ -176,13 +186,27 @@ int			exec_ast_cmd(t_shell *shell, t_cmd *cmd);
 int			is_builtin(char *cmd);
 void		debug_builtin(const char *cmd);
 
-char		*ft_freestr(char **str);
-void		ft_freestrarr(char ***arr);
 int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
 int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
 
+// signals
+
+void		set_g_signum(int s);
+
+void		signals_repl(t_shell *shell);
+void		signals_wait(t_shell *shell);
+void		signals_exec(t_shell *shell);
+
+// main helper functions
+
+int			init_shell(t_shell *shell, char *envp[]);
+
+void		set_last_status(t_shell *shell, long long status);
+
+void		repl(t_shell *shell);
+
 // !debug: delete file and functions
-void		debug_tokenizer(t_shell *shell);
+int			debug_tokenizer(t_shell *shell);
 int			debug_parser(t_shell *shell);
 
 #endif

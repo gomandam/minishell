@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 15:21:36 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/18 01:05:50 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	remove_env_node(t_env_list *env_list, t_env *node, t_env *prev)
 	free(node->full);
 	free(node);
 	env_list->size--;
-	if (env_list->envp)	// free cache
+	if (env_list->envp)
 	{
 		free(env_list->envp);
 		env_list->envp = NULL;
@@ -67,8 +67,8 @@ static void	remove_env_node(t_env_list *env_list, t_env *node, t_env *prev)
 	Returns 1 if any variable was removed, 0 otherwise.	*/
 int	ft_unset(t_env_list *env_list, char *argv[])
 {
-	int	removed;
-	int	i;
+	int		removed;
+	int		i;
 	t_env	*node;
 	t_env	*prev;
 

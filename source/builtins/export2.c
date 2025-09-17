@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/12 04:12:47 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/18 01:04:00 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,6 @@ static void	print_export_var(const char *var)
 	}
 }
 
-static int	matches_char(const char *var, char c)
-{
-	if (!var || !*var)
-		return (0);
-	return (*var == c);
-}
-
 void	print_exports_char(char **envp, char c)
 {
 	int	i;
@@ -57,7 +50,7 @@ void	print_exports_char(char **envp, char c)
 	i = 0;
 	while (envp[i])
 	{
-		if (matches_char(envp[i], c))
+		if (envp[i] && envp[i][0] == c)
 			print_export_var(envp[i]);
 		i++;
 	}
@@ -76,20 +69,51 @@ void	print_exports_nonalpha(char **envp)
 	}
 }
 
-int	valid_export_name(const char *s)
+// adds a string to a NULL-terminated char **array.
+// returns new array or NULL on error.
+char	**add_str_to_array(char **array, char *str)
 {
-	int	i;
+	int		len;
+	char	**new_array;
+	int		i;
 
-	if (!s || !*s)
-		return (0);
-	if (!ft_isalpha(*s) && *s != '_')
-		return (0);
-	i = 1;
-	while (s[i] && s[i] != '=')
+	len = 0;
+	while (array && array[len])
+		len++;
+	new_array = malloc(sizeof(char *) * (len + 2));
+	if (!new_array)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		if (!ft_isalnum(s[i]) && s[i] != '_')
-			return (0);
+		new_array[i] = ft_strdup(array[i]);
 		i++;
 	}
-	return (1);
+	new_array[i] = ft_strdup(str);
+	new_array[i + 1] = NULL;
+	if (array)
+		free_array(array);
+	return (new_array);
+}
+
+// returns 1 if str is in array, 0 otherwise. Compares up to '=' if present.
+int	str_in_array(char **array, char *str)
+{
+	int		i;
+	int		cmp_len;
+
+	if (!array || !str)
+		return (0);
+	cmp_len = 0;
+	while (str[cmp_len] && str[cmp_len] != '=')
+		cmp_len++;
+	i = 0;
+	while (array[i])
+	{
+		if (!ft_strncmp(array[i], str, cmp_len) && (array[i][cmp_len] == '='
+			|| array[i][cmp_len] == '\0'))
+			return (1);
+		i++;
+	}
+	return (0);
 }

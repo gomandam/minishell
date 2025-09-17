@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/12 04:10:41 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/18 00:02:45 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,29 @@
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-// TO DO: ft_strndup();  str_in_array();  add_str_to_array();
-// Print all export vars, grouped and sorted
-static void	export_no_args(char **envp)
-{
-	char	c;
-
-	c = 'A';
-	while (c <= 'Z')
-	{
-		print_exports_char(envp, c);
-		c++;
-	}
-	print_exports_nonalpha(envp);
-}
-
 static void	export_error(const char *argv)
 {
 	ft_putstr_fd("minishell: export: '", 2);
 	ft_putstr_fd((char *)argv, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
+}
+
+static int	valid_export_name(const char *s)
+{
+	int	i;
+
+	if (!s || !*s)
+		return (0);
+	if (!ft_isalpha(*s) && *s != '_')
+		return (0);
+	i = 1;
+	while (s[i] && s[i] != '=')
+	{
+		if (!ft_isalnum(s[i]) && s[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 // Handles export logic for a single argv
@@ -48,7 +51,7 @@ static int	handle_export_var(t_shell *shell, const char *argv)
 	eq = ft_strchr(argv, '=');
 	if (eq)
 	{
-		name = ft_strndup(argv, eq - argv);
+		name = ft_substr(argv, 0, eq - argv);
 		if (!valid_export_name(name))
 		{
 			export_error(argv);
@@ -67,6 +70,19 @@ static int	handle_export_var(t_shell *shell, const char *argv)
 			shell->env_list.head = add_str_to_array(shell->env_list.head, argv);
 	}
 	return (0);
+}
+
+static void	export_no_args(char **envp)
+{
+	char	c;
+
+	c = 'A';
+	while (c <= 'Z')
+	{
+		print_exports_char(envp, c);
+		c++;
+	}
+	print_exports_nonalpha(envp);
 }
 
 int	ft_export(t_shell *shell, char **argv)

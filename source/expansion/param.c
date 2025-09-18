@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 20:28:03 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:46:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:21:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	multi_spec_char(t_expand *build, char *val, size_t *i, size_t *strt)
 	return (0);
 }
 
-int	multi_param(t_shell *shell, t_expand *build, char *val)
+int	multi_param(t_expand *build, char *val)
 {
 	size_t	i;
 	size_t	strt;
@@ -58,7 +58,6 @@ int	multi_param(t_shell *shell, t_expand *build, char *val)
 	if (i > strt && val[strt] && !ft_isspace(val[strt]))
 		return (append_atom(build, &val[strt], i - strt, ATOM_LIT));
 	return (0);
-	(void)shell;
 }
 
 int	solve_param(t_shell *shell, t_seg *param, t_expand *build)
@@ -85,5 +84,5 @@ int	solve_param(t_shell *shell, t_seg *param, t_expand *build)
 		return (0);
 	if (param->flags & SEGF_QUOTED || build->tail->flags & BUILDF_EQ)
 		return (append_atom(build, value, ft_strlen(value), ATOM_LIT));
-	return (multi_param(shell, build, value));
+	return (multi_param(build, value));
 }

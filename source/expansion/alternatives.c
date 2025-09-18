@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/12 18:36:09 by migugar2          #+#    #+#             */
-/*   Updated: 2025/08/29 12:49:28 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:19:57 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static void	cpy_simple(t_tok *word, char *expanded)
 	expanded[i] = '\0';
 }
 
-// TODO: Apply in heredoc word
 char	*simple_expansion(t_tok *word)
 {
 	size_t	len;

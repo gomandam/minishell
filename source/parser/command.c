@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:00 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:21:31 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/12 21:23:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	parse_cmd(t_shell *shell, t_tok **cur, t_ast **out)
 {
 	t_ast	*cmd;
 	t_tok	*last_word;
+	t_tok	*redirs_tok;
+	t_tok	*redirs_last_tok;
 
 	if (*cur == NULL)
 		return (perror_unexpecteol(shell));
@@ -55,16 +57,17 @@ int	parse_cmd(t_shell *shell, t_tok **cur, t_ast **out)
 	if (cmd == NULL)
 		return (perror_malloc(shell));
 	last_word = NULL;
-	while (*cur && ((*cur)->type == T_WORD
-			|| is_redirtok(*cur)))
+	redirs_tok = NULL;
+	while (*cur && ((*cur)->type == T_WORD || is_redirtok(*cur)))
 	{
 		if ((*cur)->type == T_WORD)
 			collect_cmd(cur, cmd, &last_word);
-		else if (collect_redir(shell, cur, &cmd->u_data.cmd.redir) == 1)
-			return (free_ast_parse(&cmd), 1);
+		else if (append_redir(shell, cur, &redirs_tok, &redirs_last_tok) == 1)
+			return (free_ast_parse(&cmd), free_tokens(&redirs_tok), 1);
 	}
-	*out = cmd;
-	return (0);
+	if (collect_redirs(shell, &redirs_tok, &cmd->u_data.cmd.redir) == 1)
+		return (free_ast_parse(&cmd), 1);
+	return (*out = cmd, 0);
 }
 
 t_ast	*new_subsh_node(t_ast *child)

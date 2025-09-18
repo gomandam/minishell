@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:43:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 00:39:35 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:19:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,20 @@ char	*get_env_value(t_env_list *env_list, const char *key)
 	return (NULL);
 }
 
+char	*get_env_n_value(t_env_list *env_list, const char *key, size_t n)
+{
+	t_env	*cur;
+
+	cur = env_list->head;
+	while (cur != NULL)
+	{
+		if (ft_strncmp(cur->full, key, n + 1) == ('=' - key[n]))
+			return (cur->value);
+		cur = cur->next;
+	}
+	return (NULL);
+}
+
 void	env_list_push(t_env_list *env_list, t_env *node)
 {
 	if (env_list->head == NULL)
@@ -70,31 +84,6 @@ void	env_list_push(t_env_list *env_list, t_env *node)
 		env_list->tail->next = node;
 	env_list->tail = node;
 	env_list->size++;
-	if (env_list->envp != NULL)
-	{
-		free(env_list->envp);
-		env_list->envp = NULL;
-	}
-}
-
-void	free_env_list(t_env_list *env_list)
-{
-	t_env	*cur;
-	t_env	*next;
-
-	cur = env_list->head;
-	while (cur != NULL)
-	{
-		free(cur->full);
-		cur->full = NULL;
-		cur->value = NULL;
-		next = cur->next;
-		free(cur);
-		cur = next;
-	}
-	env_list->head = NULL;
-	env_list->tail = NULL;
-	env_list->size = 0;
 	if (env_list->envp != NULL)
 	{
 		free(env_list->envp);

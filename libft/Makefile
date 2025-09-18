@@ -2,7 +2,7 @@ NAME = libft.a
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I.
 
 AR = ar rc
 
@@ -14,6 +14,7 @@ SRC =	ft_free.c \
 			ft_close.c \
 			ft_strndup.c \
 			ft_strcmp.c \
+			get_next_line.c \
 			ft_isalpha.c \
 			ft_isdigit.c \
 			ft_isalnum.c \

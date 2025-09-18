@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 21:25:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:21:38 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int			append_atom(t_expand *b, const char *value, size_t l, t_atomtype t);
 t_atomtype	atom_peek(t_atom *atom, size_t offset, char *out);
 void		atom_advance(t_atom **atom, size_t *offset);
 
-int			multi_param(t_shell *shell, t_expand *build, char *val);
+int			multi_param(t_expand *build, char *val);
 int			solve_param(t_shell *shell, t_seg *param, t_expand *build);
 
 int			expand_redir(t_shell *shell, t_redir *redir);
@@ -166,8 +166,8 @@ int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
 char		**get_envp_shell(t_shell *shell);
 t_env		*create_env_node(char *full, char *value);
 char		*get_env_value(t_env_list *env_list, const char *key);
+char		*get_env_n_value(t_env_list *env_list, const char *key, size_t n);
 void		env_list_push(t_env_list *env_list, t_env *node);
-void		free_env_list(t_env_list *env_list);
 
 // execution
 

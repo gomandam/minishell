@@ -6,26 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 00:06:23 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 19:28:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:17:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// TODO: move
-char	*get_env_n_value(t_env_list *env_list, const char *key, size_t n)
-{
-	t_env	*cur;
-
-	cur = env_list->head;
-	while (cur != NULL)
-	{
-		if (ft_strncmp(cur->full, key, n + 1) == ('=' - key[n]))
-			return (cur->value);
-		cur = cur->next;
-	}
-	return (NULL);
-}
 
 static void	heredoc_writelit(int fd, char *line, size_t len)
 {

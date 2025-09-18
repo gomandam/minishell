@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 19:12:32 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 21:35:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:16:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,6 @@ static int	check_quoted(t_tok *word)
 	return (0);
 }
 
-// TODO: inside heredoc_func
-/*
-	char	*delimiter = simple_expansion(word);
-	pipe, signals, gnl, etc
-	free(delimiter);
-*/
 int	heredoc_redir(t_shell *shell, t_redir *redir)
 {
 	char	*delim;

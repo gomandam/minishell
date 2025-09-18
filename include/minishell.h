@@ -6,7 +6,11 @@
 /*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/09/18 01:33:33 by gomandam         ###   ########.fr       */
+=======
+/*   Updated: 2025/09/18 12:21:38 by migugar2         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +21,11 @@
 
 # include "structures.h"
 
+# include <stdio.h> // printf, perror
 # include <readline/readline.h>
 // readline, rl_on_new_line, rl_replace_line, rl_redisplay
 # include <readline/history.h>
 // add_history, rl_clear_history
-# include <stdio.h> // printf, perror
 # include <stdlib.h> // exit, malloc, free, getenv
 # include <unistd.h>
 // write, read, open, close, fork, access, chdir, getcwd, execve
@@ -39,6 +43,8 @@
 // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
 
 # define MINI_PROMPT "MINI> $ " // TODO
+# define HEREDOC_PROMPT "> " // TODO
+# define HEREDOC_PROMPT_LEN 2 // TODO
 
 extern volatile sig_atomic_t	g_signum;
 
@@ -49,6 +55,9 @@ int			perror_syntaxtok(t_shell *shell, t_tok *cur);
 int			perror_ambiguosredir(t_shell *shell, t_tok *word);
 int			perror_cmdnotfound(t_shell *shell, const char *cmd);
 int			perror_usage(t_shell *shell);
+int			perror_syscall(t_shell *shell, char *msg);
+
+int			pwarn_heredoceof(const char *delim);
 
 // lexer
 
@@ -85,10 +94,13 @@ int			is_redirtok(t_tok *tok);
 void		consume_tok(t_tok **cur);
 char		*get_text_tok(t_tok *tok);
 
+int			heredoc_write(t_shell *shell, char *line, int fd);
+int			heredoc_redir(t_shell *shell, t_redir *redir);
+
 t_redir		*new_redir(t_redirtype type, t_tok *word);
 t_redir		*new_redir_from_tok(t_tok *op, t_tok *word);
 void		redir_push(t_redirs *list, t_redir *redir);
-int			collect_redir(t_shell *shell, t_tok **cur, t_redirs *list);
+int			append_redir(t_shell *sh, t_tok **cur, t_tok **rdirs, t_tok **rlst);
 
 int			collect_redirs(t_shell *shell, t_tok **cur, t_redirs *redirs);
 
@@ -104,6 +116,7 @@ t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
 int			parse_pipe(t_shell *shell, t_tok **cur, t_ast **out);
 int			parse_and_or(t_shell *shell, t_tok **cur, t_ast **out);
 
+void		free_redir(t_redir **redir);
 void		free_redirslst(t_redir **head);
 void		free_redirs(t_redirs *list);
 void		free_ast_cmd_parse(t_ast **ast);
@@ -123,7 +136,7 @@ int			append_atom(t_expand *b, const char *value, size_t l, t_atomtype t);
 t_atomtype	atom_peek(t_atom *atom, size_t offset, char *out);
 void		atom_advance(t_atom **atom, size_t *offset);
 
-int			multi_param(t_shell *shell, t_expand *build, char *val);
+int			multi_param(t_expand *build, char *val);
 int			solve_param(t_shell *shell, t_seg *param, t_expand *build);
 
 int			expand_redir(t_shell *shell, t_redir *redir);
@@ -157,8 +170,8 @@ int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
 char		**get_envp_shell(t_shell *shell);
 t_env		*create_env_node(char *full, char *value);
 char		*get_env_value(t_env_list *env_list, const char *key);
+char		*get_env_n_value(t_env_list *env_list, const char *key, size_t n);
 void		env_list_push(t_env_list *env_list, t_env *node);
-void		free_env_list(t_env_list *env_list);
 
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);

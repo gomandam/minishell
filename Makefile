@@ -1,7 +1,7 @@
 NAME = minishell
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCFLAGS) -g3
+CFLAGS = -Wall -Wextra -Werror $(INCFLAGS) #-g3
 
 RM = rm -f
 
@@ -25,9 +25,12 @@ SOURCES = $(SRC_DIR)/main.c \
 					$(SRC_DIR)/lexer/tokens.c  \
 					$(SRC_DIR)/parser/command.c \
 					$(SRC_DIR)/parser/free.c \
+					$(SRC_DIR)/parser/heredoc.c \
+					$(SRC_DIR)/parser/heredoc_write.c \
 					$(SRC_DIR)/parser/operators.c \
 					$(SRC_DIR)/parser/parser.c \
 					$(SRC_DIR)/parser/redir.c \
+					$(SRC_DIR)/parser/redirs.c \
 					$(SRC_DIR)/expansion/alternatives.c \
 					$(SRC_DIR)/expansion/atoms.c \
 					$(SRC_DIR)/expansion/command.c \

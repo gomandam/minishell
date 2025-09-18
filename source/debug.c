@@ -180,9 +180,14 @@ void	debug_expanded_redirs(t_redirs *redirs, int level)
 	while (current)
 	{
 		debug_indent(level + 1);
-		printf("[%s] -> '%s'\n",
-			g_redirtype_names[current->type],
-			current->u_data.name);
+		if (current->type == R_HEREDOC)
+			printf("[%s] (heredoc fd %d)\n",
+				g_redirtype_names[current->type],
+				current->fd);
+		else
+			printf("[%s] -> '%s'\n",
+				g_redirtype_names[current->type],
+				current->u_data.name);
 		current = current->next;
 	}
 }
@@ -211,11 +216,13 @@ int	debug_ast_cmd(t_shell *shell, t_ast **ast, int level)
 
 	if (expand_cmd(shell, &(*ast)->u_data.cmd) == 1)
 	{
+		free_ast_parse(ast);
 		return (1);
 	}
 
 	debug_expanded_cmd_words(&(*ast)->u_data.cmd, level);
 	debug_expanded_redirs(&(*ast)->u_data.cmd.redir, level);
+	free_exp_ast(ast);
 	return (0);
 }
 
@@ -230,6 +237,7 @@ int	debug_ast_subsh(t_shell *shell, t_ast **ast, int level)
 
 	if (expand_subsh(shell, &(*ast)->u_data.subsh) == 1)
 	{
+		free_ast_parse(ast);
 		return (1);
 	}
 
@@ -239,14 +247,15 @@ int	debug_ast_subsh(t_shell *shell, t_ast **ast, int level)
 	printf("Subshell content:\n");
 	if (debug_ast_node(shell, &(*ast)->u_data.subsh.child, level + 1) == 1)
 	{
+		free_exp_ast(ast);
 		return (1);
 	}
+	free_exp_ast(ast);
 	return (0);
 }
 
 // TODO: this is a free example when expanded or fail expanded, if everything works, free_exp_ast over shell->ast works
 // TODO: in case of error, free only the part that has been expanded, for everything, deepest than current is expanded, if is operator and fails in right, left is expanded
-// TODO: also, check if can free every command or node when is expanded, and used
 int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 {
 	if (!ast || !*ast)
@@ -256,6 +265,7 @@ int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 	printf("Left operand:\n");
 	if (debug_ast_node(shell, &(*ast)->u_data.op.left, level + 1) == 1)
 	{
+		free_ast_parse(ast);
 		return (1);
 	}
 
@@ -263,9 +273,10 @@ int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 	printf("Right operand:\n");
 	if (debug_ast_node(shell, &(*ast)->u_data.op.right, level + 1) == 1)
 	{
-		free_exp_ast(&(*ast)->u_data.op.left);
+		free_ast_parse(ast);
 		return (1);
 	}
+	free_exp_ast(&(*ast));
 	return (0);
 }
 

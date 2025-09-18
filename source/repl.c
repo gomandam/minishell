@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 01:33:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 19:23:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/18 12:16:12 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,21 @@ void	set_last_status(t_shell *shell, long long status)
 		shell->last_status = (uint8_t)status;
 }
 
+int	repl_evaluate(t_shell *shell)
+{
+	if (tokenize(shell) == 1)
+		return (1);
+	if (shell->tokens == NULL)
+		return (0);
+	if (parse_ast(shell) == 1)
+		return (shell->finished);
+	if (execute_ast(shell, shell->ast) == 1)
+		return (shell->finished);
+	/*if (debug_parser(shell) == 1) // TODO: tmp
+		return (1); */
+	return (0);
+}
+
 void	repl(t_shell *shell)
 {
 	signals_repl(shell);
@@ -49,12 +64,8 @@ void	repl(t_shell *shell)
 			break ;
 		if (shell->interactive && *shell->line)
 			add_history(shell->line);
-		if (tokenize(shell) == 1)
+		if (repl_evaluate(shell) == 1)
 			break ;
-		if (shell->tokens == NULL
-			|| parse_ast(shell) == 1
-			|| execute_ast(shell, shell->ast) == 1)
-			ft_freestr(&shell->line); // TODO: must free in execution
 		ft_freestr(&shell->line);
 	}
 	clear_repl(shell);

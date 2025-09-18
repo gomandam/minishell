@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/09/11 20:21:49 by gomandam         ###   ########.fr       */
-=======
-/*   Updated: 2025/09/11 22:17:36 by migugar2         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/09/18 01:33:32 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +87,8 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 			return (ft_echo(cmd));			// since ft_echo(t_cmd *cmd)
 		if (!ft_strcmp(cmd->u_data.argv[0], "exit"))
 			return (ft_exit(shell, cmd->u_data.argv));
+		if (!ft_strcmp(cmd->u_data.argv[0], "export"))
+			return (ft_export(shell, cmd->u_data.argv));
 	}
 	return (run_external(shell, cmd));
 //	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug

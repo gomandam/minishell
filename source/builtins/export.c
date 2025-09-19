@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/18 02:01:43 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/20 00:31:41 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	handle_export_var(t_shell *shell, const char *argv)
 			free(name);
 			return (1);
 		}
-	//	shell->env_list.head = rm_env_var(shell, name); // implement later
+	//	shell->env_list.head = rm_env_var(functions); // implement later
 		shell->env_list.head = add_str_to_array(shell->env_list.head, argv);
 		free(name);
 	}

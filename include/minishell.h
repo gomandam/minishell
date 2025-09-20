@@ -6,11 +6,7 @@
 /*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/09/18 01:33:33 by gomandam         ###   ########.fr       */
-=======
-/*   Updated: 2025/09/18 12:21:38 by migugar2         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/09/20 03:48:21 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +168,7 @@ t_env		*create_env_node(char *full, char *value);
 char		*get_env_value(t_env_list *env_list, const char *key);
 char		*get_env_n_value(t_env_list *env_list, const char *key, size_t n);
 void		env_list_push(t_env_list *env_list, t_env *node);
+void		free_env_list(t_env_list *env_list);
 
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);
@@ -184,10 +181,9 @@ int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);
 
-void		print_exports_char(char **envp, char c);
-void		print_exports_nonalpha(char **envp);
-char		**add_str_to_array(char **array, char *str);
-int			str_in_array(char **array, char *str);
+void		export_print_error(t_shell *shell, const char *arg);
+int			export_print_all(t_shell *shell);
+
 
 // execution
 int			execute_ast(t_shell *shell, t_ast *node);

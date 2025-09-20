@@ -6,103 +6,128 @@
 /*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/20 00:31:41 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/20 04:02:08 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/*
-	set environment variables -> available to child process
-	e.g. if 'unset' a function, 'export' to access	*/
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-static void	export_error(const char *argv)
-{
-	ft_putstr_fd("minishell: export: '", 2);
-	ft_putstr_fd((char *)argv, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-}
-
-static int	valid_export_name(const char *s)
+static int	export_key_valid(const char *s)
 {
 	int	i;
 
 	if (!s || !*s)
 		return (0);
-	if (!ft_isalpha(*s) && *s != '_')
+	if (!(ft_isalpha(s[0]) || s[0] == '_'))
 		return (0);
 	i = 1;
 	while (s[i] && s[i] != '=')
 	{
-		if (!ft_isalnum(s[i]) && s[i] != '_')
+		if (!(ft_isalnum(s[i]) || s[i] == '_'))
 			return (0);
 		i++;
 	}
-	return (1);
+	return (s[i] == '=');
 }
-
-// Handles export logic for a single argv
-static int	handle_export_var(t_shell *shell, const char *argv)
+/*
+static int	env_key_exists(t_env_list *env, const char *key)
 {
-	char	*eq;
-	char	*name;
+	t_env	*cur;
+	size_t	len;
 
-	eq = ft_strchr(argv, '=');
-	if (eq)
+	len = 0;
+	while (key[len] && key[len] != '=')
+		len++;
+	cur = env->head;
+	while (cur)
 	{
-		name = ft_substr(argv, 0, eq - argv);
-		if (!valid_export_name(name))
-		{
-			export_error(argv);
-			free(name);
+		if (!ft_strncmp(cur->full, key, len) && cur->full[len] == '=')
 			return (1);
-		}
-	//	shell->env_list.head = rm_env_var(functions); // implement later
-		shell->env_list.head = add_str_to_array(shell->env_list.head, argv);
-		free(name);
-	}
-	else
-	{
-		if (!valid_export_name(argv))
-			return (export_error(argv), 1);
-		if (!str_in_array(shell->env_list.head, argv))
-			shell->env_list.head = add_str_to_array(shell->env_list.head, argv);
+		cur = cur->next;
 	}
 	return (0);
 }
+*/
 
-static void	export_no_args(char **envp)
+// Remove all nodes matching key (for overwrite semantics)
+static void	env_remove_key(t_env_list *env, const char *key)
 {
-	char	c;
+	t_env	*cur;
+	t_env	*prev;
+	size_t	len;
 
-	c = 'A';
-	while (c <= 'Z')
+	len = 0;
+	while (key[len] && key[len] != '=')
+		len++;
+	prev = NULL;
+	cur = env->head;
+	while (cur)
 	{
-		print_exports_char(envp, c);
-		c++;
+		if (!ft_strncmp(cur->full, key, len) && cur->full[len] == '=')
+		{
+			if (prev)
+				prev->next = cur->next;
+			else
+				env->head = cur->next;
+			if (env->tail == cur)
+				env->tail = prev;
+			free(cur->full);
+			free(cur);
+			env->size--;
+			break ;
+		}
+		prev = cur;
+		cur = cur->next;
 	}
-	print_exports_nonalpha(envp);
+	if (env->envp)
+	{
+		free(env->envp);
+		env->envp = NULL;
+	}
+}
+
+static int	export_one(t_shell *shell, const char *arg)
+{
+	char	*eq;
+	char	*val;
+	t_env	*node;
+	char	*full;
+
+	if (!export_key_valid(arg))
+		return (export_print_error(shell, arg), 1);
+	eq = ft_strchr(arg, '=');
+	val = NULL;
+	if (eq != NULL)
+		val = eq + 1;
+	env_remove_key(&shell->env_list, arg);
+	full = ft_strdup(arg);
+	if (!full)
+		return (perror_malloc(shell));
+	node = create_env_node(full, val);
+	if (!node)
+	{
+		free(full);
+		return (perror_malloc(shell));
+	}
+	env_list_push(&shell->env_list, node);
+	return (0);
 }
 
 int	ft_export(t_shell *shell, char **argv)
 {
+	int	any_err;
 	int	i;
-	int	error;
 
-	if (!argv || !argv[0])
-		return (1);
-	if (!argv[1])
-		return (export_no_args(shell->env_list.envp), 0);
+	if (!argv || !argv[1])
+		return (export_print_all(shell), 0);
 	i = 1;
-	error = 0;
+	any_err = 0;
 	while (argv[i])
 	{
-		if (handle_export_var(shell, argv[i]))
-			error = 1;
+		if (export_one(shell, argv[i]))
+			any_err = 1;
 		i++;
 	}
-	if (error)
-		return (1);
-	return (0);
+	return (any_err);
 }

@@ -6,13 +6,15 @@
 /*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/20 04:02:08 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/20 21:08:45 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
+/*  Validate env assignment key (KEY=VAL).
+    First char: alpha/_; rest: alnum/_. Must have '='. */
 static int	export_key_valid(const char *s)
 {
 	int	i;
@@ -30,27 +32,9 @@ static int	export_key_valid(const char *s)
 	}
 	return (s[i] == '=');
 }
-/*
-static int	env_key_exists(t_env_list *env, const char *key)
-{
-	t_env	*cur;
-	size_t	len;
 
-	len = 0;
-	while (key[len] && key[len] != '=')
-		len++;
-	cur = env->head;
-	while (cur)
-	{
-		if (!ft_strncmp(cur->full, key, len) && cur->full[len] == '=')
-			return (1);
-		cur = cur->next;
-	}
-	return (0);
-}
-*/
-
-// Remove all nodes matching key (for overwrite semantics)
+/* Remove env var by key from list.
+ * Handles head/tail, frees node, updates size, clears envp cache. */
 static void	env_remove_key(t_env_list *env, const char *key)
 {
 	t_env	*cur;
@@ -87,6 +71,9 @@ static void	env_remove_key(t_env_list *env, const char *key)
 	}
 }
 
+/* Handle one export arg: validate, remove old, make node, push.
+   Only accepts KEY=VAL (must have '='), never bare KEY.
+   Uses create_env_node, env_list_push. Error: print, set last_status. */
 static int	export_one(t_shell *shell, const char *arg)
 {
 	char	*eq;
@@ -114,6 +101,9 @@ static int	export_one(t_shell *shell, const char *arg)
 	return (0);
 }
 
+/* Export builtin entry: loop argv, call export_one.
+   If no args, print all env vars using export_print_all.
+   Returns 0 success, 1 if any error. */
 int	ft_export(t_shell *shell, char **argv)
 {
 	int	any_err;

@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/20 03:48:21 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/20 21:14:06 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);
 
-void		export_print_error(t_shell *shell, const char *arg);
+void		export_print_error(t_shell *shell, char *arg);
 int			export_print_all(t_shell *shell);
 
 

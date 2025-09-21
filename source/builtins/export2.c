@@ -3,54 +3,95 @@
 /*                                                        :::      ::::::::   */
 /*   export2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/20 21:12:19 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/21 04:37:51 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-// Putting t_shell just in case, we need to use it. 
-void	export_print_error(t_shell *shell, char *argv)
+void	export_perror_identifier(t_shell *shell, char *argv)
 {
-	(void)shell;
 	ft_putstr_fd("minishell: export: '", 2);
 	ft_putstr_fd(argv, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
+	set_last_status(shell, 1);
 }
 
-/* Prints all exported vars: declare -x KEY="VALUE"
-   For each node: if '=', print declare -x KEY="VALUE"; else declare -x KEY.
-   Direct to STDOUT, traverses t_env *list	*/
+static int	cmp_exportkey(const char *s1, const char *s2, size_t eq_s1)
+{
+	size_t	eq_s2;
+	size_t	minlen;
+
+	eq_s2 = 0;
+	while (s2[eq_s2] && s2[eq_s2] != '=')
+		eq_s2++;
+	if (eq_s1 <= eq_s2)
+		minlen = eq_s1;
+	else
+		minlen = eq_s2;
+	if (ft_strncmp(s1, s2, minlen) != 0)
+		return (ft_strncmp(s1, s2, minlen));
+	if (eq_s1 == eq_s2)
+		return (0);
+	if (eq_s1 < eq_s2)
+		return (-1);
+	return (1);
+}
+
+static int	minsorted_key_push(t_list **lst, char *str)
+{
+	size_t	eq;
+	t_list	*new_node;
+	t_list	*cur;
+
+	new_node = ft_lstnew(str);
+	if (new_node == NULL)
+		return (1);
+	eq = ft_strchr(str, '=') - str;
+	if (*lst == NULL
+		|| cmp_exportkey(new_node->content, (*lst)->content, eq) < 0)
+	{
+		new_node->next = *lst;
+		*lst = new_node;
+	}
+	else
+	{
+		cur = *lst;
+		while (cur->next != NULL
+			&& cmp_exportkey(new_node->content, cur->next->content, eq) >= 0)
+			cur = cur->next;
+		new_node->next = cur->next;
+		cur->next = new_node;
+	}
+	return (0);
+}
+
 int	export_print_all(t_shell *shell)
 {
 	t_env	*cur;
-	const char	*eq;
-	int		i;
+	t_list	*lst;
+	t_list	*cur_lst;
 
 	cur = shell->env_list.head;
+	lst = NULL;
 	while (cur)
 	{
-		ft_putstr_fd("declare -x ", 1);
-		eq = ft_strchr(cur->full, '=');
-		if (eq)
-		{
-			i = 0;
-			while (&cur->full[i] != eq)
-				ft_putchar_fd(cur->full[i++], 1);
-			ft_putstr_fd("=\"", 1);
-			ft_putstr_fd((char *)(eq + 1), 1);
-			ft_putstr_fd("\"\n", 1);
-		}
-		else
-		{
-			ft_putstr_fd(cur->full, 1);
-			ft_putchar_fd('\n', 1);
-		}
+		if (minsorted_key_push(&lst, cur->full) == 1)
+			return (perror_malloc(shell), ft_lstclear(&lst, NULL), 1);
 		cur = cur->next;
 	}
+	cur_lst = lst;
+	while (cur_lst)
+	{
+		write(1, cur_lst->content, ft_strlen(cur_lst->content));
+		write(1, "\n", 1);
+		cur_lst = cur_lst->next;
+	}
+	ft_lstclear(&lst, NULL);
+	set_last_status(shell, 0);
 	return (0);
 }

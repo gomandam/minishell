@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/21 03:52:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/21 04:39:12 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,8 @@ int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);
 
-void		export_print_error(t_shell *shell, char *arg);
+void		export_perror_identifier(t_shell *shell, char *argv);
+
 int			export_print_all(t_shell *shell);
 
 

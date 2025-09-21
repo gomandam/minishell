@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/21 01:16:30 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/21 04:38:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int	export_one(t_shell *shell, const char *arg)
 	char	*full;
 
 	if (!export_key_valid(arg))
-		return (export_print_error(shell, (char *)arg), 1);
+		return (export_perror_identifier(shell, (char *)arg), 1);
 	eq = ft_strchr(arg, '=');
 	val = NULL;
 	if (eq != NULL)

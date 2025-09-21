@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 22:07:18 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/15 22:59:43 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/21 03:51:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_list	*new_list_node_dup(char *todup)
 	return (new_node);
 }
 
-int	minheap_new_push(t_list **heap, char *todup)
+int	minsortedlst_new_push(t_list **lst, char *todup)
 {
 	t_list	*new_node;
 	t_list	*cur;
@@ -34,14 +34,14 @@ int	minheap_new_push(t_list **heap, char *todup)
 	new_node = new_list_node_dup(todup);
 	if (new_node == NULL)
 		return (1);
-	if (*heap == NULL || ft_strcmp(new_node->content, (*heap)->content) < 0)
+	if (*lst == NULL || ft_strcmp(new_node->content, (*lst)->content) < 0)
 	{
-		new_node->next = *heap;
-		*heap = new_node;
+		new_node->next = *lst;
+		*lst = new_node;
 	}
 	else
 	{
-		cur = *heap;
+		cur = *lst;
 		while (cur->next != NULL
 			&& ft_strcmp(new_node->content, cur->next->content) >= 0)
 			cur = cur->next;

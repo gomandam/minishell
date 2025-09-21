@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/21 02:47:32 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/21 03:52:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ int			solve_param(t_shell *shell, t_seg *param, t_expand *build);
 int			expand_redir(t_shell *shell, t_redir *redir);
 int			expand_redirs(t_shell *shell, t_redirs *redirs);
 
-int			minheap_new_push(t_list **heap, char *todup);
+int			minsortedlst_new_push(t_list **lst, char *todup);
 
 int			expand_wildcards(t_shell *shell, t_builder *builder, t_argv *argv);
 

@@ -256,7 +256,6 @@ int	debug_ast_subsh(t_shell *shell, t_ast **ast, int level)
 
 // TODO: this is a free example when expanded or fail expanded, if everything works, free_exp_ast over shell->ast works
 // TODO: in case of error, free only the part that has been expanded, for everything, deepest than current is expanded, if is operator and fails in right, left is expanded
-// TODO: also, check if can free every command or node when is expanded, and used
 int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 {
 	if (!ast || !*ast)

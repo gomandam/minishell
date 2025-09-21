@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 12:08:36 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/15 22:57:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/21 03:52:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	start_wildcard(t_builder *builder, t_atom **start, size_t *offset)
 	return (0);
 }
 
-int	wildcard_solve(t_shell *shell, t_builder *builder, t_list **heap_wildcard)
+int	wildcard_solve(t_shell *shell, t_builder *builder, t_list **lst_wildcard)
 {
 	DIR				*cur;
 	struct dirent	*entry;
@@ -99,7 +99,7 @@ int	wildcard_solve(t_shell *shell, t_builder *builder, t_list **heap_wildcard)
 	{
 		if (wildcard_match(entry->d_name, &start, &offset) == 1)
 		{
-			if (minheap_new_push(heap_wildcard, entry->d_name) == 1)
+			if (minsortedlst_new_push(lst_wildcard, entry->d_name) == 1)
 				return (perror_malloc(shell), closedir(cur), 1);
 		}
 		entry = readdir(cur);

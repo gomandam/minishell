@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/18 12:21:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/20 21:14:06 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,9 +168,24 @@ t_env		*create_env_node(char *full, char *value);
 char		*get_env_value(t_env_list *env_list, const char *key);
 char		*get_env_n_value(t_env_list *env_list, const char *key, size_t n);
 void		env_list_push(t_env_list *env_list, t_env *node);
+void		free_env_list(t_env_list *env_list);
+
+// main helper functions
+int			init_shell(t_shell *shell, char *envp[]);
+
+// builtins
+int			ft_pwd(void);
+int			ft_env(t_env_list *env_list);
+int			ft_unset(t_env_list *env_list, char *argv[]);
+int			ft_echo(t_cmd *cmd);
+int			ft_exit(t_shell *shell, char *argv[]);
+int			ft_export(t_shell *shell, char **argv);
+
+void		export_print_error(t_shell *shell, char *arg);
+int			export_print_all(t_shell *shell);
+
 
 // execution
-
 int			execute_ast(t_shell *shell, t_ast *node);
 int			exec_ast_pipe(t_shell *shell, t_ast *node);
 int			run_builtin_external(t_shell *shell, t_cmd *cmd);

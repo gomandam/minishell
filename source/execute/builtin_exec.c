@@ -6,11 +6,12 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/09 21:25:55 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/11 14:07:09 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
+#include "../../libft/libft.h"
 
 // checks if 'built-in' with "if" conditional statments, or control flow
 // returns 1 if argv[0] matches a builtin, else 0.
@@ -35,29 +36,39 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-/* //  executes if it is a built-in, assuming builtins are working
+//  executes if it is a built-in, assuming builtins are working
 // following: exit, cd, echo, env, export, unset, pwd
 // !TO DO: rename the built-ins ft_*() for proper naming functionality
-int	run_builtin_external(t_shell *shell, char *argv[])
+/*
+ 	DELETE AFTER DEBUG!!
+
+int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {
-	if (!argv || !argv[0])
+	ft_putstr_fd("DEBUG: entered run_builtin_external(); at builtin_exec.c", 2);
+	(void)shell;
+	if (!cmd->u_data.argv || !cmd->u_data.argv[0])
 		return (1);
-	if (!ft_strcmp(argv[0], "echo"))
+
+	if (!ft_strcmp(cmd->u_data.argv[0], "echo"))
 		return (ft_echo(argv));		// char **argv
-	if (!ft_strcmp(argv[0], "cd"))
+	if (!ft_strcmp(cmd->u_data.argv[0], "cd"))
 		return (ft_cd(shell, argv));	// t_shell *shell, char **argv
-	if (!ft_strcmp(argv[0], "pwd"))
+
+	if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
 		return (ft_pwd());		// void
-	if (!ft_strcmp(argv[0], "export"))
+
+	if (!ft_strcmp(cmd->u_data.argv[0], "export"))
 		return (ft_export(shell, argv)); // ! TO DO: rebuild export builtin
-	if (!ft_strcmp(argv[0], "unset"))
+	if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
 		return (ft_unset(shell, argv));	// check t_env_list
-	if (!ft_strcmp(argv[0], "env"))
+	if (!ft_strcmp(cmd->u_data.argv[0], "env"))
 		return (ft_env(shell));		// check t_env_list *env_list
-	if (!ft_strcmp(argv[0]), "exit")
+	if (!ft_strcmp(cmd->u_data.argv[0]), "exit")
 		return (ft_exit(shell, argv));
+
 	return (1);
-}*/
+}
+*/
 // DEBUGGER: Temporary functions to check the access of builtins
 void	debug_builtin(const char *cmd)
 {

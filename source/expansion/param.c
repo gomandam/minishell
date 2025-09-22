@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 20:28:03 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/18 12:21:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:18:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	solve_param(t_shell *shell, t_seg *param, t_expand *build)
 	if (key == NULL)
 		return (1);
 	ft_strlcpy(key, param->slice.begin, param->slice.len + 1);
-	value = get_env_value(&shell->env_list, key);
+	value = env_get_value(&shell->env_list, key);
 	free(key);
 	if (value == NULL || value[0] == '\0')
 		return (0);

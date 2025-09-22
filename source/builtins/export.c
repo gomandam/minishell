@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/21 04:38:04 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:23:13 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static int	export_one(t_shell *shell, const char *arg)
 		free(full);
 		return (perror_malloc(shell));
 	}
-	env_list_push(&shell->env_list, node);
+	env_push(&shell->env_list, node);
 	return (0);
 }
 

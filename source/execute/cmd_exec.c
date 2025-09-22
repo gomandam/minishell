@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/18 01:33:32 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:11:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 	if (pid == 0)
 	{
 		signals_exec(shell);
-		execve(cmd->u_data.argv[0], cmd->u_data.argv, get_envp_shell(shell));
+		execve(cmd->u_data.argv[0], cmd->u_data.argv, get_envp(shell));
 		perror("minishell: execve");
 		_exit(127);
 	}

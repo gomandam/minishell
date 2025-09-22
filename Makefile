@@ -18,6 +18,7 @@ SOURCES = \
 	$(SRC_DIR)/main.c \
 	$(SRC_DIR)/repl.c \
 	$(SRC_DIR)/env.c \
+	$(SRC_DIR)/env2.c \
 	$(SRC_DIR)/init.c \
 	$(SRC_DIR)/signals.c \
 	$(SRC_DIR)/errors.c \

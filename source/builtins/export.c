@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/22 20:23:13 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:59:21 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	ft_export(t_shell *shell, char **argv)
 	any_err = 0;
 	while (argv[i])
 	{
-		if (export_one(shell, argv[i]))
+		if (export_one(shell, argv[i]) == 1)
 			any_err = 1;
 		i++;
 	}

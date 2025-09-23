@@ -6,36 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 18:28:25 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/22 20:20:46 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:56:20 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_env_list(t_env_list *env_list)
-{
-	t_env	*cur;
-	t_env	*next;
-
-	cur = env_list->head;
-	while (cur != NULL)
-	{
-		free(cur->full);
-		cur->full = NULL;
-		cur->value = NULL;
-		next = cur->next;
-		free(cur);
-		cur = next;
-	}
-	env_list->head = NULL;
-	env_list->tail = NULL;
-	env_list->size = 0;
-	if (env_list->envp != NULL)
-	{
-		free(env_list->envp);
-		env_list->envp = NULL;
-	}
-}
 
 size_t	env_keylen_full(const char *full)
 {
@@ -69,4 +44,44 @@ char	*env_get_value(t_env_list *env_list, const char *key)
 		return (NULL);
 	keylen = env_keylen_full(key);
 	return (env_get_value_keylen(env_list, key, keylen));
+}
+
+static void	env_rm_node(t_env_list *env_list, t_env *node, t_env *prev)
+{
+	if (prev)
+		prev->next = node->next;
+	else
+		env_list->head = node->next;
+	if (env_list->tail == node)
+		env_list->tail = prev;
+	free(node->full);
+	free(node);
+	env_list->size--;
+	if (env_list->envp)
+	{
+		free(env_list->envp);
+		env_list->envp = NULL;
+	}
+}
+
+int	env_remove(t_env_list *env_list, const char *key, size_t keylen)
+{
+	t_env	*cur;
+	t_env	*prev;
+	size_t	eq;
+
+	cur = env_list->head;
+	prev = NULL;
+	while (cur != NULL)
+	{
+		eq = env_keylen_full(cur->full);
+		if (eq == keylen && ft_strncmp(cur->full, key, keylen) == 0)
+		{
+			env_rm_node(env_list, cur, prev);
+			return (1);
+		}
+		prev = cur;
+		cur = cur->next;
+	}
+	return (0);
 }

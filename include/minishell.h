@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/22 20:19:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:49:42 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,10 +179,12 @@ void		env_push(t_env_list *env_list, t_env *node);
 int			env_upsert(t_env_list *l, const char *full, const char *val);
 char		**get_envp(t_shell *shell);
 
-void		free_env_list(t_env_list *env_list);
 size_t		env_keylen_full(const char *full);
 char		*env_get_value_keylen(t_env_list *l, const char *k, size_t klen);
 char		*env_get_value(t_env_list *env_list, const char *key);
+int			env_remove(t_env_list *env_list, const char *key, size_t keylen);
+
+void		free_env_list(t_env_list *env_list);
 
 // main helper functions
 int			init_shell(t_shell *shell, char *envp[]);
@@ -190,7 +192,7 @@ int			init_shell(t_shell *shell, char *envp[]);
 // builtins
 int			ft_pwd(void);
 int			ft_env(t_env_list *env_list);
-int			ft_unset(t_env_list *env_list, char *argv[]);
+void			ft_unset(t_env_list *env_list, char *argv[]);
 int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);

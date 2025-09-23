@@ -6,11 +6,34 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/22 20:35:22 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:30:19 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_env_list(t_env_list *env_list)
+{
+	t_env	*cur;
+	t_env	*next;
+
+	cur = env_list->head;
+	while (cur != NULL)
+	{
+		next = cur->next;
+		free(cur->full);
+		free(cur);
+		cur = next;
+	}
+	env_list->head = NULL;
+	env_list->tail = NULL;
+	env_list->size = 0;
+	if (env_list->envp != NULL)
+	{
+		free(env_list->envp);
+		env_list->envp = NULL;
+	}
+}
 
 static int	ensure_pwd_env(t_shell *shell)
 {

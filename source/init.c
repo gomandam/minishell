@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/23 20:30:19 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/24 05:59:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	ensure_pwd_env(t_shell *shell)
 	{
 		if (errno == ENOMEM)
 			return (perror_malloc(shell));
-		return (perror("minishell: init: getcwd"), 1);
+		return (perror("minishell: init: getcwd"), 0);
 	}
 	full = ft_strjoin("PWD=", cwd);
 	free(cwd);

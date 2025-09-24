@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/23 20:49:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/24 00:39:20 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void		env_list_push(t_env_list *env_list, t_env *node);
 void		free_env_list(t_env_list *env_list);
 */
 t_env		*create_env_node(char *full, char *val);
-t_env		**env_find(t_env_list *l, const char *key, size_t keylen);
+t_env		**env_find(t_env_list *l, const char *k, size_t klen, t_env **pre);
 void		env_push(t_env_list *env_list, t_env *node);
 int			env_upsert(t_env_list *l, const char *full, const char *val);
 char		**get_envp(t_shell *shell);

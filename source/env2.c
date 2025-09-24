@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 18:28:25 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/23 20:56:20 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/24 00:47:05 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*env_get_value_keylen(t_env_list *l, const char *key, size_t keylen)
 
 	if (!key || *key == '\0' || !l || !l->head || keylen == 0)
 		return (NULL);
-	node = env_find(l, key, keylen);
+	node = env_find(l, key, keylen, NULL);
 	if (node == NULL || *node == NULL)
 		return (NULL);
 	return ((*node)->value);

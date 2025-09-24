@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/18 12:19:22 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/24 05:59:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,8 @@ void	free_env_list(t_env_list *env_list)
 	cur = env_list->head;
 	while (cur != NULL)
 	{
-		free(cur->full);
-		cur->full = NULL;
-		cur->value = NULL;
 		next = cur->next;
+		free(cur->full);
 		free(cur);
 		cur = next;
 	}
@@ -35,6 +33,28 @@ void	free_env_list(t_env_list *env_list)
 		free(env_list->envp);
 		env_list->envp = NULL;
 	}
+}
+
+static int	ensure_pwd_env(t_shell *shell)
+{
+	char	*cwd;
+	char	*full;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+	{
+		if (errno == ENOMEM)
+			return (perror_malloc(shell));
+		return (perror("minishell: init: getcwd"), 0);
+	}
+	full = ft_strjoin("PWD=", cwd);
+	free(cwd);
+	if (full == NULL)
+		return (perror_malloc(shell));
+	if (env_upsert(&shell->env_list, full, full + 4) == 1)
+		return (free(full), perror_malloc(shell));
+	free(full);
+	return (0);
 }
 
 int	init_envp(t_shell *shell, char *envp[])
@@ -56,8 +76,10 @@ int	init_envp(t_shell *shell, char *envp[])
 				free_env_list(&shell->env_list), 1);
 		cur->value = ft_strchr(cur->full, '=') + 1;
 		cur->next = NULL;
-		env_list_push(&shell->env_list, cur);
+		env_push(&shell->env_list, cur);
 	}
+	if (ensure_pwd_env(shell) == 1)
+		return (free_env_list(&shell->env_list), 1);
 	return (0);
 }
 

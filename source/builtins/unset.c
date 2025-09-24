@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/18 01:05:50 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:51:57 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "../../libft/libft.h"
 
 // Find env node by key
+/*
 static int	find_env_node(t_env_list *env_list, const char *key,
 	t_env **found, t_env **prev)
 {
@@ -41,51 +42,27 @@ static int	find_env_node(t_env_list *env_list, const char *key,
 	*found = NULL;
 	return (0);
 }
-
-//	Remove+free env node from list. Pointer updated, Node freed. 
-static void	remove_env_node(t_env_list *env_list, t_env *node, t_env *prev)
-{
-	if (prev)
-		prev->next = node->next;
-	else
-		env_list->head = node->next;
-	if (env_list->tail == node)
-		env_list->tail = prev;
-	free(node->full);
-	free(node);
-	env_list->size--;
-	if (env_list->envp)
-	{
-		free(env_list->envp);
-		env_list->envp = NULL;
-	}
-}
+*/
 
 /*
 	unset: implements the 'unset' built-in.
 	argv[0] = "unset", argv[1..n] = var names to unset
 	Returns 1 if any variable was removed, 0 otherwise.	*/
-int	ft_unset(t_env_list *env_list, char *argv[])
+void	ft_unset(t_env_list *env_list, char *argv[])
 {
-	int		removed;
 	int		i;
-	t_env	*node;
-	t_env	*prev;
+	size_t	keylen;
 
 	if (!env_list || !argv || !argv[1])
-		return (0);
-	removed = 0;
+		return ;
 	i = 1;
 	while (argv[i])
 	{
-		if (find_env_node(env_list, argv[i], &node, &prev))
-		{
-			remove_env_node(env_list, node, prev);
-			removed = 1;
-		}
+		keylen = ft_strlen(argv[i]);
+		if (keylen != 0)
+			env_remove(env_list, argv[i], keylen);
 		i++;
 	}
-	return (removed);
 }
 
 /*

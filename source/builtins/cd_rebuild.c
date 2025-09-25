@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/24 02:39:22 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/25 03:06:21 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,3 +64,33 @@ Use get_env_value() to set OLDPWD
 if doesnt exist then print error
 
 Print
+//
+
+int	cd_command(char ** cmd_info, t_data *data)
+{
+	char	*target_dir;
+	char	*current_pwd;
+
+	current_pwd = getcwd(NULL,0);
+	if (!current_pwd)
+		current_pwd = get_env_value(data->env, "PWD");
+	target_dir = get_cd_target(data, cmd_info);
+	if (!target_dir)
+	{
+		cleanup_cd_pwd(data, current_pwd);
+		return (1);
+	}
+	if (chdir(target_dir) == -1)
+	{
+		perror("cd");
+		cleanup_cd_pwd(data, current_pwd);
+		return (1);
+	}
+	if (current_pwd)
+		update_oldpwd(data, current_pwd);
+	else
+		update_oldpwd(data, "");
+	update_pwd(data);
+	cleanup_cd_pwd(data, current_pwd);
+	return (0);
+}

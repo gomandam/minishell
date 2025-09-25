@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_exec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42.fr>          +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/18 01:33:32 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/24 19:56:25 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	run_external(t_shell *shell, t_cmd *cmd)
 	if (pid == 0)
 	{
 		signals_exec(shell);
-		execve(cmd->u_data.argv[0], cmd->u_data.argv, get_envp_shell(shell));
+		execve(cmd->u_data.argv[0], cmd->u_data.argv, get_envp(shell));
 		perror("minishell: execve");
 		_exit(127);
 	}
@@ -82,7 +82,7 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 		if (!ft_strcmp(cmd->u_data.argv[0], "env"))
 			return (ft_env(&shell->env_list));
 		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
-			return (ft_unset(&shell->env_list, cmd->u_data.argv));
+			return (ft_unset(&shell->env_list, cmd->u_data.argv), 0); // TODO
 		if (!ft_strcmp(cmd->u_data.argv[0], "echo"))
 			return (ft_echo(cmd));			// since ft_echo(t_cmd *cmd)
 		if (!ft_strcmp(cmd->u_data.argv[0], "exit"))
@@ -97,6 +97,8 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 }
 
 // expand & execute cmd AST node. returns exit status
+// TODO: receive t_ast **node, can free and set to NULL
+// TODO: open and read redirections
 int	exec_ast_cmd(t_shell *shell, t_cmd *cmd)
 {
 	ft_putstr_fd("DEBUG: Entered exec_ast_cmd();\n", 2);

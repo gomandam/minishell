@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 00:06:23 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/18 12:17:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/22 20:21:21 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	heredoc_exp(t_shell *shell, char **key, char **val, char **status)
 	i = 0;
 	while (ft_isalnum((*key)[i]) || (*key)[i] == '_')
 		i++;
-	*val = get_env_n_value(&shell->env_list, *key, i);
+	*val = env_get_value_keylen(&shell->env_list, *key, i);
 	*key += i;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/24 19:56:25 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 21:55:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,16 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 // expand & execute cmd AST node. returns exit status
 // TODO: receive t_ast **node, can free and set to NULL
 // TODO: open and read redirections
-int	exec_ast_cmd(t_shell *shell, t_cmd *cmd)
+int	exec_ast_cmd(t_shell *shell, t_ast **cmd)
 {
 	ft_putstr_fd("DEBUG: Entered exec_ast_cmd();\n", 2);
 
-	if (expand_cmd(shell, cmd) != 0)
-		return (1);
-	return (run_builtin_external(shell, cmd));
+	if (!cmd || !*cmd)
+		return (0);
+	if (expand_cmd(shell, &(*cmd)->u_data.cmd) == 1)
+		return (free_parse_ast(cmd), 1);
+	if (run_builtin_external(shell, &(*cmd)->u_data.cmd) == 1)
+		return (free_exp_ast(cmd), 1);
+	free_exp_ast(cmd);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 22:21:36 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 21:39:28 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 
 // local function for exec_ast_pipe();
 // setup child pipe, execute subtree then exit
-static void	child_pipe_end(t_shell *shell, t_ast *node, int fd[2], int stdio)
+static void	child_pipe_end(t_shell *shell, t_ast **node, int fd[2], int stdio)
 {
+	ft_putstr_fd("DEBUG: entered child_pipe_end at pipe_exec.c\n", 2);
 	int	in_fd;
 	int	close_fd;
-
-	ft_putstr_fd("DEBUG: entered child_pipe_end at pipe_exec.c\n", 2);
 
 	in_fd = -1;
 	close_fd = -1;
@@ -69,13 +68,14 @@ static void	child_pipe_end(t_shell *shell, t_ast *node, int fd[2], int stdio)
 		dup2(in_fd, stdio);
 		close(in_fd);
 	}
+	// TODO: exit, not _exit
 	_exit(execute_ast(shell, node));
 }
 
 // fork the child process for a pipe
 // All commands in the pipeline execute in parallel,
 // 	regardless of pipeline depth or tree structure.
-static pid_t	pipe_fork(t_shell *shell, t_ast *node, int fd[2], int stdio)
+static pid_t	pipe_fork(t_shell *shell, t_ast **node, int fd[2], int stdio)
 {
 	pid_t	pid;
 
@@ -88,26 +88,29 @@ static pid_t	pipe_fork(t_shell *shell, t_ast *node, int fd[2], int stdio)
 // Per-node: create pipe, fork: L | R, close fds, execute concurrent, return right status.
 // fork: left writes fd[1] and fork: right reads fd[0]
 // Each stage (AST_PIPE) immediately forks both left and right children.
-int	exec_ast_pipe(t_shell *shell, t_ast *node)
+int	exec_ast_pipe(t_shell *shell, t_ast **node)
 {
 	int		fd[2];
 	pid_t	pid_l;
 	pid_t	pid_r;
+	int		status;
 
 	fd[0] = -1;
 	fd[1] = -1;
-	if (!node || !node->u_data.op.left || !node->u_data.op.right)
-		return (1);
+	/* if (!node || !node->u_data.op.left || !node->u_data.op.right)
+		return (1); */
 	if (pipe(fd) < 0)
-		return (perror("minishell: pipe"), 1); // TODO: last_status
-	pid_l = pipe_fork(shell, node->u_data.op.left, fd,
+		return (perror("minishell: pipe"), free_parse_ast(node), 1); // TODO: last_status
+	pid_l = pipe_fork(shell, &(*node)->u_data.op.left, fd,
 			STDOUT_FILENO);
-	pid_r = pipe_fork(shell, node->u_data.op.right, fd,
+	pid_r = pipe_fork(shell, &(*node)->u_data.op.right, fd,
 			STDIN_FILENO);
 	if (fd[0] >= 0)
 		close(fd[0]);
 	if (fd[1] >= 0)
 		close(fd[1]);
-	return (wait_pipe(shell, pid_l, pid_r));
+	status = wait_pipe(shell, pid_l, pid_r);
+	free_parse_ast(node);
+	return (status);
 }
 

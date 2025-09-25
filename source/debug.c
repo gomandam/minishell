@@ -216,7 +216,7 @@ int	debug_ast_cmd(t_shell *shell, t_ast **ast, int level)
 
 	if (expand_cmd(shell, &(*ast)->u_data.cmd) == 1)
 	{
-		free_ast_parse(ast);
+		free_parse_ast(ast);
 		return (1);
 	}
 
@@ -237,7 +237,7 @@ int	debug_ast_subsh(t_shell *shell, t_ast **ast, int level)
 
 	if (expand_subsh(shell, &(*ast)->u_data.subsh) == 1)
 	{
-		free_ast_parse(ast);
+		free_parse_ast(ast);
 		return (1);
 	}
 
@@ -265,7 +265,7 @@ int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 	printf("Left operand:\n");
 	if (debug_ast_node(shell, &(*ast)->u_data.op.left, level + 1) == 1)
 	{
-		free_ast_parse(ast);
+		free_parse_ast(ast);
 		return (1);
 	}
 
@@ -273,7 +273,7 @@ int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 	printf("Right operand:\n");
 	if (debug_ast_node(shell, &(*ast)->u_data.op.right, level + 1) == 1)
 	{
-		free_ast_parse(ast);
+		free_parse_ast(ast);
 		return (1);
 	}
 	free_exp_ast(&(*ast));

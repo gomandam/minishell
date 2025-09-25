@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:46:00 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 21:23:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 21:26:49 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ int	parse_cmd(t_shell *shell, t_tok **cur, t_ast **out)
 		if ((*cur)->type == T_WORD)
 			collect_cmd(cur, cmd, &last_word);
 		else if (append_redir(shell, cur, &redirs_tok, &redirs_last_tok) == 1)
-			return (free_ast_parse(&cmd), free_tokens(&redirs_tok), 1);
+			return (free_parse_ast(&cmd), free_tokens(&redirs_tok), 1);
 	}
 	if (collect_redirs(shell, &redirs_tok, &cmd->u_data.cmd.redir) == 1)
-		return (free_ast_parse(&cmd), 1);
+		return (free_parse_ast(&cmd), 1);
 	return (*out = cmd, 0);
 }
 
@@ -92,15 +92,15 @@ int	parse_subsh(t_shell *shell, t_tok **cur, t_ast **out)
 	if (parse_and_or(shell, cur, &child) == 1)
 		return (1);
 	if (*cur == NULL)
-		return (perror_unexpecteol(shell), free_ast_parse(&child), 1);
+		return (perror_unexpecteol(shell), free_parse_ast(&child), 1);
 	if ((*cur)->type != T_RPAREN)
-		return (perror_syntaxtok(shell, *cur), free_ast_parse(&child), 1);
+		return (perror_syntaxtok(shell, *cur), free_parse_ast(&child), 1);
 	consume_tok(cur);
 	child = new_subsh_node(child);
 	if (child == NULL)
-		return (perror_malloc(shell), free_ast_parse(&child), 1);
+		return (perror_malloc(shell), free_parse_ast(&child), 1);
 	if (collect_redirs(shell, cur, &child->u_data.subsh.redir) == 1)
-		return (free_ast_parse(&child), 1);
+		return (free_parse_ast(&child), 1);
 	*out = child;
 	return (0);
 }

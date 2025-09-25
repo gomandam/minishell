@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:48:15 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:18:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 21:26:49 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ int	parse_pipe(t_shell *shell, t_tok **cur, t_ast **out)
 		consume_tok(cur);
 		right = NULL;
 		if (parse_cmd_subsh(shell, cur, &right) == 1)
-			return (free_ast_parse(out), 1);
+			return (free_parse_ast(out), 1);
 		*out = new_op_node(AST_PIPE, *out, right);
 		if (*out == NULL)
-			return (perror_malloc(shell), free_ast_parse(out),
-				free_ast_parse(&right), 1);
+			return (perror_malloc(shell), free_parse_ast(out),
+				free_parse_ast(&right), 1);
 	}
 	return (0);
 }
@@ -69,11 +69,11 @@ int	parse_and_or(t_shell *shell, t_tok **cur, t_ast **out)
 		consume_tok(cur);
 		right = NULL;
 		if (parse_pipe(shell, cur, &right) == 1)
-			return (free_ast_parse(out), 1);
+			return (free_parse_ast(out), 1);
 		*out = new_op_node(type, *out, right);
 		if (*out == NULL)
-			return (perror_malloc(shell), free_ast_parse(out),
-				free_ast_parse(&right), 1);
+			return (perror_malloc(shell), free_parse_ast(out),
+				free_parse_ast(&right), 1);
 	}
 	return (0);
 }

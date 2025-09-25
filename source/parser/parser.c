@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 02:07:43 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:22:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 21:26:49 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ int	parse_ast(t_shell *shell)
 	cur = shell->tokens;
 	shell->ast = NULL;
 	if (parse_and_or(shell, &cur, &shell->ast) == 1)
-		return (free_tokens(&cur), free_ast_parse(&shell->ast), 1);
+		return (free_tokens(&cur), free_parse_ast(&shell->ast), 1);
 	if (cur != NULL)
 		return (perror_syntaxtok(shell, cur), free_tokens(&cur),
-			free_ast_parse(&shell->ast), 1);
+			free_parse_ast(&shell->ast), 1);
 	return (0);
 }

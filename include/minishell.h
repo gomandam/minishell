@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/24 00:39:20 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 21:37:53 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,8 @@ int			parse_and_or(t_shell *shell, t_tok **cur, t_ast **out);
 void		free_redir(t_redir **redir);
 void		free_redirslst(t_redir **head);
 void		free_redirs(t_redirs *list);
-void		free_ast_cmd_parse(t_ast **ast);
-void		free_ast_parse(t_ast **ast);
+void		free_parse_ast_cmd (t_ast **ast);
+void		free_parse_ast(t_ast **ast);
 
 int			parse_ast(t_shell *shell);
 
@@ -203,10 +203,10 @@ int			export_print_all(t_shell *shell);
 
 
 // execution
-int			execute_ast(t_shell *shell, t_ast *node);
-int			exec_ast_pipe(t_shell *shell, t_ast *node);
+int			execute_ast(t_shell *shell, t_ast **node);
+int			exec_ast_pipe(t_shell *shell, t_ast **node);
 int			run_builtin_external(t_shell *shell, t_cmd *cmd);
-int			exec_ast_cmd(t_shell *shell, t_cmd *cmd);
+int			exec_ast_cmd(t_shell *shell, t_ast **cmd);
 int			is_builtin(char *cmd);
 void		debug_builtin(const char *cmd);
 

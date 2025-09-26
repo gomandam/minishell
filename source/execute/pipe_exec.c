@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/25 21:39:28 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/25 23:31:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 // st1 & st2: storage exit status, overwritten by waitpid even initialized 0
 static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 {
-	int	st1;
 	int	st2;
+	int	sig;
 
 	signals_wait(shell);
 	waitpid(p2, &st2, 0);
-	waitpid(p1, &st1, 0);
+	waitpid(p1, NULL, 0);
 	signals_repl(shell);
 	if (WIFEXITED(st2))
-		return (WEXITSTATUS(st2));
-	if (WIFSIGNALED(st2))
+		set_last_status(shell, WEXITSTATUS(st2));
+	else if (WIFSIGNALED(st2))
 	{
-		int sig = WTERMSIG(st2);
+		sig = WTERMSIG(st2);
 		if (sig == SIGQUIT)
 		{
 			if (__WCOREDUMP(st2))
@@ -36,13 +36,16 @@ static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 			else
 				write(STDOUT_FILENO, "Quit\n", 5);
 		}
-		return (128 + WTERMSIG(st2));
+		set_last_status(shell, 128 + WTERMSIG(st2));
 	}
-	return (1);
+	else
+		set_last_status(shell, 1);
+	return (0);
 }
 
 // local function for exec_ast_pipe();
 // setup child pipe, execute subtree then exit
+// ! TODO: Control syscall errors
 static void	child_pipe_end(t_shell *shell, t_ast **node, int fd[2], int stdio)
 {
 	ft_putstr_fd("DEBUG: entered child_pipe_end at pipe_exec.c\n", 2);
@@ -68,8 +71,7 @@ static void	child_pipe_end(t_shell *shell, t_ast **node, int fd[2], int stdio)
 		dup2(in_fd, stdio);
 		close(in_fd);
 	}
-	// TODO: exit, not _exit
-	_exit(execute_ast(shell, node));
+	exit(execute_ast(shell, node));
 }
 
 // fork the child process for a pipe

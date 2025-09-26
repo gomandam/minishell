@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 15:05:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 03:58:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,6 +351,7 @@ typedef struct s_env_list
 	t_env		*head;
 	t_env		*tail;
 	char		**envp;
+	char		**path_dir;
 	size_t		size;
 }	t_env_list;
 

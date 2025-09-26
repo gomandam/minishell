@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/25 21:37:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 04:09:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int			perror_ambiguosredir(t_shell *shell, t_tok *word);
 int			perror_cmdnotfound(t_shell *shell, const char *cmd);
 int			perror_usage(t_shell *shell);
 int			perror_syscall(t_shell *shell, char *msg);
+int			perror_execve(t_shell *shell, const char *cmd);
 
 int			pwarn_heredoceof(const char *delim);
 
@@ -192,7 +193,7 @@ int			init_shell(t_shell *shell, char *envp[]);
 // builtins
 int			ft_pwd(void);
 int			ft_env(t_env_list *env_list);
-void			ft_unset(t_env_list *env_list, char *argv[]);
+int			ft_unset(t_shell *shell, char *argv[]);
 int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);
@@ -201,11 +202,10 @@ void		export_perror_identifier(t_shell *shell, char *argv);
 
 int			export_print_all(t_shell *shell);
 
-
 // execution
 int			execute_ast(t_shell *shell, t_ast **node);
 int			exec_ast_pipe(t_shell *shell, t_ast **node);
-int			run_builtin_external(t_shell *shell, t_cmd *cmd);
+int			run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid);
 int			exec_ast_cmd(t_shell *shell, t_ast **cmd);
 int			is_builtin(char *cmd);
 void		debug_builtin(const char *cmd);

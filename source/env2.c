@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/22 18:28:25 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/24 00:47:05 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 03:59:36 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ static void	env_rm_node(t_env_list *env_list, t_env *node, t_env *prev)
 		env_list->head = node->next;
 	if (env_list->tail == node)
 		env_list->tail = prev;
+	if (env_list->path_dir != NULL && *env_list->path_dir != NULL
+		&& node->value == *env_list->path_dir)
+		env_list->path_dir = NULL;
 	free(node->full);
 	free(node);
 	env_list->size--;

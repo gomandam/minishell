@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/22 19:15:16 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 03:25:20 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,26 @@ int	pwarn_heredoceof(const char *delim)
 	write(STDERR_FILENO, delim, delim_len);
 	write(STDERR_FILENO, "')\n", 3);
 	return (0);
+}
+
+int	perror_execve(t_shell *shell, const char *cmd)
+{
+	char	*msg;
+
+	if (cmd == NULL)
+		return (perror_syscall(shell, "minishell: execve"));
+	else if (errno == ENOMEM)
+		return (perror_malloc(shell));
+	else if (errno == ENOENT)
+		return (perror_cmdnotfound(shell, cmd));
+	msg = ft_strjoin("minishell: ", cmd);
+	if (msg == NULL)
+		return (perror_malloc(shell));
+	perror(msg);
+	free(msg);
+	if (errno == EACCES)
+		set_last_status(shell, 126);
+	else
+		set_last_status(shell, 1);
+	return (1);
 }

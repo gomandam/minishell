@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/26 03:58:16 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 14:16:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ typedef struct s_op
 {
 	struct s_ast	*left;
 	struct s_ast	*right;
+	size_t			wait_count;
 }	t_op;
 
 /*

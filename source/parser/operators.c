@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:48:15 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/25 21:26:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 14:17:19 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ t_ast	*new_op_node(t_asttype type, t_ast *left, t_ast *right)
 	ast->type = type;
 	ast->u_data.op.left = left;
 	ast->u_data.op.right = right;
+	if (type == AST_PIPE)
+	{
+		ast->u_data.op.wait_count = 0;
+		if (left && left->type == AST_PIPE)
+			ast->u_data.op.wait_count += left->u_data.op.wait_count;
+		else if (left && (left->type == AST_CMD || left->type == AST_SUBSH))
+			ast->u_data.op.wait_count += 1;
+		if (right && (right->type == AST_CMD || right->type == AST_SUBSH))
+			ast->u_data.op.wait_count += 1;
+	}
+	else
+		ast->u_data.op.wait_count = 2;
 	return (ast);
 }
 

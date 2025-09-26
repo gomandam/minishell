@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/25 21:34:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:52:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ int	execute_ast(t_shell *shell, t_ast **node)
 	if (!node)
 		return (0);
 	if ((*node)->type == AST_CMD)
-		return (exec_ast_cmd(shell, node));
+		return (execute_ast_cmd(shell, node));
 	else if ((*node)->type == AST_PIPE)
-		return (exec_ast_pipe(shell, node));
+		return (execute_ast_pipe(shell, node));
 	else if ((*node)->type == AST_AND_IF)
 	{
 		printf("implement and logic.");

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 04:17:55 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:55:26 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	run_external(t_shell *shell, t_ast **ast, pid_t *pid)
 	if (resolve_cmd_path(shell, &cmd_path, (*ast)->u_data.cmd.u_data.argv[0]))
 		return (1);
 	*pid = fork();
-	if (*pid < 0)
+	if (*pid == -1)
 		return (perror("minishell: fork"), free(cmd_path), 1);
 	else if (*pid != 0)
 		return (free(cmd_path), 0);
@@ -108,9 +108,9 @@ void	wait_last_pid(t_shell *shell, pid_t pid)
 // expand & execute cmd AST node. returns exit status
 // TODO: receive t_ast **node, can free and set to NULL
 // TODO: open and read redirections
-int	exec_ast_cmd(t_shell *shell, t_ast **cmd)
+int	execute_ast_cmd(t_shell *shell, t_ast **cmd)
 {
-	ft_putstr_fd("DEBUG: Entered exec_ast_cmd(); \n", 2);
+	ft_putstr_fd("DEBUG: Entered execute_ast_cmd(); \n", 2);
 	pid_t	pid;
 
 	if (!cmd || !*cmd)

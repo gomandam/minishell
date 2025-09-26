@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/26 04:09:47 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:52:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,9 +204,9 @@ int			export_print_all(t_shell *shell);
 
 // execution
 int			execute_ast(t_shell *shell, t_ast **node);
-int			exec_ast_pipe(t_shell *shell, t_ast **node);
+int			execute_ast_pipe(t_shell *shell, t_ast **node);
 int			run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid);
-int			exec_ast_cmd(t_shell *shell, t_ast **cmd);
+int			execute_ast_cmd(t_shell *shell, t_ast **cmd);
 int			is_builtin(char *cmd);
 void		debug_builtin(const char *cmd);
 

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/25 23:31:47 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 12:57:45 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 	int	sig;
 
 	signals_wait(shell);
-	waitpid(p2, &st2, 0);
-	waitpid(p1, NULL, 0);
+	if (p2 != -1)
+		waitpid(p2, &st2, 0);
+	if (p1 != -1)
+		waitpid(p1, NULL, 0);
 	signals_repl(shell);
 	if (WIFEXITED(st2))
 		set_last_status(shell, WEXITSTATUS(st2));
@@ -43,7 +45,7 @@ static int	wait_pipe(t_shell *shell, pid_t p1, pid_t p2)
 	return (0);
 }
 
-// local function for exec_ast_pipe();
+// local function for execute_ast_pipe();
 // setup child pipe, execute subtree then exit
 // ! TODO: Control syscall errors
 static void	child_pipe_end(t_shell *shell, t_ast **node, int fd[2], int stdio)
@@ -90,7 +92,7 @@ static pid_t	pipe_fork(t_shell *shell, t_ast **node, int fd[2], int stdio)
 // Per-node: create pipe, fork: L | R, close fds, execute concurrent, return right status.
 // fork: left writes fd[1] and fork: right reads fd[0]
 // Each stage (AST_PIPE) immediately forks both left and right children.
-int	exec_ast_pipe(t_shell *shell, t_ast **node)
+int	execute_ast_pipe(t_shell *shell, t_ast **node)
 {
 	int		fd[2];
 	pid_t	pid_l;
@@ -101,18 +103,16 @@ int	exec_ast_pipe(t_shell *shell, t_ast **node)
 	fd[1] = -1;
 	/* if (!node || !node->u_data.op.left || !node->u_data.op.right)
 		return (1); */
-	if (pipe(fd) < 0)
-		return (perror("minishell: pipe"), free_parse_ast(node), 1); // TODO: last_status
+	if (pipe(fd) == -1)
+		return (perror_syscall(shell, "minishell: pipe"),
+			free_parse_ast(node), 1); // TODO: last_status
 	pid_l = pipe_fork(shell, &(*node)->u_data.op.left, fd,
 			STDOUT_FILENO);
+	ft_close(&fd[1]);
 	pid_r = pipe_fork(shell, &(*node)->u_data.op.right, fd,
 			STDIN_FILENO);
-	if (fd[0] >= 0)
-		close(fd[0]);
-	if (fd[1] >= 0)
-		close(fd[1]);
+	ft_close(&fd[0]);
 	status = wait_pipe(shell, pid_l, pid_r);
 	free_parse_ast(node);
 	return (status);
 }
-

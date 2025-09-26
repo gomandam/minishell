@@ -262,6 +262,8 @@ int	debug_ast_operator(t_shell *shell, t_ast **ast, int level)
 		return (0);
 
 	debug_indent(level);
+	printf("Command count in subtree: %ld\n", (*ast)->u_data.op.wait_count);
+	debug_indent(level);
 	printf("Left operand:\n");
 	if (debug_ast_node(shell, &(*ast)->u_data.op.left, level + 1) == 1)
 	{

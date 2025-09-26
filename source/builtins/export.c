@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 03:57:46 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 04:43:37 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 
 static int	env_update_move(t_env_list *env_list, t_env *found, t_env *prev)
 {
+	if (env_list->envp != NULL)
+	{
+		free(env_list->envp);
+		env_list->envp = NULL;
+	}
 	if (found == env_list->tail)
 		return (0);
 	if (prev)

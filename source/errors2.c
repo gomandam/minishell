@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 03:25:20 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:25:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,7 @@ int	perror_execve(t_shell *shell, const char *cmd)
 		set_last_status(shell, 126);
 	else
 		set_last_status(shell, 1);
+	if (shell)
+		shell->finished = 1;
 	return (1);
 }

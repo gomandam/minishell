@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/26 12:52:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 17:16:28 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,11 +198,12 @@ int			ft_echo(t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);
 
-void		export_perror_identifier(t_shell *shell, char *argv);
+void			export_perror_identifier(t_shell *shell, char *argv);
 
 int			export_print_all(t_shell *shell);
 
 // execution
+void		wait_last_pid(t_shell *shell, pid_t pid);
 int			execute_ast(t_shell *shell, t_ast **node);
 int			execute_ast_pipe(t_shell *shell, t_ast **node);
 int			run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid);

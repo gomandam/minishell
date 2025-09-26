@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:22:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/25 21:28:03 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 23:49:26 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_redirs(t_redirs *redirs)
 	redirs->tail = NULL;
 }
 
-void	free_parse_ast_cmd (t_ast **ast)
+void	free_parse_ast_cmd(t_ast **ast)
 {
 	if (!ast || !*ast)
 		return ;
@@ -73,7 +73,7 @@ void	free_parse_ast(t_ast **ast)
 		free_redirs(&(*ast)->u_data.subsh.redir);
 	}
 	else if ((*ast)->type == AST_CMD)
-		free_parse_ast_cmd (ast);
+		free_parse_ast_cmd(ast);
 	free(*ast);
 	*ast = NULL;
 }

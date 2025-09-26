@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/26 14:16:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 22:16:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,11 +179,14 @@ typedef struct s_cmd
  * represents:
  * - priority binary nodes: AST_AND_IF, AST_OR_IF
  * - non-priority binary nodes: AST_PIPE
+ * - pipe_fd is used only for AST_PIPE to hold the pipe fds [0] read, [1] write
+ * - wait_count is used for count the number of anidated processes to wait for
  */
 typedef struct s_op
 {
 	struct s_ast	*left;
 	struct s_ast	*right;
+	int				pipe_fd[2];
 	size_t			wait_count;
 }	t_op;
 

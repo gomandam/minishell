@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 12:55:26 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 19:56:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,14 @@ static int	run_external(t_shell *shell, t_ast **ast, pid_t *pid)
 	cmd_path = NULL;
 	if (resolve_cmd_path(shell, &cmd_path, (*ast)->u_data.cmd.u_data.argv[0]))
 		return (1);
-	*pid = fork();
-	if (*pid == -1)
-		return (perror("minishell: fork"), free(cmd_path), 1);
-	else if (*pid != 0)
-		return (free(cmd_path), 0);
+	if (pid)
+	{
+		*pid = fork();
+		if (pid && *pid == -1)
+			return (perror("minishell: fork"), free(cmd_path), 1);
+		else if (pid && *pid != 0)
+			return (free(cmd_path), 0);
+	}
 	signals_exec(shell);
 	// TODO: redirections here
 	execve(cmd_path, (*ast)->u_data.cmd.u_data.argv, envp);
@@ -59,7 +62,8 @@ int	run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid)
 		return (0);
 	if (is_builtin(cmd->u_data.argv[0]))
 	{
-		*pid = 0;
+		if (pid)
+			*pid = 0;
 		ft_putstr_fd("DEBUG: inside is_builtin() -> builtin fx\n", 2);
 		if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
 			return (ft_pwd());
@@ -120,7 +124,7 @@ int	execute_ast_cmd(t_shell *shell, t_ast **cmd)
 	pid = -1;
 	if (run_builtin_external(shell, cmd, &pid) == 1)
 		return (free_exp_ast(cmd), 1);
-	wait_last_pid(shell, pid);
 	free_exp_ast(cmd);
+	wait_last_pid(shell, pid);
 	return (0);
 }

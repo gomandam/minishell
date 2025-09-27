@@ -6,11 +6,12 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:55 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 02:10:27 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/27 18:43:31 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../libft/libft.h"
 /*
 ** print working directory | current working directory
 ** Prints the current working directory to stdout.
@@ -31,9 +32,3 @@ int	ft_pwd(void)
 	free(cwd);
 	return (0);
 }
-
-// _getcwd	https://www.youtube.com/watch?v=n2iSn6zGB5A
-/*
-	getcwd() allocate buffer for current dir., check if null
-	perror() error
-*/

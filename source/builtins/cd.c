@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/27 15:18:46 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/27 20:34:43 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,7 @@ static int	ensure_pwd_env(t_shell *shell)
 	if (!pwd_line)
 		return (perror_malloc(shell));
 	if (env_upsert(&shell->env_list, pwd_line, pwd_line + 4) == 1)
-	{
-		free(pwd_line);
-		return (perror_malloc(shell));
-	}
+		return (free(pwd_line), perror_malloc(shell));
 	free(pwd_line);
 	return (0);
 }

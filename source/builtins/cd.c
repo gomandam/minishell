@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd_rebuild.c                                       :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 00:19:39 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:18:46 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,20 @@ static char	*resolve_cd_target(t_shell *shell, char **argv)
 	{
 		target = env_get_value(&shell->env_list, "HOME");
 		if (!target)
-			return(ft_putstr_fd("minishell: cd: HOME not set\n", 2), set_last_status(shell, 1), NULL);
+			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2),
+				set_last_status(shell, 1), NULL);
 		return (ft_strdup(target));
 	}
 	if (argv[2])
-		return(ft_putstr_fd("minishell: cd: too many arguments\n", 2), set_last_status(shell, 1), NULL);
+		return (ft_putstr_fd("minishell: cd: too many arguments\n", 2),
+			set_last_status(shell, 1), NULL);
 	if (!ft_strcmp(argv[1], "-"))
 	{
 		target = env_get_value(&shell->env_list, "OLDPWD");
 		if (!target)
 		{
 			ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-			return(set_last_status(shell, 1), NULL);
+			return (set_last_status(shell, 1), NULL);
 		}
 		ft_putendl_fd(target, 1);
 		return (ft_strdup(target));
@@ -121,7 +123,7 @@ int	ft_cd(t_shell *shell, char **argv)
 	old_pwd = get_current_pwd(shell);
 	target_dir = resolve_cd_target(shell, argv);
 	if (!target_dir)
-		return(free(old_pwd), 1);
+		return (free(old_pwd), 1);
 	if (chdir(target_dir) == -1)
 	{
 		perror("minishell: cd");
@@ -137,6 +139,6 @@ int	ft_cd(t_shell *shell, char **argv)
 		free(old_pwd);
 	}
 	if (ensure_pwd_env(shell) != 0)
-		return(set_last_status(shell, 1), 1);
-	return(set_last_status(shell, 0), 0);
+		return (set_last_status(shell, 1), 1);
+	return (set_last_status(shell, 0), 0);
 }

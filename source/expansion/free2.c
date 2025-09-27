@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/27 15:26:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/27 20:46:00 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	free_exp_ast(t_ast **ast)
 	{
 		free_exp_ast(&(*ast)->u_data.op.left);
 		free_exp_ast(&(*ast)->u_data.op.right);
+		ft_close(&(*ast)->u_data.op.pipe_fd[0]);
+		ft_close(&(*ast)->u_data.op.pipe_fd[1]);
 	}
 	else if ((*ast)->type == AST_SUBSH)
 	{

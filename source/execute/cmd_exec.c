@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 19:56:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:03:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,13 @@ int	run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid)
 		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
 			return (ft_unset(shell, cmd->u_data.argv));
 		if (!ft_strcmp(cmd->u_data.argv[0], "echo"))
-			return (ft_echo(cmd)); // since ft_echo(t_cmd *cmd)
+			return (ft_echo(cmd));
 		if (!ft_strcmp(cmd->u_data.argv[0], "exit"))
 			return (ft_exit(shell, cmd->u_data.argv));
 		if (!ft_strcmp(cmd->u_data.argv[0], "export"))
 			return (ft_export(shell, cmd->u_data.argv));
+		if (!ft_strcmp(cmd->u_data.argv[0], "cd"))
+			return (ft_cd(shell, cmd->u_data.argv));
 	}
 	return (run_external(shell, ast, pid));
 }

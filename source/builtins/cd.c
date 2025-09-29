@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/27 20:34:43 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/29 18:55:51 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	update_oldpwd_env(t_shell *shell, const char *old_dir)
 	oldpwd_line = ft_strjoin("OLDPWD=", old_dir);
 	if (!oldpwd_line)
 		return (perror_malloc(shell));
-	if (env_upsert(&shell->env_list, oldpwd_line, oldpwd_line + 7) == 1)
+	if (env_upsert(&shell->env_list, oldpwd_line, oldpwd_line + 6) == 1)
 	{
 		free(oldpwd_line);
 		return (perror_malloc(shell));
@@ -73,7 +73,7 @@ static int	ensure_pwd_env(t_shell *shell)
 	free(cwd);
 	if (!pwd_line)
 		return (perror_malloc(shell));
-	if (env_upsert(&shell->env_list, pwd_line, pwd_line + 4) == 1)
+	if (env_upsert(&shell->env_list, pwd_line, pwd_line + 3) == 1)
 		return (free(pwd_line), perror_malloc(shell));
 	free(pwd_line);
 	return (0);

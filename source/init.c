@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 04:16:58 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:05:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	ensure_pwd_env(t_shell *shell)
 	free(cwd);
 	if (full == NULL)
 		return (perror_malloc(shell));
-	if (env_upsert(&shell->env_list, full, full + 4) == 1)
+	if (env_upsert(&shell->env_list, full, full + 3) == 1)
 		return (free(full), perror_malloc(shell));
 	free(full);
 	return (0);

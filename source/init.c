@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 17:49:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/24 05:59:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/29 19:05:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	free_env_list(t_env_list *env_list)
 	env_list->head = NULL;
 	env_list->tail = NULL;
 	env_list->size = 0;
+	env_list->path_dir = NULL;
 	if (env_list->envp != NULL)
 	{
 		free(env_list->envp);
@@ -51,7 +52,7 @@ static int	ensure_pwd_env(t_shell *shell)
 	free(cwd);
 	if (full == NULL)
 		return (perror_malloc(shell));
-	if (env_upsert(&shell->env_list, full, full + 4) == 1)
+	if (env_upsert(&shell->env_list, full, full + 3) == 1)
 		return (free(full), perror_malloc(shell));
 	free(full);
 	return (0);
@@ -65,6 +66,7 @@ int	init_envp(t_shell *shell, char *envp[])
 	shell->env_list.tail = NULL;
 	shell->env_list.size = 0;
 	shell->env_list.envp = NULL;
+	shell->env_list.path_dir = NULL;
 	while (envp[shell->env_list.size] != NULL)
 	{
 		cur = malloc(sizeof(t_env));

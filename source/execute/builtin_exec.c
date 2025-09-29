@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 14:07:09 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/09/25 23:17:12 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 	if (!ft_strcmp(cmd->u_data.argv[0], "env"))
 		return (ft_env(shell));		// check t_env_list *env_list
 	if (!ft_strcmp(cmd->u_data.argv[0]), "exit")
-		return (ft_exit(shell, argv));
+		return (ftexit(shell, argv));
 
 	return (1);
 }

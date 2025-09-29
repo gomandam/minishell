@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:22:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 12:55:31 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/27 10:44:43 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	free_redirs(t_redirs *redirs)
 	redirs->tail = NULL;
 }
 
-void	free_ast_cmd_parse(t_ast **ast)
+void	free_parse_ast_cmd(t_ast **ast)
 {
 	if (!ast || !*ast)
 		return ;
@@ -57,23 +57,25 @@ void	free_ast_cmd_parse(t_ast **ast)
 	*ast = NULL;
 }
 
-void	free_ast_parse(t_ast **ast)
+void	free_parse_ast(t_ast **ast)
 {
 	if (!ast || !*ast)
 		return ;
 	if ((*ast)->type == AST_PIPE || (*ast)->type == AST_AND_IF
 		|| (*ast)->type == AST_OR_IF)
 	{
-		free_ast_parse(&(*ast)->u_data.op.left);
-		free_ast_parse(&(*ast)->u_data.op.right);
+		free_parse_ast(&(*ast)->u_data.op.left);
+		free_parse_ast(&(*ast)->u_data.op.right);
+		ft_close(&(*ast)->u_data.op.pipe_fd[0]);
+		ft_close(&(*ast)->u_data.op.pipe_fd[1]);
 	}
 	else if ((*ast)->type == AST_SUBSH)
 	{
-		free_ast_parse(&(*ast)->u_data.subsh.child);
+		free_parse_ast(&(*ast)->u_data.subsh.child);
 		free_redirs(&(*ast)->u_data.subsh.redir);
 	}
 	else if ((*ast)->type == AST_CMD)
-		free_ast_cmd_parse(ast);
+		free_parse_ast_cmd(ast);
 	free(*ast);
 	*ast = NULL;
 }

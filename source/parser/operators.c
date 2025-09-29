@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 21:48:15 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/11 18:18:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 22:17:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,20 @@ t_ast	*new_op_node(t_asttype type, t_ast *left, t_ast *right)
 	ast->type = type;
 	ast->u_data.op.left = left;
 	ast->u_data.op.right = right;
+	ast->u_data.op.pipe_fd[0] = -1;
+	ast->u_data.op.pipe_fd[1] = -1;
+	if (type == AST_PIPE)
+	{
+		ast->u_data.op.wait_count = 0;
+		if (left && left->type == AST_PIPE)
+			ast->u_data.op.wait_count += left->u_data.op.wait_count;
+		else if (left && (left->type == AST_CMD || left->type == AST_SUBSH))
+			ast->u_data.op.wait_count += 1;
+		if (right && (right->type == AST_CMD || right->type == AST_SUBSH))
+			ast->u_data.op.wait_count += 1;
+	}
+	else
+		ast->u_data.op.wait_count = 2;
 	return (ast);
 }
 
@@ -43,11 +57,11 @@ int	parse_pipe(t_shell *shell, t_tok **cur, t_ast **out)
 		consume_tok(cur);
 		right = NULL;
 		if (parse_cmd_subsh(shell, cur, &right) == 1)
-			return (free_ast_parse(out), 1);
+			return (free_parse_ast(out), 1);
 		*out = new_op_node(AST_PIPE, *out, right);
 		if (*out == NULL)
-			return (perror_malloc(shell), free_ast_parse(out),
-				free_ast_parse(&right), 1);
+			return (perror_malloc(shell), free_parse_ast(out),
+				free_parse_ast(&right), 1);
 	}
 	return (0);
 }
@@ -69,11 +83,11 @@ int	parse_and_or(t_shell *shell, t_tok **cur, t_ast **out)
 		consume_tok(cur);
 		right = NULL;
 		if (parse_pipe(shell, cur, &right) == 1)
-			return (free_ast_parse(out), 1);
+			return (free_parse_ast(out), 1);
 		*out = new_op_node(type, *out, right);
 		if (*out == NULL)
-			return (perror_malloc(shell), free_ast_parse(out),
-				free_ast_parse(&right), 1);
+			return (perror_malloc(shell), free_parse_ast(out),
+				free_parse_ast(&right), 1);
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/23 20:51:57 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 03:37:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,22 @@ static int	find_env_node(t_env_list *env_list, const char *key,
 	unset: implements the 'unset' built-in.
 	argv[0] = "unset", argv[1..n] = var names to unset
 	Returns 1 if any variable was removed, 0 otherwise.	*/
-void	ft_unset(t_env_list *env_list, char *argv[])
+int	ft_unset(t_shell *shell, char *argv[])
 {
 	int		i;
 	size_t	keylen;
 
-	if (!env_list || !argv || !argv[1])
-		return ;
+	if (!argv || !argv[1])
+		return (0);
 	i = 1;
 	while (argv[i])
 	{
 		keylen = ft_strlen(argv[i]);
 		if (keylen != 0)
-			env_remove(env_list, argv[i], keylen);
+			env_remove(&shell->env_list, argv[i], keylen);
 		i++;
 	}
+	return (0);
 }
 
 /*

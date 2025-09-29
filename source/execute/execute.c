@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 18:26:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 15:18:05 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,41 @@
 
 #include "minishell.h"
 
-int	execute_ast(t_shell *shell, t_ast *node)
+int	execute_ast(t_shell *shell, t_ast **node)
 {
-	int	storage;
+	/* int	storage;
 
-	storage = 0;
+	storage = 0; */
 	if (!node)
 		return (0);
-	if (node->type == AST_CMD)
-		return (exec_ast_cmd(shell, &node->u_data.cmd));
-	else if (node->type == AST_PIPE)
-		return (exec_ast_pipe(shell, node));
-	else if (node->type == AST_AND_IF)
+	if ((*node)->type == AST_CMD)
+		return (execute_ast_cmd(shell, node));
+	else if ((*node)->type == AST_PIPE)
+		return (execute_ast_pipe(shell, node));
+	else if ((*node)->type == AST_AND_IF)
 	{
-		storage = execute_ast(shell, node->u_data.op.left);
+		printf("implement and logic.");
+		free_parse_ast(node);
+		return (0);
+		/* storage = execute_ast(shell, &(*node)->u_data.op.left);
 		if (storage == 0)
-			return (execute_ast(shell, node->u_data.op.right));
-		return (storage);
+			return (execute_ast(shell, &(*node)->u_data.op.right));
+		return (storage); */
 	}
-	else if (node->type == AST_OR_IF)
+	else if ((*node)->type == AST_OR_IF)
 	{
-		storage = execute_ast(shell, node->u_data.op.left);
+		printf("implement or logic.");
+		free_parse_ast(node);
+		return (0);
+		/* storage = execute_ast(shell, &(*node)->u_data.op.left);
 		if (storage != 0)
-			return (execute_ast(shell, node->u_data.op.right));
-		return (storage);
+			return (execute_ast(shell, &(*node)->u_data.op.right));
+		return (storage); */
 	}
-	else if (node->type == AST_SUBSH)
+	else if ((*node)->type == AST_SUBSH)
 	{
 		printf("implement subshell logic.");
+		free_parse_ast(node);
 		return (0);
 		// TO DO: implement subshell logic
 		// if (expand_subsh(shell, &node->u_data.subsh) != 0)

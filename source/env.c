@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/15 18:43:52 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/24 01:25:41 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/26 03:58:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	env_push(t_env_list *env_list, t_env *node)
 		env_list->tail->next = node;
 	env_list->tail = node;
 	env_list->size++;
+	if (node->full && ft_strncmp(node->full, "PATH=", 5) == 0)
+		env_list->path_dir = &node->value;
 	if (env_list->envp != NULL)
 	{
 		free(env_list->envp);
@@ -76,7 +78,7 @@ char	**get_envp(t_shell *shell)
 		return (shell->env_list.envp);
 	shell->env_list.envp = malloc(sizeof(char *) * (shell->env_list.size + 1));
 	if (shell->env_list.envp == NULL)
-		return (NULL);
+		return (perror_malloc(shell), NULL);
 	cur = shell->env_list.head;
 	i = 0;
 	while (cur != NULL)

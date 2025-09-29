@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/24 19:56:25 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/09/27 01:02:18 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 {
 	ft_putstr_fd("DEBUG: entered the run_builtin_external(); at cmd_exec.c\n", 2);
 
-//	(void)shell; 					// remove after debug
 	if (!cmd->u_data.argv || !cmd->u_data.argv[0])
 		return (0);
 	if (is_builtin(cmd->u_data.argv[0]))
@@ -84,16 +83,15 @@ int	run_builtin_external(t_shell *shell, t_cmd *cmd)
 		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
 			return (ft_unset(&shell->env_list, cmd->u_data.argv), 0); // TODO
 		if (!ft_strcmp(cmd->u_data.argv[0], "echo"))
-			return (ft_echo(cmd));			// since ft_echo(t_cmd *cmd)
+			return (ft_echo(cmd));
 		if (!ft_strcmp(cmd->u_data.argv[0], "exit"))
 			return (ft_exit(shell, cmd->u_data.argv));
 		if (!ft_strcmp(cmd->u_data.argv[0], "export"))
 			return (ft_export(shell, cmd->u_data.argv));
+		if (!ft_strcmp(cmd->u_data.argv[0], "cd"))
+			return (ft_cd(shell, cmd->u_data.argv));
 	}
 	return (run_external(shell, cmd));
-//	if (is_builtin(cmd->u_data.argv[0]))	// remove codesnippet after debug
-//		return ((debug_builtin(cmd->u_data.argv[0])), 0);
-//	return (run_external(shell, cmd));	// remove after debug
 }
 
 // expand & execute cmd AST node. returns exit status

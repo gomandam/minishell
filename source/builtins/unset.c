@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 21:12:28 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 21:16:20 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ static int	is_valid_identifier(const char *s)
 	return (1);
 }
 
-static void	unset_error_msg(const char *arg)
+static void	unset_error_msg(char *arg)
 {
 	ft_putstr_fd("minishell: unset: '", 2);
-	ft_putstr_fd((char *)arg, 2);
+	ft_putstr_fd(arg, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 

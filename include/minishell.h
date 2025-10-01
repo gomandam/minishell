@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 21:33:49 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 22:20:41 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # include <termios.h> // tcgetattr, tcsetattr
 # include <termcap.h>
 // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
+
+# include <limits.h> // LLONG_MAX, LLONG_MIN
 
 # define MINI_PROMPT "MINI> $ " // TODO
 # define HEREDOC_PROMPT "> " // TODO

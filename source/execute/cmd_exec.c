@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 16:56:54 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 19:58:42 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid)
 			*pid = 0;
 		ft_putstr_fd("DEBUG: inside is_builtin() -> builtin fx\n", 2);
 		if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
-			return (ft_pwd());
+			return (ft_pwd(shell));
 		if (!ft_strcmp(cmd->u_data.argv[0], "env"))
 			return (ft_env(shell));
 		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))

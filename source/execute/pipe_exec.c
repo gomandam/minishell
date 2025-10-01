@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 13:41:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:37:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ void	execute_seq_cmd(t_shell *shell, t_ast **cmd, int *in_fd, int *out_fd)
 		ft_close(in_fd);
 	if (*out_fd != STDOUT_FILENO)
 		ft_close(out_fd);
+	if (shell->line)
+	{
+		ft_freestr(&shell->line);
+		rl_clear_history();
+	}
 	free_exp_ast(cmd);
 	free_parse_ast(&shell->ast);
 	free_env_list(&shell->env_list);

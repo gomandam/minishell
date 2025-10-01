@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:55 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 20:46:34 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:14:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void	pwd_set_status(t_shell *shell, int error)
 		set_last_status(shell, 0);
 }
 
-int	ft_pwd(t_shell *shell)
+int	ft_pwd(t_shell *shell, int out_fd)
 {
 	char	*cwd;
 	int		error;
@@ -56,7 +56,7 @@ int	ft_pwd(t_shell *shell)
 		perror("minishell: pwd: error retrieving current directory");
 		return (pwd_set_status(shell, 1), 1);
 	}
-	error = ft_putendl_check(cwd, 1);
+	error = ft_putendl_check(cwd, out_fd);
 	pwd_set_status(shell, error);
 	free(cwd);
 	return (error);

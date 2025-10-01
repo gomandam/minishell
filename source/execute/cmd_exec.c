@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 00:59:19 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:35:40 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include "../../libft/libft.h"
 #include <sys/wait.h>
 #include <fcntl.h>
+
+static int	free_external(t_shell *shell, t_ast **ast, char *cmd_path)
+{
+	if (cmd_path)
+		free(cmd_path);
+	free_exp_ast(ast);
+	free_env_list(&shell->env_list);
+	if (shell->line)
+		ft_freestr(&shell->line);
+	rl_clear_history();
+	return (1);
+}
 
 // TODO: last_status write
 // fork and execute external cmd, wait for completion. Returns exit status
@@ -40,9 +52,9 @@ int	run_external(t_shell *shell, t_ast **ast, pid_t *pid)
 		execve(cmd_path, (*ast)->u_data.cmd.u_data.argv, get_envp(shell));
 		perror_execve(shell, (*ast)->u_data.cmd.u_data.argv[0]);
 	}
-	free(cmd_path);
-	free_exp_ast(ast);
-	free_env_list(&shell->env_list);
+	free_external(shell, ast, cmd_path);
+	if (pid == NULL)
+		return (1);
 	return (exit(shell->last_status), 1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/02 01:07:20 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:23:56 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,15 +194,15 @@ void		free_env_list(t_env_list *env_list);
 int			init_shell(t_shell *shell, char *envp[]);
 
 // builtins
-int			ft_pwd(t_shell *shell);
-int			ft_env(t_shell *shell);
-int			ft_unset(t_shell *shell, char *argv[]);
-int			ft_echo(t_shell *shell, t_cmd *cmd);
-int			ft_exit(t_shell *shell, t_ast	**ast);
-int			ft_export(t_shell *shell, char **argv);
-int			ft_cd(t_shell *shell, char **argv);
+int			export_print_all(t_shell *shell, int out_fd);
 
-int			export_print_all(t_shell *shell);
+int			ft_export(t_shell *shell, char **argv, int out_fd);
+int			ft_pwd(t_shell *shell, int out_fd);
+int			ft_env(t_shell *shell, int out_fd);
+int			ft_echo(t_shell *shell, t_cmd *cmd, int out_fd);
+int			ft_unset(t_shell *shell, char *argv[]);
+int			ft_cd(t_shell *shell, char **argv);
+int			ft_exit(t_shell *shell, t_ast	**ast);
 
 // execution
 void		seq_close(t_ast *ast, int in_fd, int out_fd);

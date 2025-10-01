@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:14 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 20:48:20 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:20:49 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	echo_flag(char *argv)
 	return (1);
 }
 
-static int	echo_print(char *argv[], int start)
+static int	echo_print(char *argv[], int start, int out_fd)
 {
 	int	i;
 	int	length;
@@ -40,9 +40,9 @@ static int	echo_print(char *argv[], int start)
 		length = 0;
 		while (argv[i][length])
 			length++;
-		if (write(STDOUT_FILENO, argv[i], length) == -1)
+		if (write(out_fd, argv[i], length) == -1)
 			return (1);
-		if (argv[i + 1] != NULL && write(STDOUT_FILENO, " ", 1))
+		if (argv[i + 1] != NULL && write(out_fd, " ", 1) == -1)
 			return (1);
 		i++;
 	}
@@ -57,7 +57,7 @@ static void	echo_last_status(t_shell *shell, int error)
 		set_last_status(shell, 0);
 }
 
-int	ft_echo(t_shell *shell, t_cmd *cmd)
+int	ft_echo(t_shell *shell, t_cmd *cmd, int out_fd)
 {
 	char	**argv;
 	int		i;
@@ -76,9 +76,9 @@ int	ft_echo(t_shell *shell, t_cmd *cmd)
 		i++;
 	}
 	if (argv[i])
-		error = echo_print(argv, i);
+		error = echo_print(argv, i, out_fd);
 	if (!n_flag && !error)
-		if (write(STDOUT_FILENO, "\n", 1) == -1)
+		if (write(out_fd, "\n", 1) == -1)
 			error = 1;
 	echo_last_status(shell, error);
 	return (error);

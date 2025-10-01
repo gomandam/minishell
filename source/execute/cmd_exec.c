@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 13:28:11 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 16:56:54 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid)
 		if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
 			return (ft_pwd());
 		if (!ft_strcmp(cmd->u_data.argv[0], "env"))
-			return (ft_env(&shell->env_list));
+			return (ft_env(shell));
 		if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
 			return (ft_unset(shell, cmd->u_data.argv));
 		if (!ft_strcmp(cmd->u_data.argv[0], "echo"))

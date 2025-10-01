@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:25 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 17:14:12 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 21:36:46 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ static int	ft_putendl_check(char *s, int fd)
 {
 	int	len;
 	int	written;
-	
+
 	if (s == NULL)
 		return (0);
 	len = 0;
 	while (s[len])
 		len++;
 	written = write(fd, s, len);
-	if (written != len )
+	if (written != len)
 		return (1);
 	written = write(fd, "\n", 1);
 	if (written != 1)
@@ -45,7 +45,7 @@ static void	env_set_status(t_shell *shell, int error)
 int	ft_env(t_shell *shell)
 {
 	t_env	*current;
-	int	error;
+	int		error;
 
 	current = shell->env_list.head;
 	error = 0;

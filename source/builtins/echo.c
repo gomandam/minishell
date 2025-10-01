@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:14 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 13:45:36 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 20:48:20 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	echo_last_status(t_shell *shell, int error)
 		set_last_status(shell, 1);
 	else
 		set_last_status(shell, 0);
-}		
+}
 
 int	ft_echo(t_shell *shell, t_cmd *cmd)
 {
@@ -83,7 +83,8 @@ int	ft_echo(t_shell *shell, t_cmd *cmd)
 	echo_last_status(shell, error);
 	return (error);
 }
-// Same as Nested IF: if (!n_flag && !error && write(STDOUT_FILENO, "\n", 1) == -1)
+// Same as Nested IF:
+// 	if (!n_flag && !error && write(STDOUT_FILENO, "\n", 1) == -1)
 // Test: echo -n foo > /dev/full   **output:  write error, space on device**
 /* test: tokens, output redir (STDOUT)
 echo foo bar			foo bar		0

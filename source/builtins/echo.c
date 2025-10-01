@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:14 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/18 01:09:08 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 13:45:36 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	echo_flag(char *argv)
 	return (1);
 }
 
-static void	echo_print(char *argv[], int start)
+static int	echo_print(char *argv[], int start)
 {
 	int	i;
 	int	length;
@@ -40,23 +40,35 @@ static void	echo_print(char *argv[], int start)
 		length = 0;
 		while (argv[i][length])
 			length++;
-		write(STDOUT_FILENO, argv[i], length);
-		if (argv[i + 1] != NULL)
-			write(STDOUT_FILENO, " ", 1);
+		if (write(STDOUT_FILENO, argv[i], length) == -1)
+			return (1);
+		if (argv[i + 1] != NULL && write(STDOUT_FILENO, " ", 1))
+			return (1);
 		i++;
 	}
+	return (0);
 }
 
-int	ft_echo(t_cmd *cmd)
+static void	echo_last_status(t_shell *shell, int error)
 {
+	if (error)
+		set_last_status(shell, 1);
+	else
+		set_last_status(shell, 0);
+}		
+
+int	ft_echo(t_shell *shell, t_cmd *cmd)
+{
+	char	**argv;
 	int		i;
 	int		n_flag;
-	char	**argv;
+	int		error;
 
 	i = 1;
 	n_flag = 0;
+	error = 0;
 	if (!cmd || !cmd->u_data.argv)
-		return (0);
+		return (set_last_status(shell, 0), 0);
 	argv = cmd->u_data.argv;
 	while (argv[i] && echo_flag(argv[i]))
 	{
@@ -64,8 +76,21 @@ int	ft_echo(t_cmd *cmd)
 		i++;
 	}
 	if (argv[i])
-		echo_print(argv, i);
-	if (!n_flag)
-		write(STDOUT_FILENO, "\n", 1);
-	return (0);
+		error = echo_print(argv, i);
+	if (!n_flag && !error)
+		if (write(STDOUT_FILENO, "\n", 1) == -1)
+			error = 1;
+	echo_last_status(shell, error);
+	return (error);
 }
+// Same as Nested IF: if (!n_flag && !error && write(STDOUT_FILENO, "\n", 1) == -1)
+// Test: echo -n foo > /dev/full   **output:  write error, space on device**
+/* test: tokens, output redir (STDOUT)
+echo foo bar			foo bar		0
+echo -n hello			hello		0
+echo				(newline)	0
+echo -nnnn test			test		0
+echo -z test			-z test		0
+echo "fail" > /dev/full		(error)		1
+echo "fail" > unwritable	(error)		1
+*/

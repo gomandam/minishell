@@ -6,7 +6,7 @@
 /*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/11 23:18:46 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 21:54:52 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ static int	is_numeric(const char *str)
 	}
 	return (1);
 }
-//! 	string to long long (ft_strtoll) => check this functions
 //	Converts string to long long
 
-static long long	ft_strtoll(const char *str)
+static long long	ft_atoll(const char *str)
 {
 	long long	res;
 	int			sign;
@@ -105,7 +104,7 @@ int	ft_exit(t_shell *shell, char *argv[])
 		return (1);
 	}
 	else
-		status = ft_strtoll(argv[1]);
+		status = ft_atoll(argv[1]);
 	status = (uint8_t)status;
 	rl_clear_history();
 	free_shell(shell);

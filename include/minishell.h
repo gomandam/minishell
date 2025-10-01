@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/29 19:03:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 22:20:41 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # include <termios.h> // tcgetattr, tcsetattr
 # include <termcap.h>
 // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
+
+# include <limits.h> // LLONG_MAX, LLONG_MIN
 
 # define MINI_PROMPT "MINI> $ " // TODO
 # define HEREDOC_PROMPT "> " // TODO
@@ -191,15 +193,13 @@ void		free_env_list(t_env_list *env_list);
 int			init_shell(t_shell *shell, char *envp[]);
 
 // builtins
-int			ft_pwd(void);
-int			ft_env(t_env_list *env_list);
+int			ft_pwd(t_shell *shell);
+int			ft_env(t_shell *shell);
 int			ft_unset(t_shell *shell, char *argv[]);
-int			ft_echo(t_cmd *cmd);
+int			ft_echo(t_shell *shell, t_cmd *cmd);
 int			ft_exit(t_shell *shell, char *argv[]);
 int			ft_export(t_shell *shell, char **argv);
 int			ft_cd(t_shell *shell, char **argv);
-
-void		export_perror_identifier(t_shell *shell, char *argv);
 
 int			export_print_all(t_shell *shell);
 

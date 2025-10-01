@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 03:37:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 21:16:20 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,81 @@
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
+// OLD refactor of unset -> re-implemented again
+static int	is_valid_identifier(const char *s)
+{
+	int	i;
+
+	if (!s || !(ft_isalpha(s[0]) || s[0] == '_'))
+		return (0);
+	i = 1;
+	while (s[i])
+	{
+		if (!(ft_isalnum(s[i]) || s[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static void	unset_error_msg(char *arg)
+{
+	ft_putstr_fd("minishell: unset: '", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+}
+
+int	ft_unset(t_shell *shell, char *argv[])
+{
+	int		i;
+	int		error;
+
+	if (!argv || !argv[1])
+		return (set_last_status(shell, 0), 0);
+	i = 1;
+	error = 0;
+	while (argv[i])
+	{
+		if (!is_valid_identifier(argv[i]))
+		{
+			unset_error_msg(argv[i]);
+			error = 1;
+		}
+		else
+			env_remove(&shell->env_list, argv[i], ft_strlen(argv[i]));
+		i++;
+	}
+	set_last_status(shell, error);
+	return (error);
+}
+
+/* TEST for last_status
+export MYVAR=42
+unset MYVAR
+
+export A=1 B=2
+unset A B
+
+export GOOD=ok
+unset GOOD 2BAD
+
+unset
+
+unset 1 2 3
+
+unset ""
+
+unset -f MYVAR
+
+unset DOES_NOT_EXIST
+
+unset 1INVALID
+
+unset BAD-NAME
+unset "BAD NAME"
+
+unset PATH
+*/
 // Find env node by key
 /*
 static int	find_env_node(t_env_list *env_list, const char *key,
@@ -43,11 +118,11 @@ static int	find_env_node(t_env_list *env_list, const char *key,
 	return (0);
 }
 */
-
 /*
 	unset: implements the 'unset' built-in.
 	argv[0] = "unset", argv[1..n] = var names to unset
 	Returns 1 if any variable was removed, 0 otherwise.	*/
+/*
 int	ft_unset(t_shell *shell, char *argv[])
 {
 	int		i;
@@ -65,7 +140,7 @@ int	ft_unset(t_shell *shell, char *argv[])
 	}
 	return (0);
 }
-
+*/
 /*
 int	unset(char *argv[], char *envp[])
 {

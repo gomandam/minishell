@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 01:33:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/26 14:18:39 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 22:24:06 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	clear_repl(t_shell *shell)
 	free_env_list(&shell->env_list);
 	rl_clear_history();
 	if (shell->interactive)
-		write(STDOUT_FILENO, "exit\n", 5);
+		write(STDERR_FILENO, "exit\n", 5);
 }
 
 void	set_last_status(t_shell *shell, long long status)

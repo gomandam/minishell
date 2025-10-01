@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 14:31:44 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 00:59:48 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ int	run_builtin(t_shell *shell, t_ast **ast, pid_t *pid, t_builtin type)
 		return (1);
 	// TODO: bultins must write to fds[1]
 	if (type == B_PWD)
-		status = ft_pwd();
+		status = ft_pwd(shell);
 	else if (type == B_ENV)
-		status = ft_env(&shell->env_list);
+		status = ft_env(shell);
 	else if (type == B_UNSET)
 		status = ft_unset(shell, (*ast)->u_data.cmd.u_data.argv);
 	else if (type == B_ECHO)
-		status = ft_echo(&(*ast)->u_data.cmd);
+		status = ft_echo(shell, &(*ast)->u_data.cmd);
 	else if (type == B_EXIT)
 		status = ft_exit(shell, (*ast)->u_data.cmd.u_data.argv);
 	else if (type == B_EXPORT)

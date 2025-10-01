@@ -6,20 +6,12 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/24 02:20:57 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 21:32:31 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
-
-void	export_perror_identifier(t_shell *shell, char *argv)
-{
-	ft_putstr_fd("minishell: export: '", 2);
-	ft_putstr_fd(argv, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-	set_last_status(shell, 1);
-}
 
 static int	cmp_exportkey(const char *s1, const char *s2, size_t eq_s1)
 {

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/27 20:49:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 13:41:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	execute_seq_cmd(t_shell *shell, t_ast **cmd, int *in_fd, int *out_fd)
 	if (ft_dup2(in_fd, STDIN_FILENO) == 0)
 	{
 		if (ft_dup2(out_fd, STDOUT_FILENO) == 0)
-		{
-			run_builtin_external(shell, cmd, NULL);
-		}
+			run_cmd(shell, cmd, NULL);
 		else
 			perror_syscall(shell, "minishell: dup2");
 	}

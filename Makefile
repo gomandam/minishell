@@ -23,6 +23,7 @@ SOURCES = \
 	$(SRC_DIR)/signals.c \
 	$(SRC_DIR)/errors.c \
 	$(SRC_DIR)/errors2.c \
+	$(SRC_DIR)/errors3.c \
 	$(SRC_DIR)/lexer/free.c \
 	$(SRC_DIR)/lexer/general.c \
 	$(SRC_DIR)/lexer/handlers.c \
@@ -53,6 +54,7 @@ SOURCES = \
 	$(SRC_DIR)/execute/cmd_path.c \
 	$(SRC_DIR)/execute/execute.c \
 	$(SRC_DIR)/execute/pipe_exec.c \
+	$(SRC_DIR)/execute/redirections.c \
 	$(SRC_DIR)/execute/utils_exec.c \
 	$(SRC_DIR)/builtins/pwd.c \
 	$(SRC_DIR)/builtins/env.c \

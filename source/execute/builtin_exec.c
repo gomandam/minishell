@@ -6,93 +6,59 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/25 23:17:12 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 14:31:44 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../libft/libft.h"
 
-// checks if 'built-in' with "if" conditional statments, or control flow
-// returns 1 if argv[0] matches a builtin, else 0.
-int	is_builtin(char *cmd)
+t_builtin	get_builtin(char *cmd)
 {
 	if (!cmd)
-		return (0);
-	if (!ft_strcmp(cmd, "echo"))
-		return (1);
-	if (!ft_strcmp(cmd, "cd"))
-		return (1);
-	if (!ft_strcmp(cmd, "pwd"))
-		return (1);
-	if (!ft_strcmp(cmd, "export"))
-		return (1);
-	if (!ft_strcmp(cmd, "unset"))
-		return (1);
-	if (!ft_strcmp(cmd, "env"))
-		return (1);
-	if (!ft_strcmp(cmd, "exit"))
-		return (1);
-	return (0);
+		return (B_CMD);
+	if (ft_strcmp(cmd, "echo") == 0)
+		return (B_ECHO);
+	if (ft_strcmp(cmd, "cd") == 0)
+		return (B_CD);
+	if (ft_strcmp(cmd, "pwd") == 0)
+		return (B_PWD);
+	if (ft_strcmp(cmd, "export") == 0)
+		return (B_EXPORT);
+	if (ft_strcmp(cmd, "unset") == 0)
+		return (B_UNSET);
+	if (ft_strcmp(cmd, "env") == 0)
+		return (B_ENV);
+	if (ft_strcmp(cmd, "exit") == 0)
+		return (B_EXIT);
+	return (B_CMD);
 }
 
-//  executes if it is a built-in, assuming builtins are working
-// following: exit, cd, echo, env, export, unset, pwd
-// !TO DO: rename the built-ins ft_*() for proper naming functionality
-/*
- 	DELETE AFTER DEBUG!!
-
-int	run_builtin_external(t_shell *shell, t_cmd *cmd)
+int	run_builtin(t_shell *shell, t_ast **ast, pid_t *pid, t_builtin type)
 {
-	ft_putstr_fd("DEBUG: entered run_builtin_external(); at builtin_exec.c", 2);
-	(void)shell;
-	if (!cmd->u_data.argv || !cmd->u_data.argv[0])
+	int	status;
+	int	fds[2];
+
+	if (resolve_redirs(shell, &(*ast)->u_data.cmd.redir, fds) != 0)
 		return (1);
-
-	if (!ft_strcmp(cmd->u_data.argv[0], "echo"))
-		return (ft_echo(argv));		// char **argv
-	if (!ft_strcmp(cmd->u_data.argv[0], "cd"))
-		return (ft_cd(shell, argv));	// t_shell *shell, char **argv
-
-	if (!ft_strcmp(cmd->u_data.argv[0], "pwd"))
-		return (ft_pwd());		// void
-
-	if (!ft_strcmp(cmd->u_data.argv[0], "export"))
-		return (ft_export(shell, argv)); // ! TO DO: rebuild export builtin
-	if (!ft_strcmp(cmd->u_data.argv[0], "unset"))
-		return (ft_unset(shell, argv));	// check t_env_list
-	if (!ft_strcmp(cmd->u_data.argv[0], "env"))
-		return (ft_env(shell));		// check t_env_list *env_list
-	if (!ft_strcmp(cmd->u_data.argv[0]), "exit")
-		return (ftexit(shell, argv));
-
-	return (1);
-}
-*/
-// DEBUGGER: Temporary functions to check the access of builtins
-void	debug_builtin(const char *cmd)
-{
-	ft_putstr_fd("DEBUG: inside debug_builtin(); at builtin_exec.c\n", 2);
-
-	if (!cmd)
-	{
-		printf("No command given\n");
-		return ;
-	}
-	if (!ft_strcmp(cmd, "echo"))
-		printf("Temporary: execute builtin: echo\n");
-	else if (!ft_strcmp(cmd, "cd"))
-		printf("Temporary: execute builtin: cd\n");
-	else if (!ft_strcmp(cmd, "pwd"))
-		printf("Temporary: execute builtin: pwd\n");
-	else if (!ft_strcmp(cmd, "export"))
-		printf("Temporary: execute builtin: export\n");
-	else if (!ft_strcmp(cmd, "unset"))
-		printf("Temporary: execute builtin: unset\n");
-	else if (!ft_strcmp(cmd, "env"))
-		printf("Temporary: execute builtin: env\n");
-	else if (!ft_strcmp(cmd, "exit"))
-		printf("Temporary: execute builtin: exit\n");
+	// TODO: bultins must write to fds[1]
+	if (type == B_PWD)
+		status = ft_pwd();
+	else if (type == B_ENV)
+		status = ft_env(&shell->env_list);
+	else if (type == B_UNSET)
+		status = ft_unset(shell, (*ast)->u_data.cmd.u_data.argv);
+	else if (type == B_ECHO)
+		status = ft_echo(&(*ast)->u_data.cmd);
+	else if (type == B_EXIT)
+		status = ft_exit(shell, (*ast)->u_data.cmd.u_data.argv);
+	else if (type == B_EXPORT)
+		status = ft_export(shell, (*ast)->u_data.cmd.u_data.argv);
 	else
-		printf("Not a builtin: %s\n", cmd);
+		status = ft_cd(shell, (*ast)->u_data.cmd.u_data.argv);
+	if (pid != NULL)
+		*pid = 0;
+	close_no_std(&fds[0]);
+	close_no_std(&fds[1]);
+	return (status);
 }

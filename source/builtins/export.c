@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/29 19:05:58 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 21:16:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,17 @@ static int	is_key_valid(const char *s)
    Returns 0 success, 1 if any error. */
 int	ft_export(t_shell *shell, char **argv)
 {
-	int		any_err;
 	int		i;
 	char	*val;
 
 	if (!argv || !argv[1])
 		return (export_print_all(shell), 0);
 	i = 1;
-	any_err = 0;
+	set_last_status(shell, 0);
 	while (argv[i])
 	{
 		if (!is_key_valid(argv[i]))
-		{
 			export_perror_identifier(shell, argv[i]);
-			any_err = 1;
-		}
 		else
 		{
 			val = ft_strchr(argv[i], '=');
@@ -112,5 +108,5 @@ int	ft_export(t_shell *shell, char **argv)
 		}
 		i++;
 	}
-	return (any_err);
+	return (0);
 }

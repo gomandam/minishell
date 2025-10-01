@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 16:55:20 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/01 19:58:15 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ void		free_env_list(t_env_list *env_list);
 int			init_shell(t_shell *shell, char *envp[]);
 
 // builtins
-int			ft_pwd(void);
+int			ft_pwd(t_shell *shell);
 int			ft_env(t_shell *shell);
 int			ft_unset(t_shell *shell, char *argv[]);
 int			ft_echo(t_shell *shell, t_cmd *cmd);

@@ -6,11 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 03:30:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:40:42 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+pid_t	execute_seq_pipe(t_shell *shell, t_ast **op, int *in_fd, int *out_fd);
 
 void	execute_seq_child(t_shell *shell, t_ast **ast, int *in_fd, int *out_fd)
 {
@@ -39,8 +41,6 @@ void	execute_seq_child(t_shell *shell, t_ast **ast, int *in_fd, int *out_fd)
 	free_env_list(&shell->env_list);
 	exit(shell->last_status);
 }
-
-pid_t	execute_seq_pipe(t_shell *shell, t_ast **op, int *in_fd, int *out_fd);
 
 pid_t	execute_left_side(t_shell *shell, t_ast **op, int *in_fd)
 {

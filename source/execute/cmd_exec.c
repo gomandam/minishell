@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:35:40 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:36:51 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 #include <sys/wait.h>
 #include <fcntl.h>
 
@@ -27,10 +26,6 @@ static int	free_external(t_shell *shell, t_ast **ast, char *cmd_path)
 	return (1);
 }
 
-// TODO: last_status write
-// fork and execute external cmd, wait for completion. Returns exit status
-// 127 (manual) Utility to be executed was not found.
-// waitpid(pid, &status, 0); for single CMD, not pipe. Get exit code, no zombies
 int	run_external(t_shell *shell, t_ast **ast, pid_t *pid)
 {
 	char	*cmd_path;
@@ -58,9 +53,7 @@ int	run_external(t_shell *shell, t_ast **ast, pid_t *pid)
 	return (exit(shell->last_status), 1);
 }
 
-// Decide builtin or external, execute builtin directly, and
-// external is via fork/execve. Then, return cmd exit status
-// TO DO: review 'unset' but so far it is okay
+// Decide builtin or external, execute builtin directly
 int	run_cmd(t_shell *shell, t_ast **ast, pid_t *pid)
 {
 	t_cmd		*cmd;
@@ -78,7 +71,6 @@ int	run_cmd(t_shell *shell, t_ast **ast, pid_t *pid)
 	return (run_external(shell, ast, pid));
 }
 
-// TODO: open and read redirections
 int	execute_ast_cmd(t_shell *shell, t_ast **cmd)
 {
 	pid_t	pid;

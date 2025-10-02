@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/29 18:55:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:08:40 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int	ft_cd(t_shell *shell, char **argv)
 		free(old_pwd);
 		free(target_dir);
 		set_last_status(shell, 1);
-		return (1);
+		return (0);
 	}
 	free(target_dir);
 	if (old_pwd)

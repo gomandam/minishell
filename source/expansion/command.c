@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/16 16:52:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 19:37:46 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 02:34:12 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,14 @@ int	expand_subsh(t_shell *shell, t_subsh *subsh)
 {
 	if (expand_redirs(shell, &subsh->redir) == 1)
 		return (1);
+	return (0);
+}
+
+int	expand_child(t_shell *shell, t_ast *ast)
+{
+	if (ast->type == AST_CMD)
+		return (expand_cmd(shell, &ast->u_data.cmd));
+	else if (ast->type == AST_SUBSH)
+		return (expand_subsh(shell, &ast->u_data.subsh));
 	return (0);
 }

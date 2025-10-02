@@ -49,12 +49,14 @@ SOURCES = \
 	$(SRC_DIR)/expansion/structures.c \
 	$(SRC_DIR)/expansion/wildcards.c \
 	$(SRC_DIR)/expansion/wildcards2.c \
+	$(SRC_DIR)/execute/and_or_exec.c \
 	$(SRC_DIR)/execute/builtin_exec.c \
 	$(SRC_DIR)/execute/cmd_exec.c \
 	$(SRC_DIR)/execute/cmd_path.c \
 	$(SRC_DIR)/execute/execute.c \
 	$(SRC_DIR)/execute/pipe_exec.c \
 	$(SRC_DIR)/execute/redirections.c \
+	$(SRC_DIR)/execute/subsh_exec.c \
 	$(SRC_DIR)/execute/utils_exec.c \
 	$(SRC_DIR)/builtins/pwd.c \
 	$(SRC_DIR)/builtins/env.c \

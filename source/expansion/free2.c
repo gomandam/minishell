@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 18:36:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 13:32:08 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 03:05:54 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	free_exp_ast(t_ast **ast)
 	}
 	else if ((*ast)->type == AST_SUBSH)
 	{
-		free_exp_ast(&(*ast)->u_data.subsh.child);
+		free_parse_ast(&(*ast)->u_data.subsh.child);
 		free_exp_redirs(&(*ast)->u_data.subsh.redir);
 	}
 	else if ((*ast)->type == AST_CMD)

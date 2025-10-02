@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 19:27:19 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 19:40:19 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,8 @@ int	ft_exit(t_shell *shell, t_ast	**ast)
 	else if ((*ast)->u_data.cmd.u_data.argv[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		shell->last_status = 1;
-		return (1);
+		set_last_status(shell, 1);
+		return (0);
 	}
 	else
 		status = (uint8_t)exit_to_ll(shell, ast,

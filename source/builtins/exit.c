@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 13:04:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 19:40:19 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,19 @@ static int	is_numeric(const char *str)
 	int	i;
 
 	i = 0;
-	if (!str || !str[0])
+	if (!str || !str[i])
 		return (0);
-	if (str[0] == '-' || str[0] == '+')
+	while (str[i] && ft_isspace(str[i]))
 		i++;
-	while (str[i])
-	{
-		if (str[i] < '0' || str[i] > '9')
-			return (0);
+	if (str[i] == '-' || str[i] == '+')
 		i++;
-	}
-	return (1);
+	if (!ft_isdigit(str[i]))
+		return (0);
+	while (str[i] && ft_isdigit(str[i]))
+		i++;
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	return (str[i] == '\0');
 }
 
 static int	exit_perror_numeric(t_shell *shell, t_ast **ast, char *argv)

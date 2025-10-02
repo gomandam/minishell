@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/02 19:39:59 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 20:59:48 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@
 
 # include <limits.h> // LLONG_MAX, LLONG_MIN
 
-# define MINI_PROMPT "MINI> $ " // TODO
-# define HEREDOC_PROMPT "> " // TODO
-# define HEREDOC_PROMPT_LEN 2 // TODO
+# ifndef MINI_PROMPT
+#  define MINI_PROMPT "🅼🅸🅽🅸🆈🅴🆂🅺🅰 \001\033[31m\002>\001\033[0m\002 "
+# endif
+# define HEREDOC_PROMPT "\033[31m>\033[0m "
+# define HEREDOC_PROMPT_LEN 12
 
 extern volatile sig_atomic_t	g_signum;
 

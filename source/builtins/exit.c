@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 16:10:04 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:29:22 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	free_shell(t_shell *shell)
 		ft_freestr(&shell->line);
 	rl_clear_history();
 	if (shell->ast)
-		free_exp_ast(&shell->ast); // TODO: free current as exp, rest as parse
+		free_exp_ast(&shell->ast);
 	free_env_list(&shell->env_list);
 }
 

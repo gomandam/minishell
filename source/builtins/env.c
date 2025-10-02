@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
+/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:25 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 21:36:46 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:16:00 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	env_set_status(t_shell *shell, int error)
 		set_last_status(shell, 0);
 }
 
-int	ft_env(t_shell *shell)
+int	ft_env(t_shell *shell, int out_fd)
 {
 	t_env	*current;
 	int		error;
@@ -52,7 +52,7 @@ int	ft_env(t_shell *shell)
 	while (current)
 	{
 		if (current->full && ft_strchr(current->full, '='))
-			if (ft_putendl_check(current->full, STDOUT_FILENO))
+			if (ft_putendl_check(current->full, out_fd))
 				error = 1;
 		current = current->next;
 	}

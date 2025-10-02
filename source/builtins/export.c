@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 21:32:57 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:23:59 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ static int	is_key_valid(const char *s)
 /* Export builtin entry: loop argv, call export_one.
    If no args, print all env vars using export_print_all.
    Returns 0 success, 1 if any error. */
-int	ft_export(t_shell *shell, char **argv)
+int	ft_export(t_shell *shell, char **argv, int out_fd)
 {
 	int		i;
 	char	*val;
 
 	if (!argv || !argv[1])
-		return (export_print_all(shell), 0);
+		return (export_print_all(shell, out_fd));
 	i = 1;
 	set_last_status(shell, 0);
 	while (argv[i])

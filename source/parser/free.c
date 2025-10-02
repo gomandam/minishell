@@ -6,18 +6,19 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/03 14:22:22 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/27 10:44:43 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 12:12:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_redir(t_redir **redir)
+void	free_redir(t_redir **redir, int close_fd)
 {
 	if (!redir || !*redir)
 		return ;
 	free_tok(&(*redir)->u_data.word);
-	ft_close(&(*redir)->fd);
+	if (close_fd)
+		ft_close(&(*redir)->fd);
 	free(*redir);
 	*redir = NULL;
 }
@@ -31,7 +32,7 @@ void	free_redirslst(t_redir **head)
 	while (*head != NULL)
 	{
 		next = (*head)->next;
-		free_redir(head);
+		free_redir(head, 1);
 		*head = next;
 	}
 	*head = NULL;

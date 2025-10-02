@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 21:22:50 by migugar2          #+#    #+#             */
-/*   Updated: 2025/09/12 21:32:32 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/01 12:13:34 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	collect_redir(t_shell *shell, t_tok **cur, t_redirs *list)
 	if (redir->type == R_HEREDOC)
 	{
 		if (heredoc_redir(shell, redir) == 1)
-			return (free_redir(&redir), 1);
+			return (free_redir(&redir, 1), 1);
 	}
 	redir_push(list, redir);
 	return (0);
@@ -46,7 +46,7 @@ static void	rm_unused_in(t_redirs *redirs, t_redir *beflastin, t_redir **lastin)
 		beflastin->next = (*lastin)->next;
 	else
 		redirs->head = (*lastin)->next;
-	free_redir(lastin);
+	free_redir(lastin, 1);
 }
 
 int	collect_redirs(t_shell *shell, t_tok **cur, t_redirs *redirs)

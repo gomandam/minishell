@@ -6,7 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/10/02 13:57:52 by gomandam         ###   ########.fr       */
+=======
+/*   Updated: 2025/10/02 01:23:56 by migugar2         ###   ########.fr       */
+>>>>>>> origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +59,7 @@ int			perror_cmdnotfound(t_shell *shell, const char *cmd);
 int			perror_usage(t_shell *shell);
 int			perror_syscall(t_shell *shell, char *msg);
 int			perror_execve(t_shell *shell, const char *cmd);
+int			perror_open(t_shell *shell, const char *file);
 
 int			pwarn_heredoceof(const char *delim);
 
@@ -115,7 +120,7 @@ t_ast		*new_op_node(t_asttype type, t_ast *left, t_ast *right);
 int			parse_pipe(t_shell *shell, t_tok **cur, t_ast **out);
 int			parse_and_or(t_shell *shell, t_tok **cur, t_ast **out);
 
-void		free_redir(t_redir **redir);
+void		free_redir(t_redir **redir, int close_fd);
 void		free_redirslst(t_redir **head);
 void		free_redirs(t_redirs *list);
 void		free_parse_ast_cmd(t_ast **ast);
@@ -151,7 +156,7 @@ void		free_builders(t_builder **builders);
 void		free_argv(t_argv *argv);
 void		free_t_expand(t_expand *build);
 
-void		free_exp_redir(t_redir **redir);
+void		free_exp_redir(t_redir **redir, int close_fd);
 void		free_exp_redirslst(t_redir **head);
 void		free_exp_redirs(t_redirs *redirs);
 void		free_exp_ast_cmd(t_ast **ast);
@@ -193,27 +198,34 @@ void		free_env_list(t_env_list *env_list);
 int			init_shell(t_shell *shell, char *envp[]);
 
 // builtins
-int			ft_pwd(t_shell *shell);
-int			ft_env(t_shell *shell);
-int			ft_unset(t_shell *shell, char *argv[]);
-int			ft_echo(t_shell *shell, t_cmd *cmd);
-int			ft_exit(t_shell *shell, char *argv[]);
-int			ft_export(t_shell *shell, char **argv);
-int			ft_cd(t_shell *shell, char **argv);
+int			export_print_all(t_shell *shell, int out_fd);
 
-int			export_print_all(t_shell *shell);
+int			ft_export(t_shell *shell, char **argv, int out_fd);
+int			ft_pwd(t_shell *shell, int out_fd);
+int			ft_env(t_shell *shell, int out_fd);
+int			ft_echo(t_shell *shell, t_cmd *cmd, int out_fd);
+int			ft_unset(t_shell *shell, char *argv[]);
+int			ft_cd(t_shell *shell, char **argv);
+int			ft_exit(t_shell *shell, t_ast	**ast);
 
 // execution
 void		seq_close(t_ast *ast, int in_fd, int out_fd);
 int			ft_dup2(int *oldfd, int newfd);
-
 void		wait_last_pid(t_shell *shell, pid_t pid);
-int			is_builtin(char *cmd);
-int			run_builtin_external(t_shell *shell, t_ast **ast, pid_t *pid);
+void		close_no_std(int *fd);
+
+int			resolve_redirs(t_shell *shell, t_redirs *redirs, int fds[2]);
+int			external_redirs(t_shell *shell, t_redirs *redirs);
+
+t_builtin	get_builtin(char *cmd);
+
+int			run_builtin(t_shell *sh, t_ast **ast, pid_t *pid, t_builtin type);
+
+int			run_external(t_shell *shell, t_ast **ast, pid_t *pid);
+
+int			run_cmd(t_shell *shell, t_ast **ast, pid_t *pid);
 int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
 int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
-
-void		debug_builtin(const char *cmd);
 
 int			execute_ast_cmd(t_shell *shell, t_ast **cmd);
 int			execute_ast_pipe(t_shell *shell, t_ast **node);

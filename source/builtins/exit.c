@@ -6,11 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/10/02 16:29:22 by gomandam         ###   ########.fr       */
-=======
-/*   Updated: 2025/10/02 01:11:14 by migugar2         ###   ########.fr       */
->>>>>>> origin/main
+/*   Updated: 2025/10/02 19:27:19 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +22,7 @@ static void	free_exit(t_shell *shell, t_ast **ast)
 	rl_clear_history();
 	free_exp_ast(ast);
 	if (shell->ast)
-<<<<<<< HEAD
-		free_exp_ast(&shell->ast);
-=======
 		free_parse_ast(&shell->ast); // TODO: check if this simple implementation is correct
->>>>>>> origin/main
 	free_env_list(&shell->env_list);
 }
 

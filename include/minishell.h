@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/02 20:59:48 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 21:47:00 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,7 +198,6 @@ int			init_shell(t_shell *shell, char *envp[]);
 
 // builtins
 int			export_print_all(t_shell *shell, int out_fd);
-
 int			ft_export(t_shell *shell, char **argv, int out_fd);
 int			ft_pwd(t_shell *shell, int out_fd);
 int			ft_env(t_shell *shell, int out_fd);
@@ -250,9 +249,5 @@ int			init_shell(t_shell *shell, char *envp[]);
 void		set_last_status(t_shell *shell, long long status);
 
 void		repl(t_shell *shell);
-
-// !debug: delete file and functions
-int			debug_tokenizer(t_shell *shell);
-int			debug_parser(t_shell *shell);
 
 #endif

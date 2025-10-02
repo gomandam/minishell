@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/02 20:06:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 20:59:48 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,9 @@
 
 # include <limits.h> // LLONG_MAX, LLONG_MIN
 
-# define COLOR_RED "\033[31m"
-# define COLOR_RESET "\033[0m"
-
-# define MINI_PROMPT "\033[31m[\033[0m🅼🅸🅽🅸🆈🅴🆂🅺🅰 \033[31m]>\033[0m "
+# ifndef MINI_PROMPT
+#  define MINI_PROMPT "🅼🅸🅽🅸🆈🅴🆂🅺🅰 \001\033[31m\002>\001\033[0m\002 "
+# endif
 # define HEREDOC_PROMPT "\033[31m>\033[0m "
 # define HEREDOC_PROMPT_LEN 12
 

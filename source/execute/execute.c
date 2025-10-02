@@ -6,9 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 15:18:05 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:55:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minishell.h"
 
 /*
  * Recursive function that executes the AST node
@@ -18,15 +20,10 @@
  * - AST_AND_IF:  Handles '&&' logic (executes right only if left succeeds)
  * - AST_OR_IF:   Handles '||' logic (executes right only if left fails)
  * - AST_SUBSH:   Handles a subshell (parentheses)
- 	* Returns: exit status of the executed subtree·		*/
-
-#include "minishell.h"
-
+ * @return status of the executed subtree
+ */
 int	execute_ast(t_shell *shell, t_ast **node)
 {
-	/* int	storage;
-
-	storage = 0; */
 	if (!node)
 		return (0);
 	if ((*node)->type == AST_CMD)
@@ -34,35 +31,10 @@ int	execute_ast(t_shell *shell, t_ast **node)
 	else if ((*node)->type == AST_PIPE)
 		return (execute_ast_pipe(shell, node));
 	else if ((*node)->type == AST_AND_IF)
-	{
-		printf("implement and logic.");
-		free_parse_ast(node);
-		return (0);
-		/* storage = execute_ast(shell, &(*node)->u_data.op.left);
-		if (storage == 0)
-			return (execute_ast(shell, &(*node)->u_data.op.right));
-		return (storage); */
-	}
+		return (execute_ast_and(shell, node));
 	else if ((*node)->type == AST_OR_IF)
-	{
-		printf("implement or logic.");
-		free_parse_ast(node);
-		return (0);
-		/* storage = execute_ast(shell, &(*node)->u_data.op.left);
-		if (storage != 0)
-			return (execute_ast(shell, &(*node)->u_data.op.right));
-		return (storage); */
-	}
+		return (execute_ast_or(shell, node));
 	else if ((*node)->type == AST_SUBSH)
-	{
-		printf("implement subshell logic.");
-		free_parse_ast(node);
-		return (0);
-		// TO DO: implement subshell logic
-		// if (expand_subsh(shell, &node->u_data.subsh) != 0)
-		//	return (1);
-		// subshell execution (fork, exec in child process AST, handle redirs)
-	}
-	ft_putstr_fd("minishell: internal error: unexpected AST node type \n", 2);
+		return (execute_ast_subsh(shell, node));
 	return (1);
 }

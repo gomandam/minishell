@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 01:33:59 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 22:24:06 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:02:16 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ int	repl_evaluate(t_shell *shell)
 		return (shell->finished);
 	if (execute_ast(shell, &shell->ast) == 1)
 		return (shell->finished);
-	/* if (debug_parser(shell) == 1) // TODO: tmp
-		return (1); */
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 22:20:41 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 13:57:52 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int			parse_and_or(t_shell *shell, t_tok **cur, t_ast **out);
 void		free_redir(t_redir **redir);
 void		free_redirslst(t_redir **head);
 void		free_redirs(t_redirs *list);
-void		free_parse_ast_cmd (t_ast **ast);
+void		free_parse_ast_cmd(t_ast **ast);
 void		free_parse_ast(t_ast **ast);
 
 int			parse_ast(t_shell *shell);

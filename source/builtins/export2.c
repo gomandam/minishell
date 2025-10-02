@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/01 21:32:31 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/02 01:22:53 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	minsorted_key_push(t_list **lst, char *str)
 	return (0);
 }
 
-int	export_print_all(t_shell *shell)
+int	export_print_all(t_shell *shell, int out_fd)
 {
 	t_env	*cur;
 	t_list	*lst;
@@ -81,8 +81,8 @@ int	export_print_all(t_shell *shell)
 	cur_lst = lst;
 	while (cur_lst)
 	{
-		write(1, cur_lst->content, ft_strlen(cur_lst->content));
-		write(1, "\n", 1);
+		write(out_fd, cur_lst->content, ft_strlen(cur_lst->content));
+		write(out_fd, "\n", 1);
 		cur_lst = cur_lst->next;
 	}
 	ft_lstclear(&lst, NULL);

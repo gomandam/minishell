@@ -6,34 +6,35 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:37:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 03:30:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	execute_seq_cmd(t_shell *shell, t_ast **cmd, int *in_fd, int *out_fd)
+void	execute_seq_child(t_shell *shell, t_ast **ast, int *in_fd, int *out_fd)
 {
 	seq_close(shell->ast, *in_fd, *out_fd);
 	if (ft_dup2(in_fd, STDIN_FILENO) == 0)
 	{
 		if (ft_dup2(out_fd, STDOUT_FILENO) == 0)
-			run_cmd(shell, cmd, NULL);
+		{
+			if ((*ast)->type == AST_CMD)
+				run_cmd(shell, ast, NULL);
+			else if ((*ast)->type == AST_SUBSH)
+				run_subsh(shell, ast, 1);
+		}
 		else
 			perror_syscall(shell, "minishell: dup2");
 	}
 	else
 		perror_syscall(shell, "minishell: dup2");
-	if (*in_fd != STDIN_FILENO)
-		ft_close(in_fd);
-	if (*out_fd != STDOUT_FILENO)
-		ft_close(out_fd);
+	close_no_std(in_fd);
+	close_no_std(out_fd);
 	if (shell->line)
-	{
-		ft_freestr(&shell->line);
 		rl_clear_history();
-	}
-	free_exp_ast(cmd);
+	ft_freestr(&shell->line);
+	free_exp_ast(ast);
 	free_parse_ast(&shell->ast);
 	free_env_list(&shell->env_list);
 	exit(shell->last_status);
@@ -48,9 +49,10 @@ pid_t	execute_left_side(t_shell *shell, t_ast **op, int *in_fd)
 	if (pipe((*op)->u_data.op.pipe_fd) == -1)
 		return (perror_syscall(shell, "minishell: pipe"),
 			free_parse_ast(op), -1);
-	if ((*op)->u_data.op.left->type == AST_CMD)
+	if ((*op)->u_data.op.left->type == AST_CMD
+		|| (*op)->u_data.op.left->type == AST_SUBSH)
 	{
-		if (expand_cmd(shell, &(*op)->u_data.op.left->u_data.cmd) == 1)
+		if (expand_child(shell, (*op)->u_data.op.left) == 1)
 			return (free_parse_ast(&(*op)->u_data.op.left), -1);
 		pid = fork();
 		if (pid == -1)
@@ -58,7 +60,7 @@ pid_t	execute_left_side(t_shell *shell, t_ast **op, int *in_fd)
 				free_exp_ast(&(*op)->u_data.op.left), -1);
 		else if (pid > 0)
 			return (free_exp_ast(&(*op)->u_data.op.left), pid);
-		execute_seq_cmd(shell, &(*op)->u_data.op.left, in_fd,
+		execute_seq_child(shell, &(*op)->u_data.op.left, in_fd,
 			&(*op)->u_data.op.pipe_fd[1]);
 	}
 	pid = execute_seq_pipe(shell, &(*op)->u_data.op.left, in_fd,
@@ -70,7 +72,7 @@ pid_t	execute_right_side(t_shell *shell, t_ast **op, int *out_fd)
 {
 	pid_t	pid;
 
-	if (expand_cmd(shell, &(*op)->u_data.op.right->u_data.cmd) == 1)
+	if (expand_child(shell, (*op)->u_data.op.right) == 1)
 		return (free_parse_ast(&(*op)->u_data.op.right), -1);
 	pid = fork();
 	if (pid == -1)
@@ -78,9 +80,8 @@ pid_t	execute_right_side(t_shell *shell, t_ast **op, int *out_fd)
 			free_exp_ast(&(*op)->u_data.op.right), -1);
 	else if (pid > 0)
 		return (free_exp_ast(&(*op)->u_data.op.right), pid);
-	execute_seq_cmd(shell, &(*op)->u_data.op.right,
+	execute_seq_child(shell, &(*op)->u_data.op.right,
 		&(*op)->u_data.op.pipe_fd[0], out_fd);
-	exit(shell->last_status);
 	return (-1);
 }
 

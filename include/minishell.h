@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/20 00:02:21 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/02 01:23:56 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 03:18:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ char		*simple_expansion(t_tok *word);
 
 int			expand_cmd(t_shell *shell, t_cmd *cmd);
 int			expand_subsh(t_shell *shell, t_subsh *subsh);
+int			expand_child(t_shell *shell, t_ast *ast);
 
 int			build_literals(t_shell *shell, t_builder *builder, t_argv *argv);
 int			expansion(t_shell *shell, t_tok *tok, t_argv *argv, int is_assign);
@@ -223,8 +224,13 @@ int			run_cmd(t_shell *shell, t_ast **ast, pid_t *pid);
 int			resolve_cmd_path(t_shell *shell, char **dst, const char *cmd);
 int			get_cmd_path(t_shell *s, char **dst, const char *cmd, char **paths);
 
+void		run_subsh(t_shell *shell, t_ast **subsh, int pipe_seq);
+
+int			execute_ast_and(t_shell *shell, t_ast **and);
+int			execute_ast_or(t_shell *shell, t_ast **or);
+int			execute_ast_pipe(t_shell *shell, t_ast **pipe);
+int			execute_ast_subsh(t_shell *shell, t_ast **subsh);
 int			execute_ast_cmd(t_shell *shell, t_ast **cmd);
-int			execute_ast_pipe(t_shell *shell, t_ast **node);
 int			execute_ast(t_shell *shell, t_ast **node);
 
 // signals

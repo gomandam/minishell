@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:31:50 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 13:27:14 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 04:50:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	seq_close(t_ast *ast, int in_fd, int out_fd)
 {
-	if (ast == NULL || ast->type == AST_CMD || ast->type == AST_SUBSH)
+	if (ast == NULL || ast->type == AST_CMD)
 		return ;
 	if (ast->type == AST_PIPE)
 	{
@@ -24,9 +24,16 @@ void	seq_close(t_ast *ast, int in_fd, int out_fd)
 		if (ast->u_data.op.pipe_fd[1] != in_fd
 			&& ast->u_data.op.pipe_fd[1] != out_fd)
 			ft_close(&ast->u_data.op.pipe_fd[1]);
+		seq_close(ast->u_data.op.left, in_fd, out_fd);
+		seq_close(ast->u_data.op.right, in_fd, out_fd);
 	}
-	seq_close(ast->u_data.op.left, in_fd, out_fd);
-	seq_close(ast->u_data.op.right, in_fd, out_fd);
+	else if (ast->type == AST_AND_IF || ast->type == AST_OR_IF)
+	{
+		seq_close(ast->u_data.op.left, in_fd, out_fd);
+		seq_close(ast->u_data.op.right, in_fd, out_fd);
+	}
+	else if (ast->type == AST_SUBSH)
+		seq_close(ast->u_data.subsh.child, in_fd, out_fd);
 }
 
 void	wait_last_pid(t_shell *shell, pid_t pid)

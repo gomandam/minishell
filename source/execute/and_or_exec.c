@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   and_exec.c                                         :+:      :+:    :+:   */
+/*   and_or_exec.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 01:51:38 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/02 02:53:05 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 12:52:53 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,24 @@
 
 int	execute_ast_and(t_shell *shell, t_ast **and)
 {
-	(void)shell;
-	printf("implement and logic.\n");
-	free_parse_ast(and);
-	return (0);
-	/* storage = execute_ast(shell, &(*node)->u_data.op.left);
-	if (storage == 0)
-		return (execute_ast(shell, &(*node)->u_data.op.right));
-	return (storage); */
+	if (execute_ast(shell, &(*and)->u_data.op.left) == 1)
+		return (free_parse_ast(and), 1);
+	if (shell->last_status == 0)
+	{
+		if (execute_ast(shell, &(*and)->u_data.op.right) == 1)
+			return (free_parse_ast(and), 1);
+	}
+	return (free_parse_ast(and), 0);
+}
+
+int	execute_ast_or(t_shell *shell, t_ast **or)
+{
+	if (execute_ast(shell, &(*or)->u_data.op.left) == 1)
+		return (free_parse_ast(or), 1);
+	if (shell->last_status != 0)
+	{
+		if (execute_ast(shell, &(*or)->u_data.op.right) == 1)
+			return (free_parse_ast(or), 1);
+	}
+	return (free_parse_ast(or), 0);
 }

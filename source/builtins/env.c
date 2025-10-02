@@ -6,15 +6,12 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:25 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:16:00 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:22:17 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Changed to struct state t_shell *shell -> access set_last_status()
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
-// ft_putendl_fd() reference
 static int	ft_putendl_check(char *s, int fd)
 {
 	int	len;
@@ -59,27 +56,3 @@ int	ft_env(t_shell *shell, int out_fd)
 	env_set_status(shell, error);
 	return (error);
 }
-
-/*
-	env - lists environmental variables outputs KEY=VALUE
-	stores info used by processes (e.g. PATH, HOME, USER)
-	each string has "=" so validate on this
-	read (RTFM!) -> man 3 getenv
-*/
-/* TESTS
-env -i
-
-env foo bar
-
-env | head -n 3    or | tail -n 3
-
-env | cat
-
-env | (exit 1)
-
-env > /dev/null
-env > test.txt
-env > /dev/full
-env > .
-
-*/

@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:27:14 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:33:45 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 t_builtin	get_builtin(char *cmd)
 {

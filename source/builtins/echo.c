@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:14 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:20:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:22:58 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 static int	echo_flag(char *argv)
 {
@@ -83,15 +82,3 @@ int	ft_echo(t_shell *shell, t_cmd *cmd, int out_fd)
 	echo_last_status(shell, error);
 	return (error);
 }
-// Same as Nested IF:
-// 	if (!n_flag && !error && write(STDOUT_FILENO, "\n", 1) == -1)
-// Test: echo -n foo > /dev/full   **output:  write error, space on device**
-/* test: tokens, output redir (STDOUT)
-echo foo bar			foo bar		0
-echo -n hello			hello		0
-echo				(newline)	0
-echo -nnnn test			test		0
-echo -z test			-z test		0
-echo "fail" > /dev/full		(error)		1
-echo "fail" > unwritable	(error)		1
-*/

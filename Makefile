@@ -65,8 +65,7 @@ SOURCES = \
 	$(SRC_DIR)/builtins/exit.c \
 	$(SRC_DIR)/builtins/export.c \
 	$(SRC_DIR)/builtins/export2.c \
-	$(SRC_DIR)/builtins/cd.c \
-	$(SRC_DIR)/debug.c
+	$(SRC_DIR)/builtins/cd.c
 BONUS_SOURCES = $(SOURCES)
 
 OBJ = $(SOURCES:%.c=%.o)

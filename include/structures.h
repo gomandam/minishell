@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/26 02:42:29 by migugar2          #+#    #+#             */
-/*   Updated: 2025/10/01 13:23:16 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 21:49:42 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -344,8 +344,6 @@ typedef enum e_builtin
 	B_EXIT,
 	B_CMD,
 }	t_builtin;
-
-// * main
 
 /*
  * environment variable node,

@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:22:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:26:31 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 static int	cmp_exportkey(const char *s1, const char *s2, size_t eq_s1)
 {

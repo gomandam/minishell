@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:55:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:38:35 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
  * - AST_AND_IF:  Handles '&&' logic (executes right only if left succeeds)
  * - AST_OR_IF:   Handles '||' logic (executes right only if left fails)
  * - AST_SUBSH:   Handles a subshell (parentheses)
- * @return status of the executed subtree
- */
+ * @return status of the executed subtree */
 int	execute_ast(t_shell *shell, t_ast **node)
 {
 	if (!node)

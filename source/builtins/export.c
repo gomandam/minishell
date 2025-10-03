@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:04:11 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:23:59 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:26:04 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 static void	export_perror_identifier(t_shell *shell, char *argv)
 {
@@ -90,8 +89,7 @@ static int	is_key_valid(const char *s)
 }
 
 /* Export builtin entry: loop argv, call export_one.
-   If no args, print all env vars using export_print_all.
-   Returns 0 success, 1 if any error. */
+   If no args, print all env vars using export_print_all. */
 int	ft_export(t_shell *shell, char **argv, int out_fd)
 {
 	int		i;

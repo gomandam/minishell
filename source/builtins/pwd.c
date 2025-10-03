@@ -6,16 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:55 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 01:14:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:29:38 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
-
-// Hola Angel, I did the same as env because it is easier to understand.
-// We can just make it as one function, and declare it. But I was thinking,
-// just in case you want to modify it. It is easier this way, correct?
+#include "minishell.h"
 
 static int	ft_putendl_check(char *s, int fd)
 {

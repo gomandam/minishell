@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:44 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 19:40:19 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:23:32 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 static void	free_exit(t_shell *shell, t_ast **ast)
 {
@@ -22,12 +21,10 @@ static void	free_exit(t_shell *shell, t_ast **ast)
 	rl_clear_history();
 	free_exp_ast(ast);
 	if (shell->ast)
-		free_parse_ast(&shell->ast); // TODO: check if this simple implementation is correct
+		free_parse_ast(&shell->ast);
 	free_env_list(&shell->env_list);
 }
 
-/*	Check string = valid numeric argument for exit
-	Accepts optional + or - sign, then digits only	*/
 static int	is_numeric(const char *str)
 {
 	int	i;
@@ -90,13 +87,6 @@ static long long	exit_to_ll(t_shell *shell, t_ast **ast, char *str)
 	return (res * sign);
 }
 
-/*	print "exit" before executing exit
- 	handle: no args, 1 numeric, non-numeric & multiple
-	set status variable for multiple args (no exit)
-
-       	status = (unsigned char)status;
-		exit code valid range [0, 255] unsigned 8-bit
-*/
 int	ft_exit(t_shell *shell, t_ast	**ast)
 {
 	uint8_t	status;

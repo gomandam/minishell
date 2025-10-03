@@ -6,12 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 13:08:40 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:22:43 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-#include "../../libft/libft.h"
+#include "minishell.h"
 
 /* Get current working directory with PWD env_get_value()
    Returns malloc'd string. NULL when fail. */
@@ -54,8 +53,7 @@ static int	update_oldpwd_env(t_shell *shell, const char *old_dir)
 	return (0);
 }
 
-/* Updates PWD environment variable with current directory.
-   ensure_pwd_env() from init.c exactly. */
+/* Updates PWD environment variable with current directory. */
 static int	ensure_pwd_env(t_shell *shell)
 {
 	char	*cwd;
@@ -110,8 +108,7 @@ static char	*resolve_cd_target(t_shell *shell, char **argv)
 	return (ft_strdup(argv[1]));
 }
 
-/* Main ft_cd: change directory and update PWD/OLDPWD.
-    env functions: env_get_value, env_upsert */
+/* Change directory, update PWD/OLDPWD. */
 int	ft_cd(t_shell *shell, char **argv)
 {
 	char	*old_pwd;

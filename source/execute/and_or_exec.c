@@ -14,11 +14,12 @@
 
 int	execute_ast_and(t_shell *shell, t_ast **and)
 {
-	if (execute_ast(shell, &(*and)->u_data.op.left) == 1)
+	if (execute_ast(shell, &(*and)->u_data.op.left) == 1 && shell->finished)
 		return (free_parse_ast(and), 1);
 	if (shell->last_status == 0)
 	{
-		if (execute_ast(shell, &(*and)->u_data.op.right) == 1)
+		if (execute_ast(shell, &(*and)->u_data.op.right) == 1
+			&& shell->finished)
 			return (free_parse_ast(and), 1);
 	}
 	return (free_parse_ast(and), 0);
@@ -26,11 +27,11 @@ int	execute_ast_and(t_shell *shell, t_ast **and)
 
 int	execute_ast_or(t_shell *shell, t_ast **or)
 {
-	if (execute_ast(shell, &(*or)->u_data.op.left) == 1)
+	if (execute_ast(shell, &(*or)->u_data.op.left) == 1 && shell->finished)
 		return (free_parse_ast(or), 1);
 	if (shell->last_status != 0)
 	{
-		if (execute_ast(shell, &(*or)->u_data.op.right) == 1)
+		if (execute_ast(shell, &(*or)->u_data.op.right) == 1 && shell->finished)
 			return (free_parse_ast(or), 1);
 	}
 	return (free_parse_ast(or), 0);

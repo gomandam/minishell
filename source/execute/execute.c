@@ -6,62 +6,39 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/17 23:57:58 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/18 01:25:37 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
- * FUNCTION: execute_ast
- * 
+/* FUNCTION: execute_ast 
  * PURPOSE:
  *   Recursive dispatcher that executes AST nodes based on their type.
  *   Main entry point for executing parsed command structures.
- * 
  * PARAMETERS:
  *   @shell: Shell state containing environment and status
  *   @node:  Double pointer to AST node to execute (freed during execution)
- * 
- * RETURN:
- *   0 on success, 1 on critical failure (malloc/fork errors)
- * 
+ * RETURN: 0 on success, 1 on critical failure (malloc/fork errors)
  * BEHAVIOR:
  *   1. Checks node type using switch-like if-else chain
  *   2. Delegates to appropriate execution function
  *   3. Each delegated function handles its own memory cleanup
- * 
- * CALLED FROM:
- *   - repl_evaluate()           [source/repl.c] - initial call
- *   - execute_ast_and()         [and_or_exec.c] - recursive (left/right)
- *   - execute_ast_or()          [and_or_exec.c] - recursive (left/right)
- *   - run_subsh()               [subsh_exec.c]  - recursive (child)
- * 
- * CALLS TO:
- *   - execute_ast_cmd()         [cmd_exec.c]
- *   - execute_ast_pipe()        [pipe_exec.c]
- *   - execute_ast_and()         [and_or_exec.c]
- *   - execute_ast_or()          [and_or_exec.c]
- *   - execute_ast_subsh()       [subsh_exec.c]
- * 
  * SIDE EFFECTS:
  *   - Modifies shell->last_status based on command exit codes
  *   - Frees AST nodes progressively during execution
  *   - May create child processes (pipes, subshells, external commands)
- * 
  * ERROR HANDLING:
  *   Returns 1 if any delegated function fails critically
  *   Individual errors (cmd not found, etc.) return 0 but set last_status
- */
-/*
- * Recursive function that executes the AST node
- * Deals with the logic based on node type:
+ * NODE TYPE:
  * - AST_CMD:     Executes a command
  * - AST_PIPE:    Handles a pipeline (left | right)
  * - AST_AND_IF:  Handles '&&' logic (executes right only if left succeeds)
  * - AST_OR_IF:   Handles '||' logic (executes right only if left fails)
  * - AST_SUBSH:   Handles a subshell (parentheses)
  * @return status of the executed subtree */
+
 int	execute_ast(t_shell *shell, t_ast **node)
 {
 	if (!node)
@@ -78,17 +55,13 @@ int	execute_ast(t_shell *shell, t_ast **node)
 		return (execute_ast_subsh(shell, node));
 	return (1);
 }
-/*
- * ============================================================================
+/* ============================================================================
  * FILE: execute.c
  * ============================================================================
- *
  * PURPOSE:
  *   Main execution orchestrator for the minishell AST (Abstract Syntax Tree).
  *   Acts as the entry point and dispatcher for all execution operations.
- *
  * CONTROL FLOW TREE:
- *
  *   execute_ast (MAIN DISPATCHER)
  *        |
  *        +-- AST_CMD -----> execute_ast_cmd()     [cmd_exec.c]
@@ -122,17 +95,14 @@ int	execute_ast(t_shell *shell, t_ast **node)
  *   - Called by: repl_evaluate() [source/repl.c]
  *   - Calls to: All execution modules (cmd, pipe, and_or, subsh)
  *   - Memory: Frees AST nodes after execution via free_parse_ast()
- *
  * MODULE INTEGRATION:
  *   - Entry point for execution phase after parsing
  *   - Coordinates with expansion module for parameter/wildcard expansion
  *   - Interfaces with builtin and external command executors
  *   - Manages process creation and synchronization for pipes/subshells
- *
  * NOTES:
  *   - Recursive function: handles nested structures (and, or, pipes)
  *   - AST nodes are freed progressively during execution
  *   - Returns 1 on critical error (malloc, fork failures)
  *   - Returns 0 on successful execution (check shell->last_status for exit)
- * ============================================================================
- */
+ * ========================================================================== */

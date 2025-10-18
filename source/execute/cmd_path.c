@@ -3,15 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/09/26 04:03:27 by migugar2         ###   ########.fr       */
+/*   Created: 2025/10/18 00:46:43 by gomandam          #+#    #+#             */
+/*   Updated: 2025/10/18 00:48:02 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* ============================================================================
+ * FILE: cmd_path.c
+ * ============================================================================
+ * PURPOSE: Command path resolver - searches PATH for executables and handles
+ *          absolute/relative paths.
+ *
+ * CONTROL FLOW:
+ *   resolve_cmd_path
+ *     ├─> [if contains '/'] return as-is (absolute/relative)
+ *     └─> [else] get_cmd_path
+ *          └─> [for each PATH dir] join_path_cmd + access(F_OK)
+ *
+ * EXTERNAL USAGE: run_external [cmd_exec.c]
+ * NOTE: Returns malloc'd path string; caller must free
+ * ========================================================================== */
+
 #include "minishell.h"
 
+/* FUNCTION: join_path_cmd
+ * PURPOSE: Concatenate directory path and command name with '/'.
+ * PARAMS: @shell - state, @dst_path - output, @dir - directory, @cmd - command
+ * RETURN: 0 on success, 1 on malloc failure
+ * NOTE: Allocates new string "dir/cmd"; caller must free  */
 static int	join_path_cmd(t_shell *shell, char **dst_path, const char *dir,
 	const char *cmd)
 {
@@ -29,6 +50,12 @@ static int	join_path_cmd(t_shell *shell, char **dst_path, const char *dir,
 	return (0);
 }
 
+/* FUNCTION: get_cmd_path
+ * PURPOSE: Search PATH directories for executable command.
+ * PARAMS: @shell - state, @dst - output path, @cmd - command, @paths - PATH array
+ * RETURN: 0 if found, 1 if not found
+ * BEHAVIOR: Iterate paths, join with cmd, test access(F_OK), return first match
+ * NOTE: Sets *dst to malloc'd path on success; error 127 if not found  */
 int	get_cmd_path(t_shell *shell, char **dst, const char *cmd, char **paths)
 {
 	char	*tmp;
@@ -50,6 +77,12 @@ int	get_cmd_path(t_shell *shell, char **dst, const char *cmd, char **paths)
 	return (perror_cmdnotfound(shell, cmd));
 }
 
+/* FUNCTION: resolve_cmd_path
+ * PURPOSE: Main resolver - handles absolute/relative paths or searches PATH.
+ * PARAMS: @shell - state, @dst - output path, @cmd - command name
+ * RETURN: 0 on success, 1 on error
+ * BEHAVIOR: If contains '/', return as-is; else split PATH and search
+ * NOTE: Returns malloc'd string in *dst; checks if PATH exists  */
 int	resolve_cmd_path(t_shell *shell, char **dst, const char *cmd)
 {
 	char	**paths;

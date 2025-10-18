@@ -3,17 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_exec.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/22 00:24:27 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 22:40:42 by gomandam         ###   ########.fr       */
+/*   Created: 2025/10/18 00:27:24 by gomandam          #+#    #+#             */
+/*   Updated: 2025/10/18 00:30:32 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/* ============================================================================
+ * FILE: pipe_exec.c
+ * ============================================================================
+ * PURPOSE: Pipeline execution engine - manages multi-process pipelines with
+ *          proper fd handling, process synchronization, and cleanup.
+ *
+ * CONTROL FLOW:
+ *   execute_ast_pipe
+ *     └─> execute_seq_pipe (recursive for nested pipes)
+ *          ├─> execute_left_side
+ *          │    ├─> [if CMD/SUBSH] expand_child -> fork -> execute_seq_child
+ *          │    └─> [if PIPE] execute_seq_pipe (recursive)
+ *          └─> execute_right_side
+ *               └─> expand_child -> fork -> execute_seq_child
+ *
+ *   execute_seq_child (runs in child process)
+ *     ├─> seq_close (close inherited pipe fds)
+ *     ├─> ft_dup2 (redirect stdin/stdout)
+ *     ├─> [if CMD] run_cmd (no fork)
+ *     └─> [if SUBSH] run_subsh (no fork)
+ *
+ * EXTERNAL USAGE: execute_ast [execute.c]
+ * KEY MECHANISM: Recursive descent for left side PIPE nodes, sequential fork
+ *                for CMD/SUBSH leaves. Parent manages all pipe fds.
+ * =========================================================================  */
 
 #include "minishell.h"
 
 pid_t	execute_seq_pipe(t_shell *shell, t_ast **op, int *in_fd, int *out_fd);
 
+/* FUNCTION: execute_seq_child
+ * PURPOSE: Child process execution within pipeline, setup fds and run command.
+ * PARAMS: @shell - state, @ast - CMD/SUBSH node, @in_fd input, @out_fd output
+ * RETURN: Never returns (calls exit with last_status)
+ * BEHAVIOR: Close inherited pipes, dup2 stdin/stdout, execute command/subshell
+ * NOTE: No fork inside - direct execution; cleanup all resources before exit */
 void	execute_seq_child(t_shell *shell, t_ast **ast, int *in_fd, int *out_fd)
 {
 	seq_close(shell->ast, *in_fd, *out_fd);
@@ -42,6 +74,12 @@ void	execute_seq_child(t_shell *shell, t_ast **ast, int *in_fd, int *out_fd)
 	exit(shell->last_status);
 }
 
+/* FUNCTION: execute_left_side
+ * PURPOSE: Execute left side of pipe - create pipe, fork/recurse as needed.
+ * PARAMS: @shell - state, @op - pipe AST node, @in_fd - input fd
+ * RETURN: Child PID on success, -1 on error
+ * BEHAVIOR: If CMD/SUBSH: expand->fork->execute_seq_child; if PIPE: recurse
+ * NOTE: Creates pipe_fd communication; write end used as out_fd for left */
 pid_t	execute_left_side(t_shell *shell, t_ast **op, int *in_fd)
 {
 	pid_t	pid;
@@ -68,6 +106,12 @@ pid_t	execute_left_side(t_shell *shell, t_ast **op, int *in_fd)
 	return (pid);
 }
 
+/* FUNCTION: execute_right_side
+ * PURPOSE: Execute right side of pipe - always CMD/SUBSH leaf node.
+ * PARAMS: @shell - state, @op - pipe node, @out_fd - output fd
+ * RETURN: Child PID on success, -1 on error
+ * BEHAVIOR: Expand->fork->execute_seq_child with pipe read end as stdin
+ * NOTE: Right side always terminates pipe chain (no recursion)	*/
 pid_t	execute_right_side(t_shell *shell, t_ast **op, int *out_fd)
 {
 	pid_t	pid;
@@ -85,6 +129,12 @@ pid_t	execute_right_side(t_shell *shell, t_ast **op, int *out_fd)
 	return (-1);
 }
 
+/* FUNCTION: execute_seq_pipe
+ * PURPOSE: Recursive pipeline builder - handles nested pipes sequentially.
+ * PARAMS: @shell - state, @op - pipe node, @in_fd - input, @out_fd - output
+ * RETURN: PID of rightmost (last) child, -1 on error
+ * BEHAVIOR: Execute left (recurse if PIPE), close write end, execute right
+ * NOTE: Parent closes all intermediate pipe fds; returns last PID for wait */
 pid_t	execute_seq_pipe(t_shell *shell, t_ast **op, int *in_fd, int *out_fd)
 {
 	pid_t	left;
@@ -103,6 +153,12 @@ pid_t	execute_seq_pipe(t_shell *shell, t_ast **op, int *in_fd, int *out_fd)
 	return (free_parse_ast(op), last);
 }
 
+/* FUNCTION: execute_ast_pipe
+ * PURPOSE: Pipeline execution entry point - setup and wait for all children.
+ * PARAMS: @shell - state, @node - pipe AST root
+ * RETURN: 0 on success, 1 on error
+ * BEHAVIOR: Call execute_seq_pipe, wait for last child, wait for remaining
+ * NOTE: wait_count tracks all forked processes; last child determines status  */
 int	execute_ast_pipe(t_shell *shell, t_ast **node)
 {
 	pid_t	last;

@@ -3,17 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/24 02:02:59 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 22:22:43 by gomandam         ###   ########.fr       */
+/*   Created: 2025/10/29 16:40:58 by gomandam          #+#    #+#             */
+/*   Updated: 2025/10/29 17:51:38 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* ============================================================================
+ * PURPOSE: Change directory in parent shell; maintain PWD/OLDPWD env.
+ * CONTROL FLOW:
+ *   1) get_current_pwd -> snapshot previous dir (getcwd or PWD fallback)
+ *   2) resolve_cd_target -> HOME | "-"(OLDPWD) | path; argc validation
+ *   3) chdir(target) -> set error on failure
+ *   4) update_oldpwd_env(old_pwd) -> OLDPWD=old_pwd
+ *   5) ensure_pwd_env() -> PWD=<getcwd>
+ *   6) set_last_status(0/1)
+ * RELATIONSHIPS: Uses env_get_value/env_upsert; status via set_last_status.
+ * EXTERNAL USAGE: Invoked by run_builtin (builtin_exec.c) for "cd".
+ * NOTES: "cd -" prints new dir to stdout; errors don't exit the shell.
+ * ========================================================================== */
 #include "minishell.h"
-
-/* Get current working directory with PWD env_get_value()
-   Returns malloc'd string. NULL when fail. */
+/* PURPOSE: previous PWD; prefer getcwd, fallback to $PWD.
+ * RETURN: malloc'd CWD or NULL; prints ENOMEM via perror_malloc. */
 static char	*get_current_pwd(t_shell *shell)
 {
 	char	*cwd;
@@ -33,8 +45,8 @@ static char	*get_current_pwd(t_shell *shell)
 	return (NULL);
 }
 
-/* OLDPWD environment variable with given directory.
-   Uses env_upsert() pattern from init.c ensure_pwd_env() */
+/* PURPOSE: Set OLDPWD to old_dir (move/update entry). PARAMS: @shell,@old_dir
+ * RETURN: 0 ok, 1 on malloc error.  NOTES: No-op if old_dir NULL. */
 static int	update_oldpwd_env(t_shell *shell, const char *old_dir)
 {
 	char	*oldpwd_line;
@@ -53,7 +65,8 @@ static int	update_oldpwd_env(t_shell *shell, const char *old_dir)
 	return (0);
 }
 
-/* Updates PWD environment variable with current directory. */
+/* PURPOSE: Refresh PWD with getcwd.
+ * RETURN: 0 ok, 1 on error; sets status on error path. */
 static int	ensure_pwd_env(t_shell *shell)
 {
 	char	*cwd;
@@ -77,8 +90,9 @@ static int	ensure_pwd_env(t_shell *shell)
 	return (0);
 }
 
-/*  Resolve cd target: no args->HOME, "-"->OLDPWD, else->path.
-    returns malloc target or NULL on error. Prints to stdout for "cd -". */
+/* PURPOSE: Resolve destination directory.	PARAMS: @shell,@argv
+ * RETURN: malloc'd target dir or NULL; handles HOME, "-", argc>2 errors.
+ * NOTES: Prints path on "cd -". Sets last_status on errors. */
 static char	*resolve_cd_target(t_shell *shell, char **argv)
 {
 	char	*target;
@@ -108,7 +122,9 @@ static char	*resolve_cd_target(t_shell *shell, char **argv)
 	return (ft_strdup(argv[1]));
 }
 
-/* Change directory, update PWD/OLDPWD. */
+/* PURPOSE: Entry point for "cd".	PARAMS: @shell,@argv
+ * RETURN: 0 success, 1 fatal; sets last_status on success/failure.
+ * BEHAVIOR: Snapshot old PWD -> resolve target -> chdir -> update env. */
 int	ft_cd(t_shell *shell, char **argv)
 {
 	char	*old_pwd;

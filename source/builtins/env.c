@@ -3,15 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: gomandam <gomandam@student.42madrid.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 02:03:25 by gomandam          #+#    #+#             */
-/*   Updated: 2025/10/02 22:22:17 by gomandam         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:52:15 by gomandam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/* PURPOSE: Print environment in KEY=VALUE lines (only entries containing '=').
+ * CONTROL FLOW:
+ *   1) Iterate env_list
+ *   2) Print lines with '=' and trailing newline
+ *   3) Set last_status 0 on success, 1 if any write fails
+ * RELATIONSHIPS: Used by run_builtin (builtin_exec.c).
+ * EXTERNAL USAGE: builtin "env".
+ * NOTES: Ignores entries without '='. Writes to provided FD.
+ * ========================================================================== */
 #include "minishell.h"
-
+/* PURPOSE: Print s + newline atomically; check write counts.
+ * PARAMS: @s,@fd	  RETURN: 0 ok, 1 on error. */
 static int	ft_putendl_check(char *s, int fd)
 {
 	int	len;
@@ -31,6 +41,7 @@ static int	ft_putendl_check(char *s, int fd)
 	return (0);
 }
 
+/* PURPOSE: Update last_status based on error. */
 static void	env_set_status(t_shell *shell, int error)
 {
 	if (error)
@@ -39,6 +50,8 @@ static void	env_set_status(t_shell *shell, int error)
 		set_last_status(shell, 0);
 }
 
+/* PURPOSE: Entry point for "env".	PARAMS: @shell,@out_fd
+ * RETURN: 0 ok, 1 if any write failed. */
 int	ft_env(t_shell *shell, int out_fd)
 {
 	t_env	*current;
